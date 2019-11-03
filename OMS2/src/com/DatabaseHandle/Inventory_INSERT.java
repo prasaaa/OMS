@@ -9,219 +9,255 @@ import java.util.List;
 
 public class Inventory_INSERT {
 
-	private Connection c;
-	private PreparedStatement ps = null;
-	private String query;
-	ResultSet rs = null;
+    ResultSet rs = null;
+    private Connection c;
+    private PreparedStatement ps = null;
+    private String query;
 
-	public Inventory_INSERT(Connection c, String query) {
+    public Inventory_INSERT(Connection c, String query) {
 
-		this.c = c;
-		this.query = query;
-	}
+        this.c = c;
+        this.query = query;
+    }
 
-	public boolean Insert_Item(String modelName, String manufacturer, String supplier, String itemType, double bppitem,
-			double sppitem) {
-		try {
+    public boolean Insert_Item(String itemID, String modelName, String manufacturer, String itemType, double sppitem) {
+        try {
 
-			ps = c.prepareStatement(query);
-			ps.setString(1, modelName);
-			ps.setString(2, manufacturer);
-			ps.setString(3, supplier);
-			ps.setString(4, itemType);
-			ps.setDouble(5, bppitem);
-			ps.setDouble(6, sppitem);
+            ps = c.prepareStatement(query);
+            
+            ps.setString(1, itemID);
+            ps.setString(2, modelName);
+            ps.setString(3, manufacturer);
+            ps.setString(4, itemType);
+            ps.setDouble(5, sppitem);
 
-			ps.execute();
+            ps.execute();
 
-			return true;
+            return true;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public String getItemID(String modelName, String manufacturer, String supplier) {
+    public String getItemID(String modelName, String manufacturer, String supplier) {
 
-		String itemID = "";
+        String itemID = "";
 
-		try {
-			ps = c.prepareStatement(query);
-			ps.setString(1, modelName);
-			ps.setString(2, manufacturer);
-			ps.setString(3, supplier);
+        try {
+            ps = c.prepareStatement(query);
+            ps.setString(1, modelName);
+            ps.setString(2, manufacturer);
+            ps.setString(3, supplier);
 
-			rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
-			if (rs.next()) {
+            if (rs.next()) {
 
-				itemID = rs.getString(1);
+                itemID = rs.getString(1);
 
-			}
+            }
+            
+            return itemID;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
-		return itemID;
+        return itemID;
 
-	}
+    }
 
-	public boolean InsertStock(String itemID, long quantity, String stockINDate, String remarks) {
+    public boolean InsertStock(String stockINDate, String remarks, long quantity, double buyingPrice, String itemID, String supID) {
 
-		try {
+        try {
 
-			ps = c.prepareStatement(query);
-			ps.setString(1, itemID);
-			ps.setLong(2, quantity);
-			ps.setString(3, stockINDate);
-			ps.setString(4, remarks);
+            ps = c.prepareStatement(query);
+            ps.setString(1, stockINDate);
+            ps.setString(2, remarks);
+            ps.setLong(3, quantity);
+            ps.setDouble(4, buyingPrice);
+            ps.setString(5, itemID);
+            ps.setString(6, supID);
 
-			ps.execute();
+            ps.execute();
 
-			return true;
+            return true;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		return false;
+        return false;
 
-	}
+    }
 
-	public String getStockID(String itemID) {
+    public String getStockID(String itemID) {
 
-		String stockID = "";
+        String stockID = "";
 
-		try {
-			ps = c.prepareStatement(query);
+        try {
+            ps = c.prepareStatement(query);
 
-			ps.setString(1, itemID);
-			ps.setString(2, itemID);
+            ps.setString(1, itemID);
+            ps.setString(2, itemID);
 
-			rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
-			if (rs.next()) {
+            if (rs.next()) {
 
-				stockID = rs.getString(1);
+                stockID = rs.getString(1);
 
-			}
+            }
 
-			return stockID;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+            return stockID;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
-		return stockID;
-	}
+        return stockID;
+    }
+    
+    public long getQuantity(String stockID) {
 
-	public boolean InsertItemList(String itemID, String stockID, String barcodeNumber, String itemModel) {
-		try {
-			ps = c.prepareStatement(query);
+        long quantity = 0;
 
-			ps.setString(1, itemID);
-			ps.setString(2, stockID);
-			ps.setString(3, barcodeNumber);
-			ps.setString(4, itemModel);
-			
-			ps.execute();
+        try {
+            ps = c.prepareStatement(query);
 
-			return true;
+            ps.setString(1, stockID);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            rs = ps.executeQuery();
 
-		return false;
-	}
+            if (rs.next()) {
 
-	public boolean InsertStock(String model, long quantity, String date, String customerID, String remarks) {
-		try {
-			ps = c.prepareStatement(query);
+                quantity = rs.getLong(1);
 
-			ps.setString(1, model);
-			ps.setLong(2, quantity);
-			ps.setString(3, date);
-			ps.setString(4, customerID);
-			ps.setString(5, remarks);
+            }
 
-			ps.execute();
+            return quantity;
+            
 
-			return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } 
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        return quantity;
+    }
 
-		return false;
-	}
-	
-	public boolean InsertItemModel(String model) {
-		try {
-			ps = c.prepareStatement(query);
+    public boolean InsertItemList(String itemID, String barcodeNumber, String itemStatus, String stockID) {
+        try {
+            ps = c.prepareStatement(query);
 
-			ps.setString(1, model);
+            ps.setString(1, itemID);
+            ps.setString(2, barcodeNumber);
+            ps.setString(3, itemStatus);
+            ps.setString(4, stockID);
+            
+            
 
-			ps.execute();
+            ps.execute();
 
-			return true;
+            return true;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	public List<String> getBarcodeList(String itemID) {
+    public boolean InsertStockOUT(String date, String remarks, long quantity, double sppitem, String itemID, String customerID) {
+        try {
+            ps = c.prepareStatement(query);
 
-		List<String> list = new ArrayList<>();
+            ps.setString(1, date);
+            ps.setString(2, remarks);
+            ps.setLong(3, quantity);
+            ps.setDouble(4, sppitem);
+            ps.setString(5, itemID);
+            ps.setString(6, customerID);
 
-		try {
+            ps.execute();
 
-			ps = c.prepareStatement(query);
+            return true;
 
-			ps.setString(1, itemID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-			rs = ps.executeQuery();
+        return false;
+    }
 
-			if (rs.first()) {
+    public boolean InsertItemSupplier(String itemID, String supplerId, double buyingPrice) {
+        try {
+            ps = c.prepareStatement(query);
 
-				do {
-					list.add(rs.getString(1));
-				} while (rs.next());
-			}
+            ps.setString(1,itemID);
+            ps.setString(2, supplerId);
+            ps.setDouble(3, buyingPrice);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+            ps.execute();
 
-		return list;
+            return true;
 
-	}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public List<String> getBarcodeList(String itemID) {
+
+        List<String> list = new ArrayList<>();
+
+        try {
+
+            ps = c.prepareStatement(query);
+
+            ps.setString(1, itemID);
+
+            rs = ps.executeQuery();
+
+            if (rs.first()) {
+
+                do {
+                    list.add(rs.getString(1));
+                } while (rs.next());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        return list;
+
+    }
 
 }
