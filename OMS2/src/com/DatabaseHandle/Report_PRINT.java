@@ -224,105 +224,104 @@ public class Report_PRINT {
 		
 	}
 	
-	public void printstockreport()
-	{
-		
-		System.out.println("inside the stock method");
-		
-		Document document = new Document();
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		
-		try {
-			
-			PdfWriter.getInstance(document, new FileOutputStream("stockreport"+timeStamp+".pdf"));
-			document.open();
-			PdfPCell cell1;
-	        PdfPCell cell2;
-	        PdfPCell cell3;
-	        PdfPCell cell4;
-	        PdfPCell cell5;
-	        PdfPCell cell6;
-	        PdfPCell cell7;
-	  
-	        
-	        Paragraph preface = new Paragraph();
-	        
-	        addEmptyLine(preface, 1);
-	        
-	        preface.add(new Paragraph("Stock Report",redFont));
+	public boolean printstockreport() {
 
-	        addEmptyLine(preface, 1);
-	        
-	        preface.add(new Paragraph(
-	                "Report created on: " + " " + new Date(),smallBold));
-	        addEmptyLine(preface, 1);
-	     
+        System.out.println("inside the stock method");
 
-	        addEmptyLine(preface, 2);
+        Document document = new Document();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 
-	        document.add(preface);
-	        resultprint.beforeFirst();
-	        
-	        
-	        PdfPTable table = new PdfPTable(7);
-			table.setWidthPercentage(100);
-			
-			
-			
-			
-         
+        try {
+
+            PdfWriter.getInstance(document, new FileOutputStream("D:/Reports/stockreport" + timeStamp + ".pdf"));
+            document.open();
+            PdfPCell cell1;
+            PdfPCell cell2;
+            PdfPCell cell3;
+            PdfPCell cell4;
+            PdfPCell cell5;
+            PdfPCell cell6;
+            PdfPCell cell7;
+
+
+            Paragraph preface = new Paragraph();
+
+            addEmptyLine(preface, 1);
+
+            preface.add(new Paragraph("Stock Report", redFont));
+
+            addEmptyLine(preface, 1);
+
+            preface.add(new Paragraph(
+                    "Report created on: " + " " + new Date(), smallBold));
+            addEmptyLine(preface, 1);
+
+
+            addEmptyLine(preface, 2);
+
+            document.add(preface);
+            resultprint.beforeFirst();
+
+
+            PdfPTable table = new PdfPTable(7);
+            table.setWidthPercentage(100);
+
+
+            cell1 = new PdfPCell(new Paragraph("Stock ID"));
+            cell2 = new PdfPCell(new Paragraph("Items Model Name"));
+            cell3 = new PdfPCell(new Paragraph("Manufacturer"));
+            cell4 = new PdfPCell(new Paragraph("Supplier"));
+            cell5 = new PdfPCell(new Paragraph("Item Type"));
+            cell6 = new PdfPCell(new Paragraph("Received Date"));
+            cell7 = new PdfPCell(new Paragraph("Quantity"));
             
-            //document.add(table);
-			
-			while(resultprint.next())
-			{
-				
-				table = new PdfPTable(7);
-				table.setWidthPercentage(100);
-				if(count == 0)
-				{
-					cell1 = new PdfPCell(new Paragraph("Stock ID"));
-					cell2 = new PdfPCell(new Paragraph("Items Model Name"));
-					cell3 = new PdfPCell(new Paragraph("Manufacturer"));
-					cell4 = new PdfPCell(new Paragraph("Supplier"));
-					cell5 = new PdfPCell(new Paragraph("Item Type"));
-					cell6 = new PdfPCell(new Paragraph("Received Date"));
-					cell7 = new PdfPCell(new Paragraph("Quantity"));
-					count++;
-					resultprint.beforeFirst();
-				}else
-				{
-					cell1 = new PdfPCell(new Paragraph(resultprint.getString(1)));
-					cell2 = new PdfPCell(new Paragraph(resultprint.getString(2)));
-					cell3 = new PdfPCell(new Paragraph(resultprint.getString(3)));
-					cell4 = new PdfPCell(new Paragraph(resultprint.getString(4)));
-					cell5 = new PdfPCell(new Paragraph(resultprint.getString(5)));
-					cell6 = new PdfPCell(new Paragraph(resultprint.getString(6)));
-					cell7 = new PdfPCell(new Paragraph(resultprint.getString(7)));
-				}
-				
-				
-				
-				table.addCell(cell1);
-	            table.addCell(cell2);
-	            table.addCell(cell3);
-	            table.addCell(cell4);
-	            table.addCell(cell5);
-	            table.addCell(cell6);
-	            table.addCell(cell7);
-	            
-	            
-	            document.add(table);
-    
-			}
-			count = 0;
-			document.close();
-		}catch(Exception e)
-			{
-				System.out.print("error in pdf repair report " + e);
-			}
-		
-	}
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+            
+            document.add(table);
+
+            while (resultprint.next()) {
+
+                table = new PdfPTable(7);
+                table.setWidthPercentage(100);
+                
+                    cell1 = new PdfPCell(new Paragraph(resultprint.getString(1)));
+                    cell2 = new PdfPCell(new Paragraph(resultprint.getString(2)));
+                    cell3 = new PdfPCell(new Paragraph(resultprint.getString(3)));
+                    cell4 = new PdfPCell(new Paragraph(resultprint.getString(4)));
+                    cell5 = new PdfPCell(new Paragraph(resultprint.getString(5)));
+                    cell6 = new PdfPCell(new Paragraph(resultprint.getString(6)));
+                    cell7 = new PdfPCell(new Paragraph(resultprint.getString(7)));
+                
+
+
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+                table.addCell(cell5);
+                table.addCell(cell6);
+                table.addCell(cell7);
+
+
+                document.add(table);
+
+            }
+            
+            document.close();
+            return true;
+        } catch (Throwable e) {
+            System.out.print("error in pdf stock report " + e);
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 	public void printemp()
 	{
 		
