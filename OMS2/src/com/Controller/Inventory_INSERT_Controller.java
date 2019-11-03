@@ -1,8 +1,13 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Inventory_INSERT;
+import com.DatabaseHandle.Inventory_SELECT;
+import com.DatabaseHandle.Inventory_UPDATE;
+import com.Utilities.MySQLQueries;
+import com.model.InventoryStock;
+import com.model.ItemList;
+import com.model.Items;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,13 +15,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.*;
-import com.model.InventoryStock;
-import com.model.ItemList;
-import com.model.Items;
-import com.Utilities.MySQLQueries;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Servlet implementation class Inventory_INSERT_Controller
@@ -39,6 +43,29 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		 if (request.getParameter("submitBtn") != null) {
+	            if (request.getParameter("submitBtn").equalsIgnoreCase("Add")) {
+	                if (request.getSession(false) != null) {
+	                    request.getSession(false).setAttribute("itemID", request.getParameter("itemID"));
+	                    request.getSession(false).setAttribute("supID", request.getParameter("supID"));
+	                    request.getSession(false).setAttribute("itype", request.getParameter("itype"));
+	                    request.getSession(false).setAttribute("REFRESH", "TRUE");
+
+	                } else {
+	                    HttpSession session = request.getSession(true);
+	                    session.setAttribute("itemID", request.getParameter("itemID"));
+	                    session.setAttribute("supID", request.getParameter("supID"));
+	                    session.setAttribute("itype", request.getParameter("itype"));
+	                    session.setAttribute("REFRESH", "TRUE");
+
+	                }
+
+	                response.reset();
+	                response.sendRedirect("Stock_IN_INSERT.jsp");
+	                return;
+	            }
+	        }
 
 	}
 
@@ -49,201 +76,296 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		InventoryStock stock = new InventoryStock();
-		ItemList list = new ItemList();
+		HttpSession session = request.getSession();
+		
+		String buy = request.getParameter("bppitem").trim();
+		String stockINDate = request.getParameter("stockindate").trim();
+		String remarks = request.getParameter("remarks").trim();
 
-		String iname = request.getParameter("iname");
-		String manu = request.getParameter("manu");
-		String supplier = request.getParameter("sup");
 
-		String[] barcodeList = request.getParameter("barcode").split("\n");
+		String button = "";
 
-		for (int i = 0; i < barcodeList.length; i++) {
-			barcodeList[i] = barcodeList[i].trim();
-		}
+		if (request.getParameter("resetButton") != null) {
+			session.removeAttribute("itemID");
+			session.removeAttribute("supID");
+			session.removeAttribute("itype");
+			session.removeAttribute("bppitem");
+			session.removeAttribute("stock_in_date");
+			session.removeAttribute("remarks");
 
-		HashSet<String> barcodeSet = new HashSet<>();
+			response.reset();
+			response.sendRedirect("Stock_IN_INSERT.jsp");
+			return;
 
-		for (String str : barcodeList) {
-			barcodeSet.add(str);
-		}
+		} else if (request.getParameter("submitButton") != null) {
+			button = request.getParameter("submitButton").trim();
 
-		Items[] item = new Items[barcodeSet.size()];
+			if (button.equalsIgnoreCase("Add Item Info")) {
+				
+				
+				session.setAttribute("bppitem", buy);
+				session.setAttribute("stock_in_date", stockINDate);
+				session.setAttribute("remarks", remarks);
+				session.setAttribute("sessionStorage", "true");
+				
+				response.sendRedirect("Stock_IN_Item_SELECT.jsp");
+                return;
 
-		String itype = "";
-		if (request.getParameter("itype") != null)
-			itype = request.getParameter("itype");
+			} else if (button.equalsIgnoreCase("Change Item Info")) {
+				session.setAttribute("bppitem", buy);
+				session.setAttribute("stock_in_date", stockINDate);
+				session.setAttribute("remarks", remarks);
+				session.setAttribute("sessionStorage", "true");
+				
+				response.sendRedirect("Stock_IN_Item_SELECT.jsp");
+                return;
+			} else {
+				
+				InventoryStock stock = new InventoryStock();
+				ItemList list = new ItemList();
 
-		String buy = request.getParameter("bppitem");
-		String sell = request.getParameter("sppitem");
-		double bppitem = 0;
-		double sppitem = 0;
-		long bquantity = barcodeSet.size();
 
-		try {
-			if (!buy.isEmpty())
-				bppitem = Double.parseDouble(buy);
-			if (!sell.isEmpty())
-				sppitem = Double.parseDouble(sell);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} finally {
-			list.setModel(iname);
-			list.setManufacturer(manu);
-			list.setSupplier(supplier);
-			list.setType(itype);
-			list.setBuyingPrice(bppitem);
-			list.setSellingPrice(sppitem);
+				String iname = request.getParameter("itemID").trim();
+				String supplier = request.getParameter("supID").trim();
+				
+				String itype = "";
+				if (request.getParameter("itype") != null)
+					itype = request.getParameter("itype");
 
-			int j = 0;
+				String[] barcodeList = request.getParameterValues("barcode");
+				String[] statusList = request.getParameterValues("status");
 
-			for (String str : barcodeSet) {
-				item[j] = new Items();
-				item[j].setBarcode(str);
-				j++;
+				if (barcodeList != null) {
+					if (barcodeList.length == 0) {
 
-			}
+						session.setAttribute("itemID", iname);
+						session.setAttribute("supID", supplier);
+						session.setAttribute("itype", itype);
+						session.setAttribute("bppitem", buy);
+						session.setAttribute("remarks", remarks);
+						session.setAttribute("stock_in_date", stockINDate);
+						session.setAttribute("REFRESH", "TRUE");
+						response.sendRedirect("Inventory_Servlet?status=noItems");
+						return;
+					}
+				} else {
+					session.setAttribute("itemID", iname);
+					session.setAttribute("supID", supplier);
+					session.setAttribute("itype", itype);
+					session.setAttribute("bppitem", buy);
+					session.setAttribute("remarks", remarks);
+					session.setAttribute("stock_in_date", stockINDate);
+					session.setAttribute("REFRESH", "TRUE");
+					response.sendRedirect("Inventory_Servlet?status=noItems");
+					return;
+				}
 
-			list.setItems(item);
+				Items[] item = new Items[barcodeList.length];
 
-			String stockINDate = request.getParameter("stockindate");
-			String remarks = request.getParameter("remarks");
-			String button = request.getParameter("submitButton");
+				for (int i = 0; i < barcodeList.length; i++) {
+					item[i] = new Items();
 
-			stock.setDate(stockINDate);
-			stock.setRemarks(remarks);
-			stock.setQuantity(bquantity);
+					item[i].setBarcode(barcodeList[i]);
+					item[i].setItemStatus(statusList[i]);
+				}
 
-			stock.setItemList(list);
+				list.setItems(item);
 
-			if (!button.isEmpty()) {
+				double bppitem = 0;
 
-				if (button.equalsIgnoreCase("Insert Stock")) {
+				try {
+					if (!buy.isEmpty())
+						bppitem = Double.parseDouble(buy);
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} finally {
 
-					Inventory_INSERT insertItem = new Inventory_INSERT(ConnectionManager.getConnection(),
-							MySQLQueries.QUERY_INSERT_ITEM);
-					Inventory_INSERT selectItemID = new Inventory_INSERT(ConnectionManager.getConnection(),
-							MySQLQueries.QUERY_SELECT_ITEM_ID);
-					Inventory_INSERT insertModel = new Inventory_INSERT(ConnectionManager.getConnection(),
-							MySQLQueries.QUERY_INSERT_ITEM_MODEL);
+					list.setItemID(iname);
+					list.setSupplier(supplier);
+					list.setType(itype);
+					list.setBuyingPrice(bppitem);
 
-					Inventory_INSERT insertStock = new Inventory_INSERT(ConnectionManager.getConnection(),
-							MySQLQueries.QUERY_INSERT_STOCK);
-					Inventory_INSERT selectStockID = new Inventory_INSERT(ConnectionManager.getConnection(),
-							MySQLQueries.QUERY_SELECT_STOCK_ID);
-					Inventory_INSERT insertItemList = new Inventory_INSERT(ConnectionManager.getConnection(),
-							MySQLQueries.QUERY_INSERT_ITEM_LIST);
+					stock.setDate(stockINDate);
+					stock.setRemarks(remarks);
 
-					Inventory_INSERT selectBarcodes = new Inventory_INSERT(ConnectionManager.getConnection(),
-							MySQLQueries.QUERY_SELECT_BARCODES_BY_ITEM_ID);
+					stock.setItemList(list);
 
-					boolean itemModelStatus = insertModel.InsertItemModel(list.getModel());
+					if (!button.isEmpty()) {
 
-					if (itemModelStatus == true) {
+						if (button.equalsIgnoreCase("Insert Stock")) {
 
-						boolean itemStatus = insertItem.Insert_Item(list.getModel(), list.getManufacturer(),
-								list.getSupplier(), list.getType(), list.getBuyingPrice(), list.getSellingPrice());
+							
 
-						if (itemStatus == true) {
+							
 
-							String itemID = selectItemID.getItemID(list.getModel(), list.getManufacturer(),
-									list.getSupplier());
+							Inventory_INSERT insertStock = new Inventory_INSERT(ConnectionManager.getConnection(),
+									MySQLQueries.QUERY_INSERT_STOCK);
+							Inventory_INSERT selectStockID = new Inventory_INSERT(ConnectionManager.getConnection(),
+									MySQLQueries.QUERY_SELECT_STOCK_ID);
+							Inventory_INSERT insertItemList = new Inventory_INSERT(ConnectionManager.getConnection(),
+									MySQLQueries.QUERY_INSERT_ITEM_LIST);
+							
+							Inventory_UPDATE updateItemQuantity = new Inventory_UPDATE(ConnectionManager.getConnection(), 
+									MySQLQueries.QUERY_UPDATE_NEW_ITEM_QUANTITY);
 
-							if (!itemID.isEmpty()) {
+							Inventory_INSERT getBarcodeList = new Inventory_INSERT(ConnectionManager.getConnection(),
+									MySQLQueries.QUERY_SELECT_BARCODES_BY_ITEM_ID);
 
-								boolean itemListStatus = true;
+							List<String> oldBarcodeList = getBarcodeList.getBarcodeList(list.getItemID());
 
-								List<String> barcodes = selectBarcodes.getBarcodeList(itemID);
+							boolean status = true;
 
-								if (!barcodes.isEmpty()) {
-
-									for (String bar : barcodes) {
-
-										for (Items barcode : item) {
-
-											if (barcode.getBarcode().equalsIgnoreCase(bar)) {
-												itemListStatus = false;
-												break;
-											} else {
-												itemListStatus = true;
-												continue;
-											}
-
-										}
-
-										if (itemListStatus == false)
-											break;
-										else
-											continue;
+							for (String str : oldBarcodeList) {
+								for (String strNew : barcodeList) {
+									if (strNew.equalsIgnoreCase(str)) {
+										status = false;
+										break;
+									} else {
+										status = true;
+										continue;
 									}
+
 								}
 
-								if (itemListStatus == true) {
+								if (status == false) {
+									break;
+								} else {
+									continue;
+								}
+							}
 
-									boolean stockStatus = insertStock.InsertStock(itemID, stock.getQuantity(),
-											stock.getDate(), stock.getRemarks());
+							if (status == true) {
 
-									if (stockStatus == true) {
+								boolean itemStatus = true;
 
-										String stockID = selectStockID.getStockID(itemID);
+								if (itemStatus == true) {
 
-										if (!stockID.isEmpty()) {
-											
-											boolean status = true;
-											
-											for (Items barcode : item) {
-												status = insertItemList.InsertItemList(itemID, stockID,
-														barcode.getBarcode(), list.getModel());
+									
 
-												if (status == false)
-													break;
+								
 
-											}
+										boolean stockStatus = insertStock.InsertStock(stock.getDate(),
+												stock.getRemarks(), stock.getQuantity() ,stock.getItemList().getBuyingPrice(), stock.getItemList().getItemID(), stock.getItemList().getSupplier());
 
-											if (status == true) {
-												if (request.getSession(false) != null) {
-													request.getSession(false).setAttribute("stock", stock);
-												} else {
-													HttpSession session = request.getSession(true);
-													session.setAttribute("stock", stock);
+										if (stockStatus == true) {
+
+											String stockID = selectStockID.getStockID(stock.getItemList().getItemID());
+
+											if (!stockID.isEmpty()) {
+
+												stock.setStockID(stockID);
+												
+												System.out.println(stockID);
+
+												boolean status1 = true;
+
+												for (Items barcode : item) {
+													status1 = insertItemList.InsertItemList(list.getItemID(), barcode.getBarcode(),
+															barcode.getItemStatus(), stock.getStockID());
+
+													if (status1 == false)
+														break;
+
 												}
-												response.sendRedirect("Inventory_Servlet?status=insertSuccess");
-												return;
+
+												if (status1 == true) {
+
+												
+													long rowCount = updateItemQuantity.updateQuantity(stock.getQuantity(), 
+															stock.getItemList().getItemID());
+
+													if (rowCount != 0) {
+
+														if (request.getSession(false) != null) {
+															request.getSession(false).setAttribute("stock", stock);
+														} else {
+															session.setAttribute("stock", stock);
+														}
+														response.sendRedirect("Inventory_Servlet?status=insertSuccess");
+														return;
+													} else {
+
+														session.setAttribute("itemID", iname);
+														session.setAttribute("supID", supplier);
+														session.setAttribute("itype", itype);
+														session.setAttribute("bppitem", buy);
+														session.setAttribute("remarks", remarks);
+														session.setAttribute("stock_in_date", stockINDate);
+														session.setAttribute("REFRESH", "TRUE");
+														response.sendRedirect(
+																"Inventory_Servlet?status=insertNotSuccess");
+														return;
+													}
+												} else {
+
+													session.setAttribute("itemID", iname);
+													session.setAttribute("supID", supplier);
+													session.setAttribute("itype", itype);
+													session.setAttribute("bppitem", buy);
+													session.setAttribute("remarks", remarks);
+													session.setAttribute("stock_in_date", stockINDate);
+													session.setAttribute("REFRESH", "TRUE");
+													response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
+													return;
+												}
+
 											} else {
-												response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
+
+												session.setAttribute("itemID", iname);
+												session.setAttribute("supID", supplier);
+												session.setAttribute("itype", itype);
+												session.setAttribute("bppitem", buy);
+												session.setAttribute("remarks", remarks);
+												session.setAttribute("stock_in_date", stockINDate);
+												session.setAttribute("REFRESH", "TRUE");
+												response.sendRedirect("Inventory_Servlet?status=insertFail");
 												return;
 											}
 
 										} else {
+
+											session.setAttribute("itemID", iname);
+											session.setAttribute("supID", supplier);
+											session.setAttribute("itype", itype);
+											session.setAttribute("bppitem", buy);
+											session.setAttribute("remarks", remarks);
+											session.setAttribute("stock_in_date", stockINDate);
+											session.setAttribute("REFRESH", "TRUE");
 											response.sendRedirect("Inventory_Servlet?status=insertFail");
 											return;
 										}
-
-									} else {
-										response.sendRedirect("Inventory_Servlet?status=insertFail");
-										return;
-									}
+									
 
 								} else {
-									response.sendRedirect("Inventory_Servlet?status=insertError");
+
+									session.setAttribute("itemID", iname);
+									session.setAttribute("supID", supplier);
+									session.setAttribute("itype", itype);
+									session.setAttribute("bppitem", buy);
+									session.setAttribute("remarks", remarks);
+									session.setAttribute("stock_in_date", stockINDate);
+									session.setAttribute("REFRESH", "TRUE");
+									response.sendRedirect("Inventory_Servlet?status=insertFail");
 									return;
 								}
+
 							} else {
-								response.sendRedirect("Inventory_Servlet?status=insertFail");
+
+								session.setAttribute("itemID", iname);
+								session.setAttribute("supID", supplier);
+								session.setAttribute("itype", itype);
+								session.setAttribute("bppitem", buy);
+								session.setAttribute("remarks", remarks);
+								session.setAttribute("stock_in_date", stockINDate);
+								session.setAttribute("REFRESH", "TRUE");
+								response.sendRedirect("Inventory_Servlet?status=insertError");
 								return;
 							}
 
-						} else {
-							response.sendRedirect("Inventory_Servlet?status=insertFail");
-							return;
 						}
-					} else {
-						response.sendRedirect("Inventory_Servlet?status=insertFail");
-						return;
+
 					}
-
 				}
-
 			}
 		}
 	}

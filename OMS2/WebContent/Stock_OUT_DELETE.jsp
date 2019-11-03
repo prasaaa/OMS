@@ -69,8 +69,6 @@
 
 		//prevents caching at the proxy server
 	%>
-	
-
 	<div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->
@@ -97,7 +95,7 @@
 
 				</div>
 		
-				<a href="Payment_UPDATE.jsp" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
+				<a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
 				
 				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
 				<a href="Customer_Order_Insert.jsp"
@@ -106,18 +104,13 @@
 				class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
 				<a href="Admin_Customer_Order_Conformation.jsp"
 				class="list-group-item list-group-item-action bg-light">Customer Order &nbsp;Confirm</a>
-				<a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">Employee&nbsp;Management</a>
-				<div class="collapse" id="collapseExample2">
-					<a href="Emp_Management.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Management</a>
-					<a href="Emp_REPORT.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Reports</a>
-					<a href="IT_Manager_Assign_Emp.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee Assign &nbsp;Management</a>
-				</div>	
-					
+				
+				<a href="Emp_Management.jsp"
+				class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
+				<a href="Emp_REPORT.jsp"
+				class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
+				<a href="IT_Manager_Assign_Emp.jsp"
+				class="list-group-item list-group-item-action bg-light">Employee Assign &nbsp;Management</a>
 			</div>
 			<%} %>
 		</div>
@@ -179,6 +172,7 @@
 												<option value="bar">Barcode&nbsp;Number</option>
 												<option value="stockoutid">Stock&nbsp;OUT&nbsp;ID</option>
 												<option value="iname">Item&nbsp;Model</option>
+												<option value="manu">Manufacturer</option>
 												<option value="itype">Item&nbsp;Type</option>
 												<option value="stockoutdate">STOCK&nbsp;OUT&nbsp;Date</option>
 												<option value="customer">Customer</option>
@@ -226,6 +220,7 @@
 											<th>Item's&nbsp;Model&nbsp;Name</th>
 											<th>Item&nbsp;Type</th>
 											<th>Delivered&nbsp;Date</th>
+											<th>Selling&nbsp;Price</th>
 											<th>Quantity</th>
 											<th>Customer&nbsp;Order&nbsp;ID</th>
 
@@ -248,6 +243,7 @@
 											<td><%=results.getString(4)%></td>
 											<td><%=results.getString(5)%></td>
 											<td><%=results.getString(6)%></td>
+											<td><%=results.getString(7)%></td>
 										</tr>
 
 										<%
@@ -273,6 +269,7 @@
 											<td><%=result.getString(4)%></td>
 											<td><%=result.getString(5)%></td>
 											<td><%=result.getString(6)%></td>
+											<td><%=result.getString(7)%></td>
 										</tr>
 
 
@@ -289,27 +286,22 @@
 						</td>
 					</tr>
 					<!-- second column inside table end here -->
+				
+</table>
+
+<table style="width: 100%;">
+					<tr>
+
+						<td><a href="Stock_OUT_INSERT.jsp"
+							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
+
+						<td><a href="Stock_OUT_DELETE.jsp"
+							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
+						
+
+					</tr>
+
 				</table>
-
-
-
-
-				<!-- end of the first table -->
-
-				<div style="position: fixed; bottom: 0; width: 90%; display: flex;">
-					<div style="width: 45%; margin: 7px;">
-						<a href="Stock_OUT_INSERT.jsp"
-							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a>
-					</div>
-
-					<div style="width: 45%; margin: 7px;">
-						<a href="Stock_OUT_DELETE.jsp"
-							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a>
-					</div>
-					
-
-				</div>
-
 
 			</div>
 

@@ -1,3 +1,4 @@
+<%--suppress XmlDuplicatedId --%>
 
 <%@page import="com.model.CurrentUser"%>
 <%@page import="com.DatabaseHandle.Inventory_SELECT"%>
@@ -8,7 +9,7 @@
 <%@page import="com.Utilities.MySQLQueries"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-	
+
 
 <!DOCTYPE html>
 <html>
@@ -21,22 +22,31 @@
 
 <title>Automated Barcode Solution</title>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
 
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <!-- Bootstrap CSS -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
 	integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
 	crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	crossorigin="anonymous"></script>
 
 
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	
+
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
 	integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -58,70 +68,80 @@
 
 </head>
 <body>
-<% System.out.println("this is user " + CurrentUser.getUsername());
-	if(CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals(""))
-	{
-		response.sendRedirect("login.jsp");
-	}
-	
-	
+	<%
+		System.out.println("this is user " + CurrentUser.getUsername());
+		if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
+			response.sendRedirect("login.jsp");
+		}
 	%>
 
-	 <% response.setHeader("Cache-Control","no-cache, no-store, must-revalidate"); //HTTP 1.1 
-	 response.setHeader("Pragma","no-cache"); //HTTP 1.0 
-	 response.setDateHeader ("Expires", 0); //prevents caching at the proxy server  
+	<%
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); //HTTP 1.1 
+		response.setHeader("Pragma", "no-cache"); //HTTP 1.0 
+		response.setDateHeader("Expires", 0); //prevents caching at the proxy server
 	%>
-	
-
 	<div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->
 		<div class="bg-light border-right" id="sidebar-wrapper">
-		
-			<div class="sidebar-heading">Automated Barcode&nbsp;Solution</div>
 			<div class="list-group list-group-flush">
-			<%if(CurrentUser.getUsername().equals("admin")){ %>
-				<a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a> 
-			<%} %>
-			<%if(CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant") || CurrentUser.getUsername().equals("manager")) {%>
-				<a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
-				<div class="collapse" id="collapseExample">
+				<div class="bg-light border-right" id="sidebar-wrapper">
 
-			
-			
-					<a href="Stock_IN_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
-					<a href="Stock_OUT_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+					<div class="sidebar-heading">
+						Automated Barcode<br>Solution
+					</div>
+					<div class="list-group list-group-flush">
+						<%
+							if (CurrentUser.getUsername().equals("admin")) {
+						%>
+						<a href="Supplier_Order_Insert.jsp"
+							class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
+						<%
+							}
+						%>
+						<%
+							if (CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant")
+									|| CurrentUser.getUsername().equals("manager")) {
+						%>
+						<a
+							class="list-group-item list-group-item-action bg-light dropdown-toggle"
+							data-toggle="collapse" href="#collapseExample" role="button"
+							aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+						<div class="collapse" id="collapseExample">
 
 
+
+							<a href="Stock_IN_INSERT.jsp"
+								class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
+							<a href="Stock_OUT_INSERT.jsp"
+								class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+
+
+						</div>
+
+						<a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+
+						<a href="Customer_Details_Insert.jsp"
+							class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
+						<a href="Customer_Order_Insert.jsp"
+							class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
+						<a href="Repair_INSERT.jsp"
+							class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
+						<a href="Admin_Customer_Order_Conformation.jsp"
+							class="list-group-item list-group-item-action bg-light">Customer
+							Order &nbsp;Confirm</a> <a href="Emp_Management.jsp"
+							class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
+						<a href="Emp_REPORT.jsp"
+							class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
+						<a href="IT_Manager_Assign_Emp.jsp"
+							class="list-group-item list-group-item-action bg-light">Employee
+							Assign &nbsp;Management</a>
+					</div>
+					<%
+						}
+					%>
 				</div>
-		
-				<a href="Payment_UPDATE.jsp" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
-				
-				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
-				<a href="Customer_Order_Insert.jsp"
-					class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
-					<a href="Repair_INSERT.jsp"
-				class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
-				<a href="Admin_Customer_Order_Conformation.jsp"
-				class="list-group-item list-group-item-action bg-light">Customer Order &nbsp;Confirm</a>
-				<a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">Employee&nbsp;Management</a>
-				<div class="collapse" id="collapseExample2">
-					<a href="Emp_Management.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Management</a>
-					<a href="Emp_REPORT.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Reports</a>
-					<a href="IT_Manager_Assign_Emp.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee Assign &nbsp;Management</a>
-				</div>	
-					
 			</div>
-			<%} %>
 		</div>
 		<!-- /#sidebar-wrapper -->
 
@@ -141,16 +161,18 @@
 
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-					<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"	role="button" data-toggle="dropdown" aria-haspopup="true"
+						<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+							role="button" data-toggle="dropdown" aria-haspopup="true"
 							aria-expanded="false"> User</a>
 							<div class="dropdown-menu dropdown-menu-right"
 								aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="login.jsp">Log out</a> 
+								<a class="dropdown-item" href="login.jsp">Log out</a>
 								<div class="dropdown-divider"></div>
-								
+
 							</div></li>
 					</ul>
-				</div> 
+				</div>
 			</nav>
 
 			<!--create the big table -->
@@ -198,8 +220,12 @@
 									value="<%if (request.getAttribute("queryType") != null) {%><%=request.getAttribute("queryType")%><%}%>">
 								<input type="text" hidden="true" name="queryValue"
 									value="<%if (request.getAttribute("queryValue") != null) {%><%=request.getAttribute("queryValue")%><%}%>">
-								<button style="margin-top: 7px" class="btn btn-success btn-block confirmModal" type="button" value="Delete Stocks"
-									<%if (session.getAttribute("results") != null) { } else {%> disabled<% } %>>Delete&nbsp;Stocks</button>
+								<button style="margin-top: 7px"
+									class="btn btn-success btn-block confirmModal" type="button"
+									name="deleteAll" value="Delete Stocks"
+									<%if (session.getAttribute("results") != null) {
+			} else {%>
+									disabled <%}%>>Delete&nbsp;Stocks</button>
 							</form>
 						</td>
 					</tr>
@@ -212,7 +238,7 @@
 						<td colspan="2">
 							<!--inside the first column -->
 							<div class="table-wrapper-scroll-y my-custom-scrollbar"
-								style="height: 500px; position: relative; top: 0">
+								style="height: 545px; position: relative; top: 0">
 
 
 
@@ -226,13 +252,12 @@
 
 										<tr>
 											<th>Stock&nbsp;ID</th>
-											<th>Item's&nbsp;Model&nbsp;Name</th>
-											<th>Manufacturer</th>
+											<th>Item's&nbsp;ID</th>
 											<th>Supplier</th>
 											<th>Item&nbsp;Type</th>
 											<th>Received&nbsp;Date</th>
+											<th>Buying&nbsp;Price</th>
 											<th>Quantity</th>
-
 
 
 
@@ -256,7 +281,8 @@
 											<td><%=results.getString(4)%></td>
 											<td><%=results.getString(5)%></td>
 											<td><%=results.getString(6)%></td>
-											<td><%=results.getString(7)%></td>
+											<td><%=results.getLong(7)%></td>
+
 										</tr>
 
 										<%
@@ -281,7 +307,7 @@
 											<td><%=result.getString(4)%></td>
 											<td><%=result.getString(5)%></td>
 											<td><%=result.getString(6)%></td>
-											<td><%=result.getString(7)%></td>
+											<td><%=result.getLong(7)%></td>
 
 
 										</tr>
@@ -301,37 +327,32 @@
 
 					<!-- second column inside table end here -->
 				</table>
+				<table style="width: 100%;">
+					<tr>
+
+						<td><a href="Stock_IN_INSERT.jsp"
+							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
+
+						<td><a href="Stock_IN_DELETE.jsp"
+							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
+						<td><a href="Stock_Report.jsp"
+							class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></td>
+
+					</tr>
+
+				</table>
+
 			</div>
 
-
-
-
-			<!-- end of the first table -->
-			<div style="position: fixed; bottom: 0; width: 90%; display: flex;">
-					<div style="width: 30%; margin: 7px;">
-						<a href="Stock_IN_INSERT.jsp"
-							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a>
-					</div>
-
-					<div style="width: 30%; margin: 7px;">
-						<a href="Stock_IN_DELETE.jsp"
-							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a>
-					</div>
-					<div style="width: 30%; margin: 7px;"><a href="Stock_Report.jsp"
-							class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></div>
-
-				</div>
-
 		</div>
-
-
 	</div>
 	<!-- /#wrapper -->
 	<div id="snackbar"
 		style="color:<%if (session.getAttribute("color") != null) {%><%=session.getAttribute("color")%><%}%>">
 		<%
 			if (session.getAttribute("message") != null) {
-		%> <%=session.getAttribute("message")%>
+		%>
+		<%=session.getAttribute("message")%>
 		<%
 			}
 		%>
@@ -340,10 +361,12 @@
 	<!-- Bootstrap core JavaScript -->
 	<script src="vendor/jquery/jquery.min.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	
 
-<script src="${pageContext.request.contextPath}/js/jquery.confirmModal.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/jquery.confirmModal.js"></script>
+
+	<script
+		src="${pageContext.request.contextPath}/js/jquery.confirmModal.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/js/jquery.confirmModal.js"></script>
 
 	<!-- Menu Toggle Script -->
 
@@ -354,69 +377,72 @@
 		});
 	</script>
 
-<script src="${pageContext.request.contextPath}/js/WebScript.js"></script>	
-	
+	<script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
+	<%
+		if (session.getAttribute("color") != null && session.getAttribute("message") != null) {
+	%>
 	<script>
-
-	
-	
-		<%if (session.getAttribute("color") != null && session.getAttribute("message") != null) {%>
-			myFunction(clearAll());
-		<%}%>
-		
-		function clearAll() {
-			<%session.removeAttribute("color");
-			session.removeAttribute("message");%>
-		}	
-
+		myFunction();
+	</script>
+	<%
+		session.removeAttribute("color");
+			session.removeAttribute("message");
+	%>
+	<%
+		}
+	%>
+	<script>
 		function logValue() {
-		    switch (this.value) {
-		        case "stockindate":
-		        	document.getElementById("txtSearch").setAttribute('type','date');
-		            break;
-		        default : 
-		        	document.getElementById("txtSearch").setAttribute('type','text');
-		        	break;
-		    }
+			switch (this.value) {
+			case "stockindate":
+				document.getElementById("txtSearch").setAttribute('type',
+						'date');
+				break;
+			default:
+				document.getElementById("txtSearch").setAttribute('type',
+						'text');
+				break;
+			}
 		}
 
 		var select = document.getElementById("searchType");
 		select.addEventListener('change', logValue, false);
-	
-	
-</script>
+	</script>
 
 
-<script>
+	<script>
+		$(document).ready(function() {
 
-$(document).ready(function() {
+			$('.confirmModal').click(function(e) {
+				e.preventDefault();
 
-	 $('.confirmModal').click(function(e) {
-	      e.preventDefault();    
-	      
-	      if ($defaultsConfirmModal !== undefined) {
-	          var copy = $defaultsConfirmModal;
-	          $defaultsConfirmModal = {
-	              confirmButton: 'OK',
-	              cancelButton: 'Cancel',
-	              messageHeader: '&nbsp;',
-	              modalBoxWidth: 'auto',
-	              modalVerticalCenter: false,
-	              fadeAnimation: false,
-	              backgroundBlur: false,
-	              autoFocusOnConfirmBtn: false
-	          };
-	        }
-	      
-	      $.confirmModal('Are you sure you want to delete this?', { messageHeader: "Confirm Delete"}, function(el) {
-	    	  document.deleteForm.submit();
-	      });
-	      $defaultsConfirmModal = copy;
-	    });    
-	 
-});
+				if ($defaultsConfirmModal !== undefined) {
+					var copy = $defaultsConfirmModal;
+					$defaultsConfirmModal = {
+						confirmButton : 'OK',
+						cancelButton : 'Cancel',
+						messageHeader : '&nbsp;',
+						modalBoxWidth : 'auto',
+						modalVerticalCenter : false,
+						fadeAnimation : false,
+						backgroundBlur : false,
+						autoFocusOnConfirmBtn : false
+					};
+				}
 
-</script>
+				$.confirmModal('Are you sure you want to delete this?', {
+					messageHeader : "Confirm Delete"
+				}, function(el) {
+
+					document.deleteForm.submit();
+
+				});
+
+				$defaultsConfirmModal = copy;
+			});
+
+		});
+	</script>
 
 
 </body>

@@ -1,12 +1,9 @@
-
-<%@page import="com.model.CurrentUser"%>
 <%@page import="com.DBConnection.ConnectionManager"%>
-<%@page import="com.Utilities.MySQLQueries"%>
 <%@page import="com.DatabaseHandle.Inventory_SELECT"%>
+<%@page import="com.Utilities.MySQLQueries"%>
+<%@page import="com.model.CurrentUser"%>
 
 <%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.ResultSetMetaData"%>
-<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -18,7 +15,6 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
-
 
 
 <title>Automated Barcode Solution</title>
@@ -45,41 +41,52 @@
 	crossorigin="anonymous"></script>
 
 
-
 <!-- Custom styles for this template -->
 <link href="css/simple-sidebar3.css" rel="stylesheet">
 </head>
 
 
-
 <body>
-<% System.out.println("this is user " + CurrentUser.getUsername());
-	if(CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals(""))
-	{
-		response.sendRedirect("login.jsp");
-	}
-	
-	
+	<%
+		System.out.println("this is user " + CurrentUser.getUsername());
+		if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
+			response.sendRedirect("login.jsp");
+		}
 	%>
 
+	<%
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); //HTTP 1.1
+		response.setHeader("Pragma", "no-cache"); //HTTP 1.0
+		response.setDateHeader("Expires", 0); //prevents caching at the proxy server
+	%>
 	<div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->
 		<div class="bg-light border-right" id="sidebar-wrapper">
-		
-			<div class="sidebar-heading">Automated Barcode<br>Solution</div>
+
+			<div class="sidebar-heading">
+				Automated Barcode<br>Solution
+			</div>
 			<div class="list-group list-group-flush">
-			<%if(CurrentUser.getUsername().equals("admin")){ %>
-				<a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a> 
-			<%} %>
-			<%if(CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant") || CurrentUser.getUsername().equals("manager")) {%>
+				<%
+					if (CurrentUser.getUsername().equals("admin")) {
+				%>
+				<a href="Supplier_Order_Insert.jsp"
+					class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
+				<%
+					}
+				%>
+				<%
+					if (CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant")
+							|| CurrentUser.getUsername().equals("manager")) {
+				%>
 				<a
 					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+					data-toggle="collapse" href="#collapseExample" role="button"
+					aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
 				<div class="collapse" id="collapseExample">
 
-			
-			
+
 					<a href="Stock_IN_INSERT.jsp"
 						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
 					<a href="Stock_OUT_INSERT.jsp"
@@ -87,30 +94,26 @@
 
 
 				</div>
-		
-				<a href="Payment_UPDATE.jsp" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
-				
-				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
+
+				<a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+
+				<a href="Customer_Details_Insert.jsp"
+					class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
 				<a href="Customer_Order_Insert.jsp"
 					class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
-					<a href="Repair_INSERT.jsp"
-				class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
+				<a href="Repair_INSERT.jsp"
+					class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
 				<a href="Admin_Customer_Order_Conformation.jsp"
-				class="list-group-item list-group-item-action bg-light">Customer Order &nbsp;Confirm</a>
-				<a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">Employee&nbsp;Management</a>
-				<div class="collapse" id="collapseExample2">
-					<a href="Emp_Management.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Management</a>
-					<a href="Emp_REPORT.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Reports</a>
-					<a href="IT_Manager_Assign_Emp.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee Assign &nbsp;Management</a>
-				</div>	
-					
+					class="list-group-item list-group-item-action bg-light">Customer&nbsp;Order&nbsp;Confirm</a> <a href="Emp_Management.jsp"
+					class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
+				<a href="Emp_REPORT.jsp"
+					class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
+				<a href="IT_Manager_Assign_Emp.jsp"
+					class="list-group-item list-group-item-action bg-light">Employee&nbsp;Assign &nbsp;Management</a>
 			</div>
-			<%} %>
+			<%
+				}
+			%>
 		</div>
 		<!-- /#sidebar-wrapper -->
 
@@ -130,111 +133,30 @@
 
 				<div class="collapse navbar-collapse" id="navbarSupportedContent">
 					<ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-						<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"	role="button" data-toggle="dropdown" aria-haspopup="true"
+						<li class="nav-item dropdown"><a
+							class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+							role="button" data-toggle="dropdown" aria-haspopup="true"
 							aria-expanded="false"> User</a>
 							<div class="dropdown-menu dropdown-menu-right"
 								aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="login.jsp">Log out</a> 
+								<a class="dropdown-item" href="login.jsp">Log out</a>
 								<div class="dropdown-divider"></div>
-								
+
 							</div></li>
 					</ul>
 				</div>
 			</nav>
 
 			<!--create the big table -->
-			<div style="top: 0">
+			<div style="top: 0; height:637px;">
 				<table class="table table-bordered table-striped mb-0"
-					style="width: 100%; height: 75%;">
+					style="width: 100%; height: 100%;">
+
 					<!--division of the first two big columns start here -->
 					<tr>
 						<!-- creating first column of the big table-->
-						<td style="width: 70%; padding: 0;">
-							<!--inside the first column --> <!-- -----------CHANGE STARTS HERE FIRST TABLE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 
-
-						</td>
-
-
-						<!-- start of the next notification column -->
-						<td rowspan="2"
-							style="padding: 0; top: 0; width: 100%; height: 100%;">
-							<!--creation of the notification table -->
-							<table style="height: 100%; width: 100%;">
-
-								<!-- notification one  -->
-
-								<tr>
-									<td style="height: 60%;">
-										<!-- form starts here  -->
-
-										<div class="container" style="height: 525px; overflow: auto;">
-
-											
-							<form action="Inventory_REPORT_SELECT_Controller"
-								method="POST" id="searchForm" name="searchForm">
-								<table class="table table-bordered table-striped mb-0"
-									style="width: 100%;">
-									<tr>
-										<td style="padding-top: 0px; padding-bottom: 0px;"><input
-											class="btn-block" name="queryValue" id="txtSearch"
-											type="text" placeholder="Search Here..." required
-											<%if (session.getAttribute("results") != null) {%> disabled
-											<%}%>></td>
-											</tr>
-											<tr>
-										<td style="padding-top: 0px; padding-bottom: 0px;"><select
-											required class="btn-block" name="queryType" id="searchType"
-											<%if (session.getAttribute("results") != null) {%> disabled
-											<%}%>>
-												<option value="" disabled selected>Search&nbsp;By...</option>
-												<option value="bar">Barcode&nbsp;Number</option>
-												<option value="stockid">Stock&nbsp;ID</option>
-												<option value="iname">Item&nbsp;Model</option>
-												<option value="manu">Manufacturer</option>
-												<option value="sup">Supplier</option>
-												<option value="itype">Item&nbsp;Type</option>
-												<option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
-										</select></td>
-										</tr>
-										<tr>
-										<td style="padding-top: 0px; padding-bottom: 0px;"><input
-											name="search" type="submit" class="btn-block"
-											<%if (session.getAttribute("results") != null) {%>
-											value="Reset" id="resetBtn" formnovalidate <%} else {%>
-											value="Search Stock" <%}%>></td></tr>
-											
-											
-											
-									
-								</table>
-							</form>
-							<form action = "Stock_Report_Controller" method = "post">
-											<input type= "submit" value = "Print" style = "width:100%">
-											</form>
-
-										</div> <!--  form ends here -->
-
-									</td>
-
-
-								</tr>
-								<tr>
-									<td>
-									
-										<div style="width: 100%; display: flex; flex-direction: row;">
-											<label for="submit-form"
-												class="buttonLabel btn btn-success btn-block btn-lg">Insert&nbsp;Stock</label>
-											<label id="rstBtn" for="reset-form"
-												class="buttonLabel btn btn-danger btn-block btn-lg">Reset&nbsp;Fields</label>
-										</div>
-
-									</td>
-								</tr>
-							</table>
-					</tr>
-					<tr>
-						<td>
+						<td rowspan="3">
 							<div class="table-wrapper-scroll-y my-custom-scrollbar"
 								style="height: 525px; position: relative;">
 
@@ -250,21 +172,18 @@
 											<th>Quantity</th>
 
 
-
-
 										</tr>
 									</thead>
 									<tbody>
 										<%
 											if (session.getAttribute("results") != null) {
-							
-												HttpSession session_report_stock = request.getSession();
-												ResultSet results = (ResultSet) session.getAttribute("results");
-												session_report_stock.setAttribute("report_stock", results);
-												
-												if (results.first()) {
 
-												do {
+												HttpSession session_report_stock = request.getSession(true);
+												ResultSet results = (ResultSet) session.getAttribute("results");
+												results.beforeFirst();
+												session_report_stock.setAttribute("report_stock", results);
+
+												while (results.next()) {
 										%>
 										<tr>
 											<td><%=results.getString(1)%></td>
@@ -277,9 +196,9 @@
 										</tr>
 
 										<%
-											} while (results.next());
-														}
-												session.removeAttribute("results");
+											}
+
+												
 
 											} else {
 
@@ -311,25 +230,107 @@
 
 							</div> <!--finish first column-->
 						</td>
+
+
+
+
+						<!-- start of the next notification column -->
+						<td style="padding: 0; top: 0; width: 100%; height: 100%;">
+							<!--creation of the notification table -->
+							<table style="height: 100%; width: 100%;">
+
+								<!-- notification one  -->
+
+								<tr>
+									<td style="height: 30%;">
+										<!-- form starts here  -->
+
+										<div class="container" style="overflow: auto;">
+
+
+											<form action="Inventory_REPORT_SELECT_Controller"
+												method="POST" id="searchForm" name="searchForm">
+												<table class="table table-bordered table-striped mb-0"
+													style="width: 100%;">
+													<tr>
+														<td style="padding-top: 0px; padding-bottom: 0px;"><input
+															class="btn-block" name="queryValue" id="txtSearch"
+															type="text" placeholder="Search Here..." required
+															<%if (session.getAttribute("results") != null) {%>
+															disabled <%}%>></td>
+													</tr>
+													<tr>
+														<td style="padding-top: 0px; padding-bottom: 0px;"><select
+															required class="btn-block" name="queryType"
+															id="searchType"
+															<%if (session.getAttribute("results") != null) {%>
+															disabled <%}%>>
+																<option value="" disabled selected>Search&nbsp;By...</option>
+																<option value="bar">Barcode&nbsp;Number</option>
+																<option value="stockid">Stock&nbsp;ID</option>
+																<option value="iname">Item&nbsp;Model</option>
+																<option value="manu">Manufacturer</option>
+																<option value="sup">Supplier</option>
+																<option value="itype">Item&nbsp;Type</option>
+																<option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
+														</select></td>
+													</tr>
+													<tr>
+														<td><input name="search" type="submit"
+															class="btn-block"
+															<% if (session.getAttribute("results") != null) {%>
+															value="Reset" id="resetBtn" formnovalidate <%} else {%>
+															value="Search Stock" <%}%>></td>
+
+													</tr>
+
+
+												</table>
+											</form>
+
+
+
+
+										</div> <!--  form ends here -->
+
+									</td>
+
+
+								</tr>
+								<tr>
+									<td style="padding-left:40px;">
+										<form action="Stock_Report_Controller" method="post">
+											
+												
+													<button type="submit" style="width:93%" class="btn btn-success btn-block"
+													 <% if (session.getAttribute("results") != null) { } else { %>disabled<% } %>>Generate&nbsp;Report</button>
+												
+
+											
+										</form>
+									</td>
+								</tr>
+								<!-- <tr>
+									<td>
+										<div style="height:300px"></div>
+									</td>
+								</tr> -->
+
+
+							</table>
+						</td>
 					</tr>
-					<!-- second column inside table end here -->
 				</table>
-
-
-
-
-				<!-- end of the first table -->
-
-				<table style="width: 100%;">
+				<table style="width:100%;">
+					<!-- second column inside table end here -->
+				
 					<tr>
 
-						<td ><a href="Stock_IN_INSERT.jsp"
-							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
-
-						<td><a href="Stock_IN_DELETE.jsp"
-							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
-						<td><a href="Stock_Report.jsp"
-							class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></td>
+						<td><a href="Stock_IN_INSERT.jsp"
+							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a> </td>
+							<td><a
+							href="Stock_IN_DELETE.jsp" class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
+							<td><a href="Stock_Report.jsp" class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></td>
 
 					</tr>
 
@@ -353,8 +354,10 @@
 
 
 	<!-- Bootstrap core JavaScript -->
-	<script src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- Menu Toggle Script -->
 
 	<script>
@@ -363,60 +366,63 @@
 			$("#wrapper").toggleClass("toggled");
 		});
 	</script>
-	
-	<script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
-	
-	<script>
-	
-	$(document).ready(function(){
-		 document.getElementById("txtArea").addEventListener(
-					'keydown',
-					function(event) {
-						if ((event.ctrlKey && event.key === "j")
-								|| (event.ctrlKey && event.key === "b")
-								|| (event.ctrlKey && event.key === "i"))
-							event.preventDefault();
-					});
-			
 
-			setInputFilter(document.getElementById("txtBPPItem"), function(value) {
-				return /^-?\d*[.,]?\d{0,2}$/.test(value);
-			});
-			setInputFilter(document.getElementById("txtSPPItem"), function(value) {
-				return /^-?\d*[.,]?\d{0,2}$/.test(value);
-			});    
-	 });
-	
+	<script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							document
+									.getElementById("txtArea")
+									.addEventListener(
+											'keydown',
+											function(event) {
+												if ((event.ctrlKey && event.key === "j")
+														|| (event.ctrlKey && event.key === "b")
+														|| (event.ctrlKey && event.key === "i"))
+													event.preventDefault();
+											});
+
+							setInputFilter(document
+									.getElementById("txtBPPItem"), function(
+									value) {
+								return /^-?\d*[.,]?\d{0,2}$/.test(value);
+							});
+							setInputFilter(document
+									.getElementById("txtSPPItem"), function(
+									value) {
+								return /^-?\d*[.,]?\d{0,2}$/.test(value);
+							});
+						});
 	<%if (session.getAttribute("color") != null && session.getAttribute("message") != null) {%>
 		myFunction(clearAll());
 	<%}%>
-	function clearAll() {
-			<%session.removeAttribute("color");
+		function clearAll() {
+	<%session.removeAttribute("color");
 			session.removeAttribute("message");%>
-	}
-	
-	function logValue() {
-	    switch (this.value) {
-	        case "stockindate":
-	        	document.getElementById("txtSearch").setAttribute('type','date');
-	            break;
-	        default : 
-	        	document.getElementById("txtSearch").setAttribute('type','text');
-	        	break;
-	    }
-	}
+		}
 
-	var select = document.getElementById("searchType");
-	select.addEventListener('change', logValue, false);
+		function logValue() {
+			switch (this.value) {
+			case "stockindate":
+				document.getElementById("txtSearch").setAttribute('type',
+						'date');
+				break;
+			default:
+				document.getElementById("txtSearch").setAttribute('type',
+						'text');
+				break;
+			}
+		}
 
-	 
-	
-	
-</script>
+		var select = document.getElementById("searchType");
+		select.addEventListener('change', logValue, false);
+	</script>
 
+<% session.removeAttribute("results"); %>
 
 </body>
-
 
 
 </html>

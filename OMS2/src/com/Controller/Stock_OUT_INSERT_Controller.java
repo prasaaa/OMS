@@ -1,8 +1,10 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Inventory_INSERT;
+import com.DatabaseHandle.Inventory_SELECT;
+import com.DatabaseHandle.Inventory_UPDATE;
+import com.Utilities.MySQLQueries;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,12 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Inventory_INSERT;
-import com.DatabaseHandle.Inventory_SELECT;
-import com.DatabaseHandle.Inventory_UPDATE;
-import com.Utilities.MySQLQueries;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Servlet implementation class Stock_OUT_INSERT_Controller
@@ -71,15 +71,9 @@ public class Stock_OUT_INSERT_Controller extends HttpServlet {
 
 				Inventory_INSERT insertStock = new Inventory_INSERT(ConnectionManager.getConnection(),
 						MySQLQueries.QUERY_INSERT_STOCK_OUT);
-
-				Inventory_SELECT selectQuantity = new Inventory_SELECT(ConnectionManager.getConnection(),
-						MySQLQueries.QUERY_GET_ITEM_QUANTITY);
-
-				Inventory_SELECT validateCustomerOrderID = new Inventory_SELECT(ConnectionManager.getConnection(),
-						MySQLQueries.QUERY_VALIDATE_CUSTOMER_ORDER_ID);
-
-				Inventory_SELECT validateModelName = new Inventory_SELECT(ConnectionManager.getConnection(),
-						MySQLQueries.QUERY_VALIDATE_ITEM_MODEL);
+				
+				Inventory_INSERT getFaultyItems = new Inventory_INSERT(ConnectionManager.getConnection(),
+						MySQLQueries.QUERY_GET_FAULTY_ITEMS);
 
 				Inventory_UPDATE updateStatus = new Inventory_UPDATE(ConnectionManager.getConnection(),
 						MySQLQueries.QUERY_UPDATE_STOCK_OUT_ID);
@@ -87,12 +81,21 @@ public class Stock_OUT_INSERT_Controller extends HttpServlet {
 				Inventory_INSERT selectStockOutID = new Inventory_INSERT(ConnectionManager.getConnection(),
 						MySQLQueries.QUERY_SELECT_STOCK_OUT_ID);
 
-				String model_name = request.getParameter("iname");
+				Inventory_INSERT getBarcodeList = new Inventory_INSERT(ConnectionManager.getConnection(),
+						MySQLQueries.QUERY_SELECT_BARCODES_BY_ITEM_ID);
+
+				String itemID = request.getParameter("itemID");
+				String itemType = request.getParameter("itype");
 
 				long quantity = 0;
 
-				if (!request.getParameter("quantity").isEmpty())
-					quantity = Long.parseLong(request.getParameter("quantity"));
+				double sppitem = 0;
+
+				if (request.getParameter("sppitem") != null) {
+
+					if (!request.getParameter("sppitem").isEmpty())
+						sppitem = Double.parseDouble(request.getParameter("sppitem"));
+				}
 
 				String date = request.getParameter("stockoutdate");
 
@@ -100,44 +103,32 @@ public class Stock_OUT_INSERT_Controller extends HttpServlet {
 
 				String customerOrdID = request.getParameter("custOrdID");
 
+				String[] barcodeList = request.getParameterValues("barcode");
+
+				quantity = barcodeList.length;
+
+				List<String> oldBarcodeList = getBarcodeList.getBarcodeList(itemID);
+
 				if (request.getSession(false) != null) {
-					request.getSession(false).setAttribute("model_name", model_name);
-					request.getSession(false).setAttribute("quantity", quantity);
+					request.getSession(false).setAttribute("stockOUTItemID", itemID);
+					request.getSession(false).setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						request.getSession(false).setAttribute("sppitem", sppitem);
+
 					request.getSession(false).setAttribute("stock_out_date", date);
 					request.getSession(false).setAttribute("remarks", remarks);
 				} else {
 					HttpSession session = request.getSession(true);
-					session.setAttribute("model_name", model_name);
-					session.setAttribute("quantity", quantity);
+					session.setAttribute("stockOUTItemID", itemID);
+					session.setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						session.setAttribute("sppitem", sppitem);
+
 					session.setAttribute("stock_out_date", date);
 					session.setAttribute("remarks", remarks);
 
-				}
-
-				ResultSet resultModel = validateModelName.retreiveQueryData(model_name);
-				if (resultModel != null) {
-					try {
-
-						if (!resultModel.first()) {
-							response.sendRedirect("Stock_OUT_Servlet?status=invalidModel");
-							return;
-						}
-
-					} catch (SQLException e2) {
-						// TODO Auto-generated catch block
-						e2.printStackTrace();
-					} finally {
-						try {
-							resultModel.close();
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-
-				} else {
-					response.sendRedirect("Stock_OUT_Servlet?status=invalidModel");
-					return;
 				}
 
 				if (quantity == 0) {
@@ -145,105 +136,218 @@ public class Stock_OUT_INSERT_Controller extends HttpServlet {
 					return;
 				}
 
-				ResultSet resultCustomerOrdID = validateCustomerOrderID.retreiveQueryData(customerOrdID);
+				boolean status = true;
 
-				if (resultCustomerOrdID != null) {
-					try {
-
-						if (!resultCustomerOrdID.first()) {
-							response.sendRedirect("Stock_OUT_Servlet?status=invalidCustOrdID");
-							return;
+				for (String str : oldBarcodeList) {
+					for (String strNew : barcodeList) {
+						if (strNew.equalsIgnoreCase(str)) {
+							status = false;
+							break;
+						} else {
+							status = true;
+							continue;
 						}
 
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} finally {
-						try {
-							resultCustomerOrdID.close();
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
+
+					if (status == false) {
+						break;
+					} else {
+						continue;
+					}
+				}
+
+				if (status == true) {
+
+					response.sendRedirect("Stock_OUT_Servlet?status=itemNotExists");
+					return;
 
 				} else {
-					response.sendRedirect("Stock_OUT_Servlet?status=invalidCustOrdID");
-					return;
-				}
 
-				long remainingQuantity = 0;
+					List <String> faultList = getFaultyItems.getBarcodeList(itemID);
 
-				ResultSet resultQuantity = selectQuantity.retreiveQueryData(model_name);
+					boolean status1 = true;
+					
+					for (String str : faultList) {
+						for (String strNew : barcodeList) {
+							if (strNew.equalsIgnoreCase(str)) {
+								status1 = false;
+								break;
+							} else {
+								status1 = true;
+								continue;
+							}
 
-				if (resultQuantity != null) {
-
-					try {
-						if (resultQuantity.next()) {
-							remainingQuantity = resultQuantity.getLong(1);
 						}
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+
+						if (status1 == false) {
+							break;
+						} else {
+							continue;
+						}
 					}
-				}
 
-				if (quantity <= remainingQuantity && remainingQuantity != 0) {
+					if (status1 == true) {
 
-					boolean bool = false;
+						boolean bool = false;
 
-					bool = insertStock.InsertStock(model_name, quantity, date, customerOrdID, remarks);
+						bool = insertStock.InsertStockOUT(date, remarks , quantity, sppitem, itemID, customerOrdID);
 
-					if (bool == true) {
+						if (bool == true) {
 
-						String stockOutID = selectStockOutID.getStockID(model_name);
+							String stockOutID = selectStockOutID.getStockID(itemID);
 
-						if (!stockOutID.isEmpty()) {
+							if (!stockOutID.isEmpty()) {
 
-							long count = updateStatus.updateStatus(stockOutID, model_name, quantity);
+								long count = 0;
+								for (String str : barcodeList) {
+									
+									count = updateStatus.updateStatus(stockOutID, itemID, str);
+									
+									if (count == 0)
+										break;
+								}
 
-							if (count > 0) {
-								response.sendRedirect("Stock_OUT_Servlet?status=insertSuccess");
-								return;
+								if (count > 0) {
+									response.sendRedirect("Stock_OUT_Servlet?status=insertSuccess");
+									return;
+								} else {
+									response.sendRedirect("Stock_OUT_Servlet?status=insertError");
+									return;
+								}
 							} else {
 								response.sendRedirect("Stock_OUT_Servlet?status=insertError");
 								return;
 							}
+
 						} else {
-							response.sendRedirect("Stock_OUT_Servlet?status=insertError");
+							response.sendRedirect("Stock_OUT_Servlet?status=insertFail");
 							return;
 						}
-
 					} else {
-						response.sendRedirect("Stock_OUT_Servlet?status=insertFail");
+						response.sendRedirect("Stock_OUT_Servlet?status=faultItemExists");
 						return;
 					}
-				} else {
-					response.sendRedirect("Stock_OUT_Servlet?status=insufficientQuantity");
-					return;
+
 				}
 
-			} else {
-				String model_name = request.getParameter("iname");
+			} else if (request.getParameter("submitButton").trim().equalsIgnoreCase("Add Item Info")) {
 
-				long quantity = 0;
+				String itemID = request.getParameter("itemID");
+				String itemType = request.getParameter("itype");
 
-				if (!request.getParameter("quantity").isEmpty())
-					quantity = Long.parseLong(request.getParameter("quantity"));
+				double sppitem = 0;
+
+				if (request.getParameter("sppitem") != null) {
+
+					if (!request.getParameter("sppitem").isEmpty())
+						sppitem = Double.parseDouble(request.getParameter("sppitem"));
+				}
 
 				String date = request.getParameter("stockoutdate");
 
 				String remarks = request.getParameter("remarks");
 
 				if (request.getSession(false) != null) {
-					request.getSession(false).setAttribute("model_name", model_name);
-					request.getSession(false).setAttribute("quantity", quantity);
+					request.getSession(false).setAttribute("stockOUTItemID", itemID);
+					request.getSession(false).setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						request.getSession(false).setAttribute("sppitem", sppitem);
+
 					request.getSession(false).setAttribute("stock_out_date", date);
 					request.getSession(false).setAttribute("remarks", remarks);
 				} else {
 					HttpSession session = request.getSession(true);
-					session.setAttribute("model_name", model_name);
-					session.setAttribute("quantity", quantity);
+					session.setAttribute("stockOUTItemID", itemID);
+					session.setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						session.setAttribute("sppitem", sppitem);
+
+					session.setAttribute("stock_out_date", date);
+					session.setAttribute("remarks", remarks);
+
+				}
+				response.reset();
+				response.sendRedirect("Stock_OUT_Item_SELECT.jsp");
+				return;
+
+			} else if (request.getParameter("submitButton").trim().equalsIgnoreCase("Change Item Info")) {
+
+				String itemID = request.getParameter("itemID");
+				String itemType = request.getParameter("itype");
+
+				double sppitem = 0;
+
+				if (request.getParameter("sppitem") != null) {
+
+					if (!request.getParameter("sppitem").isEmpty())
+						sppitem = Double.parseDouble(request.getParameter("sppitem"));
+				}
+
+				String date = request.getParameter("stockoutdate");
+
+				String remarks = request.getParameter("remarks");
+
+				if (request.getSession(false) != null) {
+					request.getSession(false).setAttribute("stockOUTItemID", itemID);
+					request.getSession(false).setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						request.getSession(false).setAttribute("sppitem", sppitem);
+
+					request.getSession(false).setAttribute("stock_out_date", date);
+					request.getSession(false).setAttribute("remarks", remarks);
+				} else {
+					HttpSession session = request.getSession(true);
+					session.setAttribute("stockOUTItemID", itemID);
+					session.setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						session.setAttribute("sppitem", sppitem);
+
+					session.setAttribute("stock_out_date", date);
+					session.setAttribute("remarks", remarks);
+
+				}
+				response.reset();
+				response.sendRedirect("Stock_OUT_Item_SELECT.jsp");
+				return;
+
+			} else {
+				String itemID = request.getParameter("itemID");
+				String itemType = request.getParameter("itype");
+
+				double sppitem = 0;
+
+				if (request.getParameter("sppitem") != null) {
+
+					if (!request.getParameter("sppitem").isEmpty())
+						sppitem = Double.parseDouble(request.getParameter("sppitem"));
+				}
+
+				String date = request.getParameter("stockoutdate");
+
+				String remarks = request.getParameter("remarks");
+
+				if (request.getSession(false) != null) {
+					request.getSession(false).setAttribute("stockOUTItemID", itemID);
+					request.getSession(false).setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						request.getSession(false).setAttribute("sppitem", sppitem);
+
+					request.getSession(false).setAttribute("stock_out_date", date);
+					request.getSession(false).setAttribute("remarks", remarks);
+				} else {
+					HttpSession session = request.getSession(true);
+					session.setAttribute("stockOUTItemID", itemID);
+					session.setAttribute("stockoutitype", itemType);
+
+					if (sppitem > 0)
+						session.setAttribute("sppitem", sppitem);
+
 					session.setAttribute("stock_out_date", date);
 					session.setAttribute("remarks", remarks);
 
@@ -263,11 +367,14 @@ public class Stock_OUT_INSERT_Controller extends HttpServlet {
 			if (request.getSession(false).getAttribute("stock_out_date") != null)
 				request.getSession(false).removeAttribute("stock_out_date");
 
-			if (request.getSession(false).getAttribute("quantity") != null)
-				request.getSession(false).removeAttribute("quantity");
+			if (request.getSession(false).getAttribute("stockOUTItemID") != null)
+				request.getSession(false).removeAttribute("stockOUTItemID");
 
-			if (request.getSession(false).getAttribute("model_name") != null)
-				request.getSession(false).removeAttribute("model_name");
+			if (request.getSession(false).getAttribute("sppitem") != null)
+				request.getSession(false).removeAttribute("sppitem");
+
+			if (request.getSession(false).getAttribute("stockoutitype") != null)
+				request.getSession(false).removeAttribute("stockoutitype");
 
 			response.reset();
 			response.sendRedirect("Stock_OUT_INSERT.jsp");

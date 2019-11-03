@@ -298,26 +298,19 @@
 
 					<!-- second column inside table end here -->
 				</table>
-			</div>
+			<table style="width: 100%;">
+					<tr>
 
+						<td><a href="Stock_OUT_INSERT.jsp"
+							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
 
+						<td><a href="Stock_OUT_DELETE.jsp"
+							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
+						
 
+					</tr>
 
-			<!-- end of the first table -->
-			<div style="position: fixed; bottom: 0; width: 90%; display: flex;">
-					<div style="width: 30%; margin: 7px;">
-						<a href="Stock_OUT_INSERT.jsp"
-							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a>
-					</div>
-
-					<div style="width: 30%; margin: 7px;">
-						<a href="Stock_OUT_DELETE.jsp"
-							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a>
-					</div>
-					<div style="width: 30%; margin: 7px;"><a href=""
-							class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></div>
-
-				</div>
+				</table>
 
 		</div>
 

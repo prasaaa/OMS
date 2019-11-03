@@ -1,4 +1,6 @@
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="com.model.CurrentUser"%>
 <%@page import="com.Utilities.MySQLQueries"%>
 <%@page import="com.DatabaseHandle.Inventory_SELECT"%>
@@ -47,11 +49,68 @@
 
 <!-- Custom styles for this template -->
 <link href="css/simple-sidebar3.css" rel="stylesheet">
+
+
+<script>
+function clearSessions(){
+	sessionStorage.clear();
+	
+};
+</script>
+
+
 </head>
 
 
 
-<body>
+
+<body onload="clearSessions();">
+<% 
+if (session.getAttribute("REFRESH") != null) {
+			if (session.getAttribute("REFRESH").toString().equalsIgnoreCase("TRUE"))
+				session.setAttribute("REFRESH", "FALSE");
+			else {
+				session.removeAttribute("REFRESH");
+				
+
+				if (session.getAttribute("itemID") != null)
+					session.removeAttribute("itemID");
+				
+				if (session.getAttribute("bppitem") != null)
+					session.removeAttribute("bppitem");
+				
+				if (session.getAttribute("remarks") != null)
+					session.removeAttribute("remarks");
+
+				if (session.getAttribute("stock_in_date") != null)
+					session.removeAttribute("stock_in_date");
+
+				if (session.getAttribute("supID") != null)
+					session.removeAttribute("supID");
+
+				if (session.getAttribute("itype") != null)
+					session.removeAttribute("itype");
+			}
+		} else {
+			if (session.getAttribute("itemID") != null)
+				session.removeAttribute("itemID");
+			
+			if (session.getAttribute("bppitem") != null)
+				session.removeAttribute("bppitem");
+			
+			if (session.getAttribute("remarks") != null)
+				session.removeAttribute("remarks");
+
+			if (session.getAttribute("stock_in_date") != null)
+				session.removeAttribute("stock_in_date");
+
+			if (session.getAttribute("supID") != null)
+				session.removeAttribute("supID");
+
+			if (session.getAttribute("itype") != null)
+				session.removeAttribute("itype");
+		}
+%>
 <% System.out.println("this is user " + CurrentUser.getUsername());
 	if(CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals(""))
 	{
@@ -65,15 +124,7 @@
 		 response.setHeader("Pragma","no-cache"); //HTTP 1.0 
 		 response.setDateHeader ("Expires", 0); //prevents caching at the proxy server  
 		%>
-	<% System.out.println("this is user " + CurrentUser.getUsername());
-	if(CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals(""))
-	{
-		response.sendRedirect("login.jsp");
-	}
-	
-	
-	%>
-
+		
 	<div class="d-flex" id="wrapper">
 
 		<!-- Sidebar -->
@@ -100,7 +151,7 @@
 
 				</div>
 		
-				<a href="Payment_UPDATE.jsp" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
+				<a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
 				
 				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
 				<a href="Customer_Order_Insert.jsp"
@@ -109,18 +160,13 @@
 				class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
 				<a href="Admin_Customer_Order_Conformation.jsp"
 				class="list-group-item list-group-item-action bg-light">Customer Order &nbsp;Confirm</a>
-				<a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">Employee&nbsp;Management</a>
-				<div class="collapse" id="collapseExample2">
-					<a href="Emp_Management.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Management</a>
-					<a href="Emp_REPORT.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee&nbsp;Reports</a>
-					<a href="IT_Manager_Assign_Emp.jsp"
-					class="list-group-item list-group-item-action bg-secondary text-white">Employee Assign &nbsp;Management</a>
-				</div>	
-					
+				
+				<a href="Emp_Management.jsp"
+				class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
+				<a href="Emp_REPORT.jsp"
+				class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
+				<a href="IT_Manager_Assign_Emp.jsp"
+				class="list-group-item list-group-item-action bg-light">Employee Assign &nbsp;Management</a>
 			</div>
 			<%} %>
 		</div>
@@ -215,37 +261,70 @@
 										<div class="container" style="height: 525px; overflow: auto;">
 
 											<form action="Inventory_INSERT_Controller" method="post">
-
-												<label for="iname">Item&nbsp;Model&nbsp;Name</label> <input
-													type="text" name="iname" placeholder="Item Model.."
-													required><br> <label for="manu">Manufacturer</label>
-												<input type="text" name="manu" placeholder="Manufacturer.."
-													required><br /> <label for="sup">Supplier</label>
-												<input type="text" name="sup" placeholder="Supplier.."
-													required><br /> <label for="itype">Item&nbsp;Type</label>
-												<select name="itype" required>
-													<option value="None" disabled selected>Select&nbsp;Item&nbsp;Type</option>
-													<option value="Finger Print">Finger&nbsp;Print</option>
-													<option value="Card Punch">Card&nbsp;Punch</option>
-													<option value="CCTV Camera">CCTV&nbsp;Camera</option>
-												</select><br> <label for="bppitem">Buying&nbsp;Price&nbsp;Per&nbsp;Item</label>
-												<input type="text" id="txtBPPItem" name="bppitem"
+												<% if (session.getAttribute("itemID") != null) { %>
+												<label for="itemID">Item&nbsp;ID</label> <input
+													type="text" name="itemID" <% if (session.getAttribute("itemID") != null) { %>value="<%= session.getAttribute("itemID") %>" <% } %>
+													required class="readonly"><br><label for="sup">Supplier&nbsp;ID</label>
+												<input name="supID" type="text" required <% if (session.getAttribute("supID") != null) { %>value="<%= session.getAttribute("supID") %>" <% } %>
+													class="readonly">
+													
+												
+												<br /> <label for="itype">Item&nbsp;Type</label>
+												<input name="itype" required type="text" class="readonly" <% if (session.getAttribute("itype") != null) { %>value="<%= session.getAttribute("itype") %>" <% } %>><br>
+												<button type="submit" formnovalidate="formnovalidate"
+													name="submitButton"
+													class=" btn btn-warning btn-lg btn-block"
+													value="Change Item Info">Change&nbsp;Item&nbsp;Info</button>
+												<% } else { %>
+												<label for="itemID">Item&nbsp;ID</label> <input
+													type="text" name="itemID" placeholder="Item ID Goes Here..."
+													required class="readonly"><br><label for="sup">Supplier&nbsp;ID</label>
+												<input name="supID" type="text" required placeholder="Supplier ID Goes Here..."
+													class="readonly">
+													
+												
+												<br /> <label for="itype">Item&nbsp;Type</label>
+												<input name="itype" required type="text" class="readonly" placeholder="Item Type Goes Here..." ><br>
+												<button type="submit" formnovalidate="formnovalidate"
+													name="submitButton" class="btn btn-info btn-lg btn-block"
+													value="Add Item Info">Add&nbsp;Item&nbsp;Info</button>
+												<% } %><br>
+												<label for="bppitem">Buying&nbsp;Price&nbsp;Per&nbsp;Item</label>
+												<input type="text" id="txtBPPItem" name="bppitem" <% if (session.getAttribute("bppitem") != null) { %>value="<%= session.getAttribute("bppitem") %>" <% } %>
 													placeholder="Buying Price Per Item.." required><br>
-												<label for="sppitem">Selling&nbsp;Price&nbsp;Per&nbsp;Item</label>
-												<input type="text" id="txtSPPItem" name="sppitem"
-													placeholder="Selling Price Per Item.." required><br>
-
-												<label for="barcode">Item&nbsp;List</label>
-												<textarea id="txtArea" name="barcode" rows="4" cols="10"
-													placeholder="Enter Barcodes Here (One per Line)..." required></textarea>
-												<br> <label for="stockindate">Stock&nbsp;IN&nbsp;Date</label>
-												<input type="date" name="stockindate" required><br>
+												<label for="stockindate">Stock&nbsp;IN&nbsp;Date</label>
+												<input type="date" name="stockindate" id="datePicker" required <% if (session.getAttribute("stock_in_date") != null) { %>value="<%= session.getAttribute("stock_in_date") %>" <% } else { %> value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"<% } %>><br>
 												<label for="remarks">Any&nbsp;other&nbsp;Informations</label>
-												<textarea id="txtAreaRemarks" name="remarks" rows="4"
-													cols="4" placeholder="Enter Stock Information Here..."></textarea>
-												<br> <input type="submit" id="submit-form"
+												<% if (session.getAttribute("remarks") != null) { %><textarea id="txtAreaRemarks" name="remarks" rows="4"
+													cols="4" placeholder="Enter Stock Information Here..."><%= session.getAttribute("remarks") %></textarea><% } else { %>
+													<textarea id="txtAreaRemarks" name="remarks" rows="4"
+													cols="4" placeholder="Enter Stock Information Here..."></textarea><% } %>
+												<br>
+
+												<label for="barcode">Item&nbsp;List</label><br>
+												<span class="popup" style="width:65%;">
+												<input style="width:100%;" type="text" id="txtBarcode" name="barcodeNmber" placeholder="Enter Barcode Here...">
+												<span class="popuptext" id="myPopup"></span>
+												</span>
+												<select name="itemStatus" style="width:33.5%;" id="statusOption">
+													<option value="Working" selected>Working</option>
+													<option value="Faulty">Faulty</option>
+												</select>
+												
+												<div style="width: 100%; display: flex; flex-direction: row;">
+												<button style="width:50%; margin-right:2.5px;" class="btn btn-info" type="button" onclick="myFirstFunction();" >Add&nbsp;Item</button><br>
+												<button style="width:50%; margin-left:2.5px;" class="btn btn-warning" type="button" onclick="deleteAllRows();">Clear&nbsp;All</button>
+												</div><br>
+												<div style = "width:350px; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;">	
+												<table style="width:100%; padding:0; border-spacing:0;" id="myTable" border =1>
+											  <col style="width:70%">
+											  <col style="width:25%">
+											  
+												</table>
+												</div>
+												<input type="submit" id="submit-form"
 													hidden="true" name="submitButton" value="Insert Stock">
-												<input type="reset" id="reset-form" hidden="true"
+												<input type="submit" formnovalidate id="reset-form" hidden="true"
 													name="resetButton" value="Reset Fields">
 
 											</form>
@@ -278,11 +357,11 @@
 									<thead>
 										<tr>
 											<th>Stock&nbsp;ID</th>
-											<th>Item's&nbsp;Model&nbsp;Name</th>
-											<th>Manufacturer</th>
+											<th>Item's&nbsp;ID</th>
 											<th>Supplier</th>
 											<th>Item&nbsp;Type</th>
 											<th>Received&nbsp;Date</th>
+											<th>Buying&nbsp;Price</th>
 											<th>Quantity</th>
 
 
@@ -304,8 +383,8 @@
 											<td><%=results.getString(3)%></td>
 											<td><%=results.getString(4)%></td>
 											<td><%=results.getString(5)%></td>
-											<td><%=results.getString(6)%></td>
-											<td><%=results.getString(7)%></td>
+											<td><%=results.getDouble(6)%></td>
+											<td><%=results.getLong(7)%></td>
 										</tr>
 
 										<%
@@ -329,8 +408,8 @@
 											<td><%=result.getString(3)%></td>
 											<td><%=result.getString(4)%></td>
 											<td><%=result.getString(5)%></td>
-											<td><%=result.getString(6)%></td>
-											<td><%=result.getString(7)%></td>
+											<td><%=result.getDouble(6)%></td>
+											<td><%=result.getLong(7)%></td>
 
 										</tr>
 										<%
@@ -400,13 +479,18 @@
 	
 	<script>
 	
+	
 	$(document).ready(function(){
-		 document.getElementById("txtArea").addEventListener(
+		
+		
+		
+		 document.getElementById("txtBarcode").addEventListener(
 					'keydown',
 					function(event) {
 						if ((event.ctrlKey && event.key === "j")
 								|| (event.ctrlKey && event.key === "b")
-								|| (event.ctrlKey && event.key === "i"))
+								|| (event.ctrlKey && event.key === "i")
+								|| (event.keyCode === 13))
 							event.preventDefault();
 					});
 			
@@ -414,19 +498,17 @@
 			setInputFilter(document.getElementById("txtBPPItem"), function(value) {
 				return /^-?\d*[.,]?\d{0,2}$/.test(value);
 			});
-			setInputFilter(document.getElementById("txtSPPItem"), function(value) {
-				return /^-?\d*[.,]?\d{0,2}$/.test(value);
-			});    
+			   
 	 });
-	
+	</script>
 	<%if (session.getAttribute("color") != null && session.getAttribute("message") != null) {%>
-		myFunction(clearAll());
+	<script>
+		myFunction();
+	</script>
+		<%session.removeAttribute("color");
+		session.removeAttribute("message");%>
 	<%}%>
-	function clearAll() {
-			<%session.removeAttribute("color");
-			session.removeAttribute("message");%>
-	}
-	
+	<script>
 	function logValue() {
 	    switch (this.value) {
 	        case "stockindate":
@@ -442,10 +524,107 @@
 	select.addEventListener('change', logValue, false);
 
 	 
-	
-	
 </script>
 
+<script>
+    $(".readonly").on('keydown paste', function(e){
+        e.preventDefault();
+    });
+</script>
+
+<script>
+		function myFirstFunction() {
+			
+			if (document.getElementById("txtBarcode").value.trim() != "") { 
+				
+				var barcodeArray = [];
+				var i = 0;
+				var bool = true;
+				
+				var table = document.getElementById("myTable");
+				var selecteditem = document.getElementById("txtBarcode");
+				var quantity =  document.getElementById("statusOption");
+				
+				if (sessionStorage.getItem("barcodeList")) {
+					barcodeArray = JSON.parse(sessionStorage.getItem("barcodeList"));
+				} else {
+					
+					sessionStorage.setItem("barcodeList", JSON.stringify(barcodeArray));
+					barcodeArray = JSON.parse(sessionStorage.getItem("barcodeList"));
+					
+				}
+			
+				for (i = 0; i < barcodeArray.length; i++) {
+					if (barcodeArray[i] === selecteditem.value) {
+						bool = false;
+						break;
+					}
+				}
+				
+				if (bool == true) {
+			  
+			  		barcodeArray.push(selecteditem.value);
+			  		sessionStorage.setItem("barcodeList", JSON.stringify(barcodeArray));
+			  		table.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ='+selecteditem.value+' name = "barcode"></td> <td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" name = "status" value = '+quantity.value+'></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeRow(this)"><i class="fa fa-trash"></i></button></td></tr>';
+			  		document.getElementById("txtBarcode").value = "";
+			  		autoFocus();
+			  		
+				} else {
+					var popup = document.getElementById("myPopup");
+					popup.innerHTML = "Duplicate Barcode Number!!";
+					popup.classList.toggle("show");
+					setTimeout(function() {
+						popup.classList.remove("show");
+					}, 3000);
+					document.getElementById("txtBarcode").value = "";
+					autoFocus();
+				}
+			  
+			  
+			} else {
+				var popup = document.getElementById("myPopup");
+				popup.innerHTML = "Please Enter a Barcode Number!!";
+				popup.classList.toggle("show");
+				setTimeout(function() {
+					popup.classList.remove("show");
+				}, 3000);
+				autoFocus();
+			}
+		  
+		}
+		
+		function autoFocus() {
+			document.getElementById("txtBarcode").focus();
+	  		document.getElementById("txtBarcode").scrollIntoView();
+		}
+		  
+		  
+		 function deleteAllRows() {
+			 document.getElementById("myTable").innerHTML = "";
+			 sessionStorage.removeItem("barcodeList");
+			 autoFocus();
+		  }
+		  
+		  function removeRow(input) {
+			  var barcodeArray = JSON.parse(sessionStorage.getItem("barcodeList"));
+			  var i = input.parentNode.parentNode.rowIndex;
+			  document.getElementById("myTable").deleteRow(i);
+			  barcodeArray.splice(i, 1);
+			  sessionStorage.setItem("barcodeList", JSON.stringify(barcodeArray));
+			  autoFocus();
+			}
+		</script>
+
+		<% 
+			session.removeAttribute("itemID");
+			session.removeAttribute("supID");
+			session.removeAttribute("itype");
+			session.removeAttribute("bppitem");
+			session.removeAttribute("remarks");
+		
+		
+		
+		%>
 
 </body>
 
