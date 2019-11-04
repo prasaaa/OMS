@@ -138,6 +138,8 @@ input[type=text], select, textarea, input[type=date], input[type=number]
 	resize: vertical;
 }
 
+
+
 input[type=submit], input[type=button] {
 	background-color: #4CAF50;
 	color: white;
