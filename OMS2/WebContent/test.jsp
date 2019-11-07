@@ -40,12 +40,6 @@
 			<option value="nepal">Nepal</option>
 			<option value="butan">Butan</option>
 			<option value="maldives">Maldives</option>
-			<option value="myannmar">Myanmar</option>
-			<option value="thailand">Thailand</option>
-			<option value="malaysia">Malaysia</option>
-			<option value="singapore">Singapore</option>
-			<option value="indonesia">Indonesia</option>
-			<option value="vietnam">Vietnam</option>
 		</select>
 		<br><br>
 		
@@ -58,6 +52,8 @@
 	    	searchInputPlaceholder: "Search..."
 	    });
 	});
-	</script>
+
+
+    </script>
 </body>
 </html>
