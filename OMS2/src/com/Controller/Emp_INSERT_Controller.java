@@ -1,7 +1,7 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Emp_INSERT;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,10 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Connection;
 
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Emp_INSERT;
-import com.mysql.cj.Query;
 
 @WebServlet("/Emp_INSERT_Controller")
 public class Emp_INSERT_Controller extends HttpServlet {

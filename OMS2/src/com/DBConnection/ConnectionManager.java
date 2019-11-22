@@ -8,7 +8,7 @@ public class ConnectionManager {
     private static String url = "jdbc:mysql://localhost:3306/omsdb";
     private static String drivername = "com.mysql.jdbc.Driver";
     private static String username = "root";
-    private static String password = "admin";
+    private static String password = "prasa@123";
     private static Connection con;
 
     public static Connection getConnection() {

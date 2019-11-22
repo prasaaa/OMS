@@ -1,24 +1,19 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Repair_SELECT_Main;
+import com.model.Repairdetails;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Payment_SELECT;
-import com.DatabaseHandle.Repair_SELECT_Main;
-import com.model.Repairdetails;
-import com.sun.corba.se.impl.orbutil.RepIdDelegator;
-
-import sun.security.util.Length;
 
 /**
  * Servlet implementation class Repair_Filter_Controller
