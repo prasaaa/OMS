@@ -11,6 +11,7 @@ public class ConnectionManager {
     private static String password = "root";
     private static Connection con;
 
+
     public static Connection getConnection() {
         //establishing the connection
         try {
