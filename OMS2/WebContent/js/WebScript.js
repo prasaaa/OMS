@@ -26,7 +26,7 @@ function setInputFilter(textbox, inputFilter) {
 }
 
 document.getElementById("txtSearch").addEventListener('keydown', function (event) {
-    if ((event.ctrlKey && event.key === "j") || event.keyCode == 13 || (event.ctrlKey && event.key === "b") || (event.ctrlKey && event.key === "i"))
+    if ((event.ctrlKey && event.key === "j") || event.keyCode === 13 || (event.ctrlKey && event.key === "b") || (event.ctrlKey && event.key === "i"))
         event.preventDefault();
 });
 
