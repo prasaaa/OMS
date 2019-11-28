@@ -1,12 +1,11 @@
 
 
-<%@page import="com.model.CurrentUser"%>
-<%@page import="com.DatabaseHandle.Emp_SELECT"%>
 <%@page import="com.DBConnection.ConnectionManager"%>
+<%@page import="com.DatabaseHandle.Emp_SELECT" %>
 <%@page import="java.sql.Connection"%>
 <%@page import="java.sql.ResultSet"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+         pageEncoding="ISO-8859-1" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -170,10 +169,10 @@
 
 <script>
 $('#exampleModal').on('show.bs.modal', function (event) {
-	  var button = $(event.relatedTarget) // Button that triggered the modal
-	  var recipient = button.data('whatever')
-	  var modal = $(this)
-	  modal.find('.modal-title').text('New message to ' + recipient)
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var recipient = button.data('whatever');
+    var modal = $(this);
+    modal.find('.modal-title').text('New message to ' + recipient);
 	  modal.find('.modal-body input').val(recipient)
 	})
 </script>

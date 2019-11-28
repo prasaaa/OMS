@@ -64,7 +64,7 @@ function matchStart (term, text) {
 $.fn.select2.amd.require(['select2/compat/matcher'], function (oldMatcher) {
   $(".js-example-matcher-compat").select2({
     matcher: oldMatcher(matchStart)
-  })
+  });
 });
 
 </script>

@@ -19,8 +19,8 @@ public class payment {
 	public payment(String paymentid, String price, String status, String type, String due_date) {
 		
 		this.paymentid = paymentid;
-		paydate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());;
-		this.price = Double.parseDouble(price);
+        paydate = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        this.price = Double.parseDouble(price);
 		this.status = status;
 		this.type = type;
 		this.due_date = due_date;

@@ -1,22 +1,18 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Customer_order_INSERT;
+import com.DatabaseHandle.Main_SELECT;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Customer_order_INSERT;
-import com.DatabaseHandle.Main_SELECT;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.HashMap;
 
 
 @WebServlet("/Customer_Order_Insert_Controller")
@@ -46,10 +42,9 @@ public class Customer_Order_Insert_Controller extends HttpServlet {
 		order_type =  request.getParameter("order_type"); 
 		Connection ccoic = ConnectionManager.getConnection();
 		counter = 1;
-		item_name = request.getParameter(String.valueOf(counter)+"item");
-		if(request.getParameter(String.valueOf(counter)+"quantity") != null)
-		{
-			item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
+        item_name = request.getParameter(counter + "item");
+        if (request.getParameter(counter + "quantity") != null) {
+            item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
 		}
 		
 		while(item_name != null)
@@ -75,10 +70,10 @@ public class Customer_Order_Insert_Controller extends HttpServlet {
 				System.out.println("error in fetching item details " + e);
 			}
 			counter++;
-			item_name = request.getParameter(String.valueOf(counter)+"item");
-			if(request.getParameter(String.valueOf(counter)+"quantity") != null)
+            item_name = request.getParameter(counter + "item");
+            if (request.getParameter(counter + "quantity") != null)
 			{
-				item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
+                item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
 			}
 			
 			

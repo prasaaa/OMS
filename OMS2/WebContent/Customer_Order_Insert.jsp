@@ -1,10 +1,10 @@
 
-<%@page import="com.model.CurrentUser"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="com.DatabaseHandle.Supplier_SELECT"%>
 <%@page import="com.DBConnection.ConnectionManager"%>
-<%@page import="java.sql.ResultSet"%>
+<%@page import="com.DatabaseHandle.Supplier_SELECT" %>
+<%@page import="com.model.CurrentUser" %>
 <%@page import="java.sql.Connection"%>
+<%@page import="java.sql.ResultSet" %>
+<%@page import="java.util.HashMap" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -150,9 +150,9 @@
 						ResultSet resultset_for_items ;
 						//for the use of dropdown we use a hashmap
 						HashMap<String,Integer> dropdown_item_store = new HashMap<String,Integer>();
-								
-						 
-						if( (Integer) session.getAttribute("test")  != null)
+
+
+                            if (session.getAttribute("test") != null)
 						{
 							System.out.println("came inside the test");
 							Supplier_SELECT si2 = (Supplier_SELECT) request.getAttribute("ss");	

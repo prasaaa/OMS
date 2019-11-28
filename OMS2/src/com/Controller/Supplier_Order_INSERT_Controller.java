@@ -1,24 +1,21 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.HashMap;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Main_SELECT;
+import com.DatabaseHandle.Supplier_CONFIRM_STOCK;
+import com.DatabaseHandle.Supplier_Order_INSERT;
+import com.model.Supplier_Order;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Customer_order_INSERT;
-import com.DatabaseHandle.Main_SELECT;
-import com.DatabaseHandle.Supplier_CONFIRM_STOCK;
-import com.DatabaseHandle.Supplier_Order_INSERT;
-import com.model.Supplier_Order;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.HashMap;
 
 
 @WebServlet("/Supplier_Order_INSERT_Controller")
@@ -55,11 +52,10 @@ public class Supplier_Order_INSERT_Controller extends HttpServlet {
 		supplier_type =  supplier_type_hashmap.get(supplier_Id);
 
 		counter = 1;
-		item_name = request.getParameter(String.valueOf(counter)+"item");
-		if(request.getParameter(String.valueOf(counter)+"quantity") != null)
-		{
-			item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
-			item_quantity_double =  Double.parseDouble(request.getParameter(String.valueOf(counter)+"quantity"));
+        item_name = request.getParameter(counter + "item");
+        if (request.getParameter(counter + "quantity") != null) {
+            item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
+            item_quantity_double = Double.parseDouble(request.getParameter(counter + "quantity"));
 			
 		}
 		
@@ -92,11 +88,11 @@ public class Supplier_Order_INSERT_Controller extends HttpServlet {
 			
 			buying_totalprice =  buying_totalprice + buying_price * item_quantity_double;
 			counter++;
-			item_name = request.getParameter(String.valueOf(counter)+"item");
-			if(request.getParameter(String.valueOf(counter)+"quantity") != null)
+            item_name = request.getParameter(counter + "item");
+            if (request.getParameter(counter + "quantity") != null)
 			{
-				item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
-				item_quantity_double =  Double.parseDouble(request.getParameter(String.valueOf(counter)+"quantity"));
+                item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
+                item_quantity_double = Double.parseDouble(request.getParameter(counter + "quantity"));
 			}
 			
 			

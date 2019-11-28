@@ -53,11 +53,11 @@ var data = [
 
 $(".js-example-data-array").select2({
   data: data
-})
+});
 
 $(".js-example-data-array-selected").select2({
   data: data
-})
+});
 </script>
 
 Unlike the case of items supplied by [AJAX data sources](/data-sources/ajax), items supplied as an array will be immediately rendered as `<option>` elements in the target `<select>` control.

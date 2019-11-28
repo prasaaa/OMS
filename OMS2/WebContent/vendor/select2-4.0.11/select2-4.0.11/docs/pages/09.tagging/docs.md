@@ -88,7 +88,7 @@ The separators that should be used when tokenizing can be specified using the `t
 $(".js-example-tokenizer").select2({
     tags: true,
     tokenSeparators: [',', ' ']
-})
+});
 
 </script>
 

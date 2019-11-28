@@ -109,7 +109,7 @@ You can, and should, use a `<label>` with Select2, just like any other `<select>
         '</span>'
       );
       return $state;
-    };
+    }
   });
 
 </script>
@@ -176,7 +176,7 @@ The two Select2 boxes below are styled to `50%` and `75%` width respectively to 
 <script type="text/javascript" class="js-code-example-responsive">
 
 $(".js-example-responsive").select2({
-    width: 'resolve' // need to override the changed default
+    width: 'resolve'; // need to override the changed default
 });
 
 </script>

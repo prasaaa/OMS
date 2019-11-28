@@ -9,6 +9,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1" %>
 
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -259,16 +260,18 @@
                                         <form action="Inventory_INSERT_Controller" method="post">
                                             <% if (session.getAttribute("itemID") != null) { %>
                                             <label for="itemID">Item&nbsp;ID</label> <input
-                                                type="text" id="itemID" name="itemID"
+                                                type="text" id="itemID" name="itemID" required="required"
                                                 <% if (session.getAttribute("itemID") != null) { %>value="<%= session.getAttribute("itemID") %>" <% } %>
-                                                required class="readonly"><br><label for="sup">Supplier&nbsp;ID</label>
-                                            <input name="supID" id="sup" type="text" required
+                                                readonly="readonly" tabindex="-1"><br><label
+                                                for="sup">Supplier&nbsp;ID</label>
+                                            <input name="supID" id="sup" type="text" required="required"
                                                    <% if (session.getAttribute("supID") != null) { %>value="<%= session.getAttribute("supID") %>" <% } %>
-                                                   class="readonly">
+                                                   readonly="readonly" tabindex="-1">
 
 
                                             <br/> <label for="itype">Item&nbsp;Type</label>
-                                            <input name="itype" id="itype" required type="text" class="readonly"
+                                            <input name="itype" id="itype" type="text" readonly="readonly"
+                                                   required="required" tabindex="-1"
                                                    <% if (session.getAttribute("itype") != null) { %>value="<%= session.getAttribute("itype") %>" <% } %>><br>
                                             <button type="submit" formnovalidate="formnovalidate"
                                                     name="submitButton"
@@ -385,10 +388,14 @@
                             <tr>
                                 <td>
                                     <div style="width: 100%; display: flex; flex-direction: row;">
-                                        <label for="submit-form"
-                                               class="buttonLabel btn btn-success btn-block btn-lg">Insert&nbsp;Stock</label>
-                                        <label id="rstBtn" for="reset-form"
-                                               class=" buttonLabel btn btn-danger btn-block btn-lg">Reset&nbsp;Fields</label>
+                                        <button for="submit-form"
+                                                onclick="document.getElementById('submit-form').click()"
+                                                class="buttonLabel btn btn-success btn-block btn-lg">Insert&nbsp;Stock
+                                        </button>
+                                        <button id="rstBtn" for="reset-form"
+                                                onclick="document.getElementById('reset-form').click()"
+                                                class=" buttonLabel btn btn-danger btn-block btn-lg">Reset&nbsp;Fields
+                                        </button>
                                     </div>
 
                                 </td>
@@ -610,11 +617,11 @@
 
 </script>
 
-<script>
+<%--<script>
     $(".readonly").on('keydown paste', function (e) {
         e.preventDefault();
     });
-</script>
+</script>--%>
 
 
 <%

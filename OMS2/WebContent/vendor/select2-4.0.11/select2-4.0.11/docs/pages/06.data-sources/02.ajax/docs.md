@@ -288,7 +288,7 @@ $(".js-example-data-ajax").select2({
     delay: 250,
     data: function (params) {
       return {
-        q: params.term, // search term
+        q: params.term,;; // search term
         page: params.page
       };
     },

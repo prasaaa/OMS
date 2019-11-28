@@ -1,15 +1,13 @@
 
-<%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="com.model.CurrentUser"%>
-<%@page import="com.Utilities.MySQLQueries"%>
-<%@page import="com.DatabaseHandle.Inventory_SELECT"%>
 <%@page import="com.DBConnection.ConnectionManager"%>
+<%@page import="com.DatabaseHandle.Inventory_SELECT" %>
+<%@page import="com.Utilities.MySQLQueries" %>
+<%@page import="com.model.CurrentUser" %>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.ResultSetMetaData"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="java.text.SimpleDateFormat" %>
+<%@page import="java.util.Date" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+         pageEncoding="ISO-8859-1" %>
 
 
 <!DOCTYPE html>
@@ -55,7 +53,7 @@
 	function clearSessions() {
 		sessionStorage.clear();
 
-	};
+    }
 </script>
 
 </head>
