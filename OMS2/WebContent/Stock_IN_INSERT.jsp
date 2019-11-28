@@ -1,3 +1,4 @@
+<%@page import="com.DatabaseHandle.Main_SELECT"%>
 <%@page import="com.DBConnection.ConnectionManager" %>
 <%@page import="com.DatabaseHandle.Inventory_SELECT" %>
 <%@page import="com.Utilities.MySQLQueries" %>
@@ -119,6 +120,8 @@
     response.setDateHeader("Expires", 0); //prevents caching at the proxy server
 %>
 
+
+
 <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
@@ -126,10 +129,9 @@
 
         <div class="sidebar-heading">Automated Barcode<br>Solution</div>
         <div class="list-group list-group-flush">
-            <%if (CurrentUser.getUsername().equals("admin")) { %>
+            
             <a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
-            <%} %>
-            <%if (CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant") || CurrentUser.getUsername().equals("manager")) {%>
+            
             <a
                     class="list-group-item list-group-item-action bg-light dropdown-toggle"
                     data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
@@ -162,7 +164,7 @@
             <a href="IT_Manager_Assign_Emp.jsp"
                class="list-group-item list-group-item-action bg-light">Employee Assign &nbsp;Management</a>
         </div>
-        <%} %>
+     
     </div>
     <!-- /#sidebar-wrapper -->
 
@@ -195,6 +197,63 @@
                 </ul>
             </div>
         </nav>
+        
+        <!-- fetching necessary item fro the items drop down -->
+        <% 
+      	//for the drop down item select
+      	ResultSet resultset_for_items;
+		Main_SELECT si4 = new Main_SELECT(ConnectionManager.getConnection(),"select item_id,item_details,buying_price from item_details_table ");
+		resultset_for_items = si4.get_table();
+        
+        %>
+        <!-- necessary js fro the items drop down -->
+        <script>
+        
+        //filter fucntion for the Item Detail
+	    function itemdetailsitemdisplayfilterFunction() {
+	    	  var input, filter, ul, li, a, i;
+	    	  input = document.getElementById("itemdetailsmyInput");
+	    	  filter = input.value.toUpperCase();
+	    	  div = document.getElementById("itemdetailsitemdisplay");
+	    	  a = div.getElementsByTagName("a");
+	    	  
+	    	  for (i = 0; i < a.length; i++) {
+	    	    txtValue = a[i].textContent || a[i].innerText;
+	    	    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+	    	      a[i].style.display = "";
+	    	    } else {
+	    	      a[i].style.display = "none";
+	    	    }
+	    	  }
+	    	}
+	
+	    window.onclick = function(event) {
+	    	
+	    	
+			
+			var itemx = document.getElementById("itemdetailsitemdisplay");
+			
+			
+			 if(event.target.id == "itemdetailsdropitem"){
+				itemx.classList.toggle("show");	
+				customerx.classList.remove("show");	
+				orderx.classList.remove("show");	
+			}
+			else if(event.target.id == "itemdetailsmyInput"){
+				
+			}
+		
+			else {
+				
+				
+				itemx.classList.remove("show");	
+					
+			}
+		}
+        
+        
+        
+        </script>
 
         <!--create the big table -->
         <div style="top: 0">
@@ -258,6 +317,34 @@
                                     <div class="container" style="height: 525px; overflow-y: auto; overflow-x: hidden">
 
                                         <form action="Inventory_INSERT_Controller" method="post">
+                                        
+                                        <label>Place the Items needed to Order Here</label><br>
+										<div class="dropdown" >
+											<input type = "text" id = "itemdetailsdropitem" value = "Select The Item" readonly>
+											
+												<div  id = "itemdetailsitemdisplay" class="dropdown-content" style = "margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
+													<div style="position: sticky;top: -4%;margin-top:-2%;">
+														<input type="text" id = "itemdetailsmyInput" onkeyup="itemdetailsitemdisplayfilterFunction()" autocomplete = "off" placeholder = "Search here.." >
+													</div>
+													
+													<div  style = "overflow-x:hidden;">
+																<% while(resultset_for_items.next())
+															       {%>
+																		<a id = '<%=resultset_for_items.getString("item_id") %>' onclick = "document.getElementById('itemdetailsdropitem').value = '<%=resultset_for_items.getString("item_id")%>';" ><b><%=resultset_for_items.getString("item_id")%></b><br><%=resultset_for_items.getString("item_details")%><br>Price :&nbsp; <span id="itemprice"><%=resultset_for_items.getDouble("buying_price")%></span></a>
+																		<script>
+																			itemmap.set('<%=resultset_for_items.getString("item_id") %>', '<%=resultset_for_items.getDouble("buying_price")%>');
+																		
+																		</script>														
+																<% } %>
+													</div>
+													
+													
+												</div>
+										
+											</div>
+                                        
+                                        
+                                        
                                             <% if (session.getAttribute("itemID") != null) { %>
                                             <label for="itemID">Item&nbsp;ID</label> <input
                                                 type="text" id="itemID" name="itemID" required="required"
@@ -282,15 +369,18 @@
                                             <label for="itemID">Item&nbsp;ID</label> <input
                                                 type="text" id="itemID" autocomplete="off" name="itemID"
                                                 placeholder="Item ID Goes Here..."
-                                                required class="readonly"><br><label for="sup">Supplier&nbsp;ID</label>
+                                                readonly="readonly"
+                                                   required="required" tabindex="-1"><br><label for="sup">Supplier&nbsp;ID</label>
                                             <input name="supID" type="text" id="sup" autocomplete="off" required
                                                    placeholder="Supplier ID Goes Here..."
-                                                   class="readonly">
+                                                   readonly="readonly"
+                                                   required="required" tabindex="-1">
 
 
                                             <br/> <label for="itype">Item&nbsp;Type</label>
                                             <input name="itype" id="itype" autocomplete="off" required type="text"
-                                                   class="readonly" placeholder="Item Type Goes Here..."><br>
+                                                   readonly="readonly"
+                                                   required="required" tabindex="-1" placeholder="Item Type Goes Here..."><br>
                                             <button type="submit" formnovalidate="formnovalidate"
                                                     name="submitButton" class="btn btn-info btn-lg btn-block"
                                                     value="Add Item Info">Add&nbsp;Item&nbsp;Info
