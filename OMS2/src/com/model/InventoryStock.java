@@ -6,7 +6,6 @@ public class InventoryStock {
     private String stockID;
     private String stockINDate;
     private String remarks;
-    private long quantity;
 
 
     public InventoryStock() {
@@ -44,13 +43,7 @@ public class InventoryStock {
 		this.stockID = stockID;
 	}
 
-	public long getQuantity() {
-		return quantity;
-	}
 
-	public void setQuantity(long quantity) {
-		this.quantity = quantity;
-	}
 
 
 

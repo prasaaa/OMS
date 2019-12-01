@@ -11,8 +11,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
@@ -26,7 +28,7 @@
 <!-- Custom styles for this template -->
 <link href="css/simple-sidebar2.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
 #wgtmsr{
@@ -98,7 +100,21 @@ a:hover {background-color: #ddd;}
 
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-primary" id="menu-toggle">Menu</button>
+				<button class="btn btn-primary" id="menu-toggle" >Menu</button>&nbsp;&nbsp;&nbsp;
+				<input type = "text" id ="searchinput" style ="width:30%;" placeholder="Search...." onkeyup="searchfunction()">&nbsp;&nbsp;&nbsp;
+				
+				<select style ="width:10%;" id ="cate" >
+					<option>Cus Order ID</option>
+					<option>Cus ID</option>
+					<option>Ord Date</option>
+					<option>Req Date</option>
+					<option>Type</option>			
+				
+				</select>
+				
+				
+				
+				
 				
 				<button class="navbar-toggler" type="button" data-toggle="collapse"
 					data-target="#navbarSupportedContent"
@@ -138,15 +154,13 @@ a:hover {background-color: #ddd;}
 
 							<!-- -----------CHANGE STARTS HERE FIRST TABLE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 							<table class="table table-bordered table-striped mb-0"
-								style="position: relative;">
+								style="position: relative;" id ="maintable">
 								<tr>
 									<th>Cus Order ID </th>
 									<th> Cus ID</th>
 									<th>Ord Date</th>
 									<th>Req Date</th>									
-									<th>Type</th>
-									
-								
+									<th>Type</th>							
 								</tr>
 								
 
@@ -234,6 +248,53 @@ a:hover {background-color: #ddd;}
 												    if( event.keyCode == 13 || event.keyCode == 17 || event.keyCode == 74 )
 												      event.preventDefault();
 												});
+												
+												
+												//to search main table
+												function searchfunction() {
+												  var input, filter, table, tr, td, i, txtValue,catval,colno;
+												  input = document.getElementById("searchinput");
+												  catval = document.getElementById("cate").value;												  
+												  filter = input.value.toUpperCase();
+												  table = document.getElementById("maintable");
+												  tr = table.getElementsByTagName("tr");
+												  if(catval === "Cus Order ID")
+													  {
+													  	colno = 0;
+													  	
+													  }
+												  else if(catval === "Cus ID")
+													  {
+													  	colno = 1;
+													  	
+													  }
+												  else if(catval === "Ord Date")
+													  {
+													  	colno = 2;
+													  }
+												  else if(catval ==="Req Date")
+													  {
+													  	colno =  3;
+													  }
+												  else {
+													  colno = 4;
+												  }
+												  for (i = 0; i < tr.length; i++) {
+												    td = tr[i].getElementsByTagName("td")[colno];
+												    if (td) {
+												      txtValue = td.textContent || td.innerText;												      
+												      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+												        tr[i].style.display = "";
+												      } else {
+												        tr[i].style.display = "none";
+												      }
+												    }       
+												  }
+												}
+												
+												
+											
+												
 												
 												function myFunction() {
 													
@@ -474,7 +535,7 @@ a:hover {background-color: #ddd;}
 																													  box-sizing: border-box;
 																													  margin-top: 6px;
 																													  margin-bottom: 16px;
-																													  ">
+																													  resize: vertical;">
 												<br> 
 												
 												<label>Select Order Type</label><br>
@@ -620,7 +681,6 @@ a:hover {background-color: #ddd;}
 			</table>
 
 		</div>
-	</div>
 		<!-- /#wrapper -->
 
 		<!-- Bootstrap core JavaScript -->

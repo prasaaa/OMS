@@ -168,4 +168,6 @@ public class MySQLQueries {
 	public static final String QUERY_SELECT_STOCK_OUT_BY_MANUFACTURER = "SELECT s.stock_out_id, s.item_id, i.item_type, s.stock_out_date, s.selling_price, s.quantity, s.customer_order_id FROM `stock_out_items_table` s INNER JOIN `item_details_table` i ON i.item_id = s.item_id WHERE i.item_manufacturer = ?";
 
 	public static final String QUERY_DELETE_STOCK_OUT_BY_MANUFACTURER = "";
+
+    public static final String QUERY_GET_ALL_ITEM_DETAILS = "SELECT item_id, item_model_name, item_manufacturer, item_supplier, item_type, item_details FROM item_details_table;";
 }

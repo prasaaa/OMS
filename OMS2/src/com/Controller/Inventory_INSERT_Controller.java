@@ -78,7 +78,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 		HttpSession session = request.getSession();
 		
-		String buy = request.getParameter("bppitem").trim();
+
 		String stockINDate = request.getParameter("stockindate").trim();
 		String remarks = request.getParameter("remarks").trim();
 
@@ -103,7 +103,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 			if (button.equalsIgnoreCase("Add Item Info")) {
 				
 				
-				session.setAttribute("bppitem", buy);
+
 				session.setAttribute("stock_in_date", stockINDate);
 				session.setAttribute("remarks", remarks);
 				session.setAttribute("sessionStorage", "true");
@@ -112,7 +112,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
                 return;
 
 			} else if (button.equalsIgnoreCase("Change Item Info")) {
-				session.setAttribute("bppitem", buy);
+
 				session.setAttribute("stock_in_date", stockINDate);
 				session.setAttribute("remarks", remarks);
 				session.setAttribute("sessionStorage", "true");
@@ -141,7 +141,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 						session.setAttribute("itemID", iname);
 						session.setAttribute("supID", supplier);
 						session.setAttribute("itype", itype);
-						session.setAttribute("bppitem", buy);
+
 						session.setAttribute("remarks", remarks);
 						session.setAttribute("stock_in_date", stockINDate);
 						session.setAttribute("REFRESH", "TRUE");
@@ -152,7 +152,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 					session.setAttribute("itemID", iname);
 					session.setAttribute("supID", supplier);
 					session.setAttribute("itype", itype);
-					session.setAttribute("bppitem", buy);
+
 					session.setAttribute("remarks", remarks);
 					session.setAttribute("stock_in_date", stockINDate);
 					session.setAttribute("REFRESH", "TRUE");
@@ -171,19 +171,12 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 				list.setItems(item);
 
-				double bppitem = 0;
 
-				try {
-					if (!buy.isEmpty())
-						bppitem = Double.parseDouble(buy);
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				} finally {
 
 					list.setItemID(iname);
 					list.setSupplier(supplier);
 					list.setType(itype);
-					list.setBuyingPrice(bppitem);
+
 
 					stock.setDate(stockINDate);
 					stock.setRemarks(remarks);
@@ -244,8 +237,8 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 								
 
-										boolean stockStatus = insertStock.InsertStock(stock.getDate(),
-												stock.getRemarks(), stock.getQuantity() ,stock.getItemList().getBuyingPrice(), stock.getItemList().getItemID(), stock.getItemList().getSupplier());
+										boolean stockStatus = true;//insertStock.InsertStock(stock.getDate(),
+												//stock.getRemarks(), stock.getQuantity() ,stock.getItemList().getBuyingPrice(), stock.getItemList().getItemID(), stock.getItemList().getSupplier());
 
 										if (stockStatus == true) {
 
@@ -271,8 +264,8 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 												if (status1 == true) {
 
 												
-													long rowCount = updateItemQuantity.updateQuantity(stock.getQuantity(), 
-															stock.getItemList().getItemID());
+													long rowCount = 0;//updateItemQuantity.updateQuantity(stock.getQuantity(),
+															//stock.getItemList().getItemID());
 
 													if (rowCount != 0) {
 
@@ -288,7 +281,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 														session.setAttribute("itemID", iname);
 														session.setAttribute("supID", supplier);
 														session.setAttribute("itype", itype);
-														session.setAttribute("bppitem", buy);
+
 														session.setAttribute("remarks", remarks);
 														session.setAttribute("stock_in_date", stockINDate);
 														session.setAttribute("REFRESH", "TRUE");
@@ -301,7 +294,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 													session.setAttribute("itemID", iname);
 													session.setAttribute("supID", supplier);
 													session.setAttribute("itype", itype);
-													session.setAttribute("bppitem", buy);
+
 													session.setAttribute("remarks", remarks);
 													session.setAttribute("stock_in_date", stockINDate);
 													session.setAttribute("REFRESH", "TRUE");
@@ -314,7 +307,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 												session.setAttribute("itemID", iname);
 												session.setAttribute("supID", supplier);
 												session.setAttribute("itype", itype);
-												session.setAttribute("bppitem", buy);
+
 												session.setAttribute("remarks", remarks);
 												session.setAttribute("stock_in_date", stockINDate);
 												session.setAttribute("REFRESH", "TRUE");
@@ -327,7 +320,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 											session.setAttribute("itemID", iname);
 											session.setAttribute("supID", supplier);
 											session.setAttribute("itype", itype);
-											session.setAttribute("bppitem", buy);
+
 											session.setAttribute("remarks", remarks);
 											session.setAttribute("stock_in_date", stockINDate);
 											session.setAttribute("REFRESH", "TRUE");
@@ -341,7 +334,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 									session.setAttribute("itemID", iname);
 									session.setAttribute("supID", supplier);
 									session.setAttribute("itype", itype);
-									session.setAttribute("bppitem", buy);
+
 									session.setAttribute("remarks", remarks);
 									session.setAttribute("stock_in_date", stockINDate);
 									session.setAttribute("REFRESH", "TRUE");
@@ -354,7 +347,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 								session.setAttribute("itemID", iname);
 								session.setAttribute("supID", supplier);
 								session.setAttribute("itype", itype);
-								session.setAttribute("bppitem", buy);
+
 								session.setAttribute("remarks", remarks);
 								session.setAttribute("stock_in_date", stockINDate);
 								session.setAttribute("REFRESH", "TRUE");
@@ -365,7 +358,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 						}
 
 					}
-				}
+
 			}
 		}
 	}

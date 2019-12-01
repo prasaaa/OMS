@@ -9,7 +9,6 @@ public class ItemList {
 
     private String itemType;
 
-    private double buyingPrice;
 
 
     private Items[] items;
@@ -19,7 +18,6 @@ public class ItemList {
 
         supplierID = "";
         itemType = "";
-        buyingPrice = 0;
 
 
     }
@@ -47,15 +45,6 @@ public class ItemList {
     public void setType(String itemType) {
         this.itemType = itemType;
     }
-
-    public double getBuyingPrice() {
-        return this.buyingPrice;
-    }
-
-    public void setBuyingPrice(double buyingPrice) {
-        this.buyingPrice = buyingPrice;
-    }
-
 
 	public String getItemID() {
 		return itemID;
