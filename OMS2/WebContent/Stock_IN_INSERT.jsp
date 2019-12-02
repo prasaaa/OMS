@@ -50,16 +50,16 @@
 
     <style>
         i#caret {
-            border : none;
-            background : none;
+            border: none;
+            background: none;
             position: absolute;
             top: 17px;
             right: 13px;
         }
 
         i#caretSearch {
-            border : none;
-            background : none;
+            border: none;
+            background: none;
             position: absolute;
             top: 17px;
             right: 13px;
@@ -124,7 +124,6 @@
     response.setHeader("Pragma", "no-cache"); //HTTP 1.0
     response.setDateHeader("Expires", 0); //prevents caching at the proxy server
 %>
-
 
 
 <div class="d-flex" id="wrapper">
@@ -207,7 +206,7 @@
         <%
             //for the drop down item select
             ResultSet resultset_for_items;
-            Main_SELECT si4 = new Main_SELECT(ConnectionManager.getConnection(),MySQLQueries.QUERY_GET_ALL_ITEM_DETAILS);
+            Main_SELECT si4 = new Main_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_ITEM_DETAILS);
             resultset_for_items = si4.get_table();
 
         %>
@@ -232,32 +231,25 @@
                 }
             }
 
-            window.onclick = function(event) {
-
+            window.onclick = function (event) {
 
 
                 var itemx = document.getElementById("itemdetailsitemdisplay");
 
 
-                if(event.target.id === "itemdetailsdropitem" || event.target.id === "caret" ){
+                if (event.target.id === "itemdetailsdropitem" || event.target.id === "caret") {
                     itemx.classList.toggle("show");
                     customerx.classList.remove("show");
                     orderx.classList.remove("show");
-                }
-                else if(event.target.id === "itemdetailsmyInput"){
+                } else if (event.target.id === "itemdetailsmyInput") {
 
-                }
-
-                else {
+                } else {
 
 
                     itemx.classList.remove("show");
 
                 }
             };
-
-
-
 
 
         </script>
@@ -280,10 +272,16 @@
                                 <tr>
                                     <td style="padding-top: 0px; padding-bottom: 0px;"><input
                                             class="btn-block" name="queryValue" id="txtSearch"
-                                            type="text" placeholder="Search Here..." required></td>
+                                            type="text" placeholder="Type Here to Search..." required
+                                        <%if (session.getAttribute("results") != null) {%> disabled
+                                        <%}%>></td>
                                     <td style="padding-top: 0px; padding-bottom: 0px;"><select
-                                            required class="btn-block" name="queryType" id="searchType">
+                                            required class="btn-block" name="queryType" id="searchType"
+                                            <%if (session.getAttribute("results") != null) {%> disabled
+                                            <%}%>>
+
                                         <option value="" disabled selected>Search&nbsp;By...</option>
+                                        <option value="bar">Barcode&nbsp;Number</option>
                                         <option value="stockid">Stock&nbsp;ID</option>
                                         <option value="iname">Item&nbsp;Model</option>
                                         <option value="manu">Manufacturer</option>
@@ -291,8 +289,16 @@
                                         <option value="itype">Item&nbsp;Type</option>
                                         <option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
                                     </select></td>
-                                    <td style="padding-top: 0; padding-bottom: 0;"><input type="reset" value="Reset">
-                                    </td>
+                                    <td style="padding-top: 0; padding-bottom: 0;">
+                                        <input
+
+                                            <%if (session.getAttribute("results") != null) {%>
+                                                name="search" type="reset" class="btn-block"
+                                                value="Reset" id="resetBtn1"
+                                            <%} else {%>
+                                                name="search" type="reset" class="btn-block"
+                                                value="Reset" id="resetBtn"
+                                            <%}%>></td>
                                 </tr>
                             </table>
 
@@ -317,31 +323,44 @@
 
                                         <form id="mainForm" action="Inventory_INSERT_Controller" method="post">
 
-                                            <label for="itemdetailsdropitem" id="stockItem" >Stock&nbsp;Item</label><br>
-                                            <div class="dropdown" >
+                                            <label for="itemdetailsdropitem" id="stockItem">Stock&nbsp;Item</label><br>
+                                            <div class="dropdown">
                                                 <div class="popup" style="width:100%;">
-                                                    <input type = "text" id = "itemdetailsdropitem" style="cursor: default;" placeholder="Click Here to Select an Item" value="" required autocomplete = "off" readonly class="form-control"><i class="fa fa-caret-down" id="caret"></i><span
+                                                    <input type="text" id="itemdetailsdropitem" style="cursor: default;"
+                                                           placeholder="Click Here to Select an Item" value="" required
+                                                           autocomplete="off" readonly class="form-control"><i
+                                                        class="fa fa-caret-down" id="caret"></i><span
                                                         class="popuptext"
                                                         id="myPopup3"></span>
                                                 </div>
-                                                <div  id = "itemdetailsitemdisplay" class="dropdown-content" style = "margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
+                                                <div id="itemdetailsitemdisplay" class="dropdown-content"
+                                                     style="margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
                                                     <div style="position: sticky;top:-6px;margin-top:-6px;padding:0">
-                                                        <input tabindex="0" type="text" id = "itemdetailsmyInput" onkeyup="itemdetailsitemdisplayfilterFunction()" autocomplete = "off" placeholder = "Search here.." ><i class="fa fa-search" id="caretSearch"></i>
+                                                        <input tabindex="0" type="text" id="itemdetailsmyInput"
+                                                               onkeyup="itemdetailsitemdisplayfilterFunction()"
+                                                               autocomplete="off" placeholder="Search here.."><i
+                                                            class="fa fa-search" id="caretSearch"></i>
                                                     </div>
 
-                                                    <div  style = "overflow-x:hidden;">
+                                                    <div style="overflow-x:hidden;">
 
-                                                        <% while(resultset_for_items.next())
-                                                        {%>
-                                                            <a style="cursor: pointer;" id = '<%=resultset_for_items.getString("item_id") %>' tabindex="0" >Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%></b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultset_for_items.getString("item_type")%><br>Manufacturer&nbsp;:&nbsp;<%=resultset_for_items.getString("item_manufacturer")%><br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("item_supplier")%><br>Description&nbsp;:&nbsp;<%=resultset_for_items.getString("item_details")%></a>
+                                                        <% while (resultset_for_items.next()) {%>
+                                                        <a style="cursor: pointer;"
+                                                           id='<%=resultset_for_items.getString("item_id") %>'
+                                                           tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
+                                                        </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultset_for_items.getString("item_type")%>
+                                                            <br>Manufacturer&nbsp;:&nbsp;<%=resultset_for_items.getString("item_manufacturer")%>
+                                                            <br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("item_supplier")%>
+                                                            <br>Description&nbsp;:&nbsp;<%=resultset_for_items.getString("item_details")%>
+                                                        </a>
                                                         <script>
-                                                            document.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener('click', function() {
+                                                            document.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener('click', function () {
                                                                 document.getElementById('itemdetailsdropitem').value = '<%=resultset_for_items.getString("item_id")%>';
-                                                                document.getElementById('iteminformation').innerHTML = '<p>'+document.getElementById('<%=resultset_for_items.getString("item_id") %>').innerHTML+'</p>';
+                                                                document.getElementById('iteminformation').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>').innerHTML + '</p>';
                                                                 document.getElementById('itemdetailsmyInput').value = "";
                                                             });
 
-                                                            document.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener("keyup", function (e){
+                                                            document.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener("keyup", function (e) {
                                                                 if (e.keyCode === 13) {
                                                                     e.preventDefault();
                                                                     document.getElementById('<%=resultset_for_items.getString("item_id") %>').click();
@@ -357,8 +376,9 @@
                                                 </div>
 
                                             </div>
-                                            <div id="iteminformation" style="width:100%; background-color: lightgrey; padding:0; height:auto; overflow-x:hidden;">
-                                            <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
+                                            <div id="iteminformation"
+                                                 style="width:100%; background-color: lightgrey; padding:0; height:auto; overflow-x:hidden;">
+                                                <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
                                             </div>
                                             <br>
 
@@ -372,7 +392,8 @@
                                                       placeholder="Enter Stock Information Here..."></textarea>
                                             <br>
 
-                                            <label for="txtBarcode" id="workingItems">Working&nbsp;Item&nbsp;List</label><br>
+                                            <label for="txtBarcode"
+                                                   id="workingItems">Working&nbsp;Item&nbsp;List</label><br>
                                             <div class="popup" style="width:100%;">
                                                 <input style="width:100%;" type="text" id="txtBarcode"
                                                        name="barcodeNmber" placeholder="Enter Barcode Here...">
@@ -389,7 +410,8 @@
                                                 </button>
                                             </div>
                                             <br>
-                                            <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;" id="workingList">
+                                            <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;"
+                                                 id="workingList">
                                                 <table style="width:100%; padding:0; border-spacing:0;" id="myTable"
                                                        border=1>
                                                     <col style="width:100%">
@@ -434,8 +456,10 @@
                                                 </table>
                                             </div>
                                             <input type="button" id="submit-form"
-                                                   hidden="hidden" onclick="validateFormX()" name="submitButton" value="Insert Stock">
-                                            <input type="reset" hidden="hidden" id="reset-form" onclick="clearAllFields();"
+                                                   hidden="hidden" onclick="validateFormX()" name="submitButton"
+                                                   value="Insert Stock">
+                                            <input type="reset" hidden="hidden" id="reset-form"
+                                                   onclick="clearAllFields();"
                                                    name="resetButton" value="Reset Fields">
 
                                         </form>
@@ -487,8 +511,8 @@
                                     Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
                                             MySQLQueries.QUERY_SELECT_ALL);
                                     result = si.get_inventory_table();
-                                        try {
-                                            while (result.next()) {
+                                    try {
+                                        while (result.next()) {
                                 %>
                                 <tr>
                                     <td><%=result.getString(1)%>
@@ -620,31 +644,42 @@
 <script>
     function logValue() {
         switch (this.value) {
+            case "bar":
+                document.getElementById("resetBtn").setAttribute('type', 'submit');
+                document.getElementById("resetBtn").style.backgroundColor = "green";
+                document.getElementById("txtSearch").setAttribute('type', 'text');
+                document.getElementById("resetBtn").setAttribute('value', 'Search Stock');
+                break;
             case "stockindate":
                 document.getElementById("txtSearch").setAttribute('type', 'date');
+                document.getElementById("resetBtn").setAttribute('value', 'Reset');
+                document.getElementById("resetBtn").style.backgroundColor = "red";
                 break;
             default :
+                document.getElementById("resetBtn").setAttribute('type', 'reset');
                 document.getElementById("txtSearch").setAttribute('type', 'text');
+                document.getElementById("resetBtn").style.backgroundColor = "red";
+                document.getElementById("resetBtn").setAttribute('value', 'Reset');
                 break;
         }
     }
+
     var select = document.getElementById("searchType");
     select.addEventListener('change', logValue, false);
 
 
-    document.getElementById('itemdetailsdropitem').addEventListener('keyup', function (event){
-        if(event.keyCode === 13) {
+    document.getElementById('itemdetailsdropitem').addEventListener('keyup', function (event) {
+        if (event.keyCode === 13) {
             document.getElementById('itemdetailsitemdisplay').classList.toggle('show');
         }
     });
-
 
 
 </script>
 
 <script>
 
-    function validateFormX(){
+    function validateFormX() {
 
         var popup;
 
@@ -683,7 +718,6 @@
             document.getElementById('mainForm').submit();
         }
     }
-
 
 
     function clearAllFields() {
