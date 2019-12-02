@@ -1,6 +1,6 @@
-<%@page import="com.DatabaseHandle.Main_SELECT"%>
 <%@page import="com.DBConnection.ConnectionManager" %>
 <%@page import="com.DatabaseHandle.Inventory_SELECT" %>
+<%@page import="com.DatabaseHandle.Main_SELECT" %>
 <%@page import="com.Utilities.MySQLQueries" %>
 <%@page import="com.model.CurrentUser" %>
 <%@page import="java.sql.ResultSet" %>
@@ -280,15 +280,10 @@
                                 <tr>
                                     <td style="padding-top: 0px; padding-bottom: 0px;"><input
                                             class="btn-block" name="queryValue" id="txtSearch"
-                                            type="text" placeholder="Search Here..." required
-                                        <%if (session.getAttribute("results") != null) {%> disabled
-                                        <%}%>></td>
+                                            type="text" placeholder="Search Here..." required></td>
                                     <td style="padding-top: 0px; padding-bottom: 0px;"><select
-                                            required class="btn-block" name="queryType" id="searchType"
-                                            <%if (session.getAttribute("results") != null) {%> disabled
-                                            <%}%>>
+                                            required class="btn-block" name="queryType" id="searchType">
                                         <option value="" disabled selected>Search&nbsp;By...</option>
-                                        <option value="bar">Barcode&nbsp;Number</option>
                                         <option value="stockid">Stock&nbsp;ID</option>
                                         <option value="iname">Item&nbsp;Model</option>
                                         <option value="manu">Manufacturer</option>
@@ -296,11 +291,8 @@
                                         <option value="itype">Item&nbsp;Type</option>
                                         <option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
                                     </select></td>
-                                    <td style="padding-top: 0; padding-bottom: 0;"><input
-                                            name="search" type="submit" class="btn-block"
-                                        <%if (session.getAttribute("results") != null) {%>
-                                            value="Reset" id="resetBtn" formnovalidate <%} else {%>
-                                            value="Search Stock" <%}%>></td>
+                                    <td style="padding-top: 0; padding-bottom: 0;"><input type="reset" value="Reset">
+                                    </td>
                                 </tr>
                             </table>
 
@@ -479,12 +471,11 @@
                             <table class="table table-bordered table-striped mb-0">
                                 <thead>
                                 <tr>
-                                    <th>Stock&nbsp;ID</th>
-                                    <th>Item's&nbsp;ID</th>
+                                    <th>Stock&nbsp;IN&nbsp;ID</th>
+                                    <th>Item&nbsp;ID</th>
                                     <th>Supplier</th>
                                     <th>Item&nbsp;Type</th>
                                     <th>Received&nbsp;Date</th>
-                                    <th>Buying&nbsp;Price</th>
                                     <th>Quantity</th>
 
 
@@ -492,40 +483,12 @@
                                 </thead>
                                 <tbody>
                                 <%
-                                    if (session.getAttribute("results") != null) {
-                                        ResultSet results = (ResultSet) session.getAttribute("results");
-                                        try {
-                                            do {
-                                %>
-                                <tr>
-                                    <td><%=results.getString(1)%>
-                                    </td>
-                                    <td><%=results.getString(2)%>
-                                    </td>
-                                    <td><%=results.getString(3)%>
-                                    </td>
-                                    <td><%=results.getString(4)%>
-                                    </td>
-                                    <td><%=results.getString(5)%>
-                                    </td>
-                                    <td><%=results.getDouble(6)%>
-                                    </td>
-                                    <td><%=results.getLong(7)%>
-                                    </td>
-                                </tr>
-
-                                <%
-                                        } while (results.next());
-                                    } catch (SQLException e) {
-                                        e.printStackTrace();
-                                    }
-                                    session.removeAttribute("results");
-                                } else {
                                     ResultSet result;
                                     Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
                                             MySQLQueries.QUERY_SELECT_ALL);
                                     result = si.get_inventory_table();
-                                    while (result.next()) {
+                                        try {
+                                            while (result.next()) {
                                 %>
                                 <tr>
                                     <td><%=result.getString(1)%>
@@ -542,11 +505,15 @@
                                     </td>
                                     <td><%=result.getLong(7)%>
                                     </td>
-
                                 </tr>
+
                                 <%
                                         }
+                                    } catch (SQLException e) {
+                                        e.printStackTrace();
                                     }
+
+
                                 %>
                                 </tbody>
                             </table>
@@ -585,7 +552,7 @@
      style="color:<%if (session.getAttribute("color") != null) {%><%=session.getAttribute("color")%><%}%>">
     <%
         if (session.getAttribute("message") != null) {
-    %><%=session.getAttribute("message")%>
+    %>      <%=session.getAttribute("message")%>
     <%
         }
     %>
@@ -729,14 +696,6 @@
 
 </script>
 
-
-<%
-    session.removeAttribute("itemID");
-    session.removeAttribute("supID");
-    session.removeAttribute("itype");
-    session.removeAttribute("bppitem");
-    session.removeAttribute("remarks");
-%>
 
 </body>
 
