@@ -210,48 +210,7 @@
 
         %>
         <!-- necessary js fro the items drop down -->
-        <script>
 
-            //filter fucntion for the Item Detail
-            function itemdetailsitemdisplayfilterFunction() {
-                var input, filter, ul, li, a, i;
-                input = document.getElementById("itemdetailsmyInput");
-                filter = input.value.toUpperCase();
-                div = document.getElementById("itemdetailsitemdisplay");
-                a = div.getElementsByTagName("a");
-
-                for (i = 0; i < a.length; i++) {
-                    txtValue = a[i].textContent || a[i].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        a[i].style.display = "";
-                    } else {
-                        a[i].style.display = "none";
-                    }
-                }
-            }
-
-            window.onclick = function (event) {
-
-
-                var itemx = document.getElementById("itemdetailsitemdisplay");
-
-
-                if (event.target.id === "itemdetailsdropitem" || event.target.id === "caret") {
-                    itemx.classList.toggle("show");
-                    customerx.classList.remove("show");
-                    orderx.classList.remove("show");
-                } else if (event.target.id === "itemdetailsmyInput") {
-
-                } else {
-
-
-                    itemx.classList.remove("show");
-
-                }
-            };
-
-
-        </script>
 
         <!--create the big table -->
         <div style="top: 0">
@@ -409,7 +368,7 @@
                                                 </select>
                                                 <span class="popuptext" id="myPopup4"></span>
                                             </div>
-                                            <div class="popup" style="width:100%;"><textarea id="fault_description"
+                                            <div class="popup" style="width:100%;"><textarea id="description"
                                                                                              placeholder="Enter Fault Description Here..."
                                                                                              cols="4"
                                                                                              rows="4"></textarea><span
@@ -417,40 +376,50 @@
                                                     id="myPopup2"></span>
                                             </div>
                                             <div style="width: 100%; display: flex; flex-direction: row;">
-                                                <button style="width:50%; margin-right:2.5px;" class="btn btn-info"
+                                                <button style="width:100%; margin-right:2.5px;" class="btn btn-info"
                                                         type="button" onclick="myFirstFunction();">Add&nbsp;Item
                                                 </button>
                                                 <br>
-                                                <button style="width:50%; margin-left:2.5px;" class="btn btn-warning"
-                                                        type="button" onclick="deleteAllRows();">Clear&nbsp;All
-                                                </button>
+
                                             </div>
 
-
                                             <br>
+
                                             <label for="txtBarcode"
                                                    id="workingItems">Working&nbsp;Item&nbsp;List</label><br>
                                             <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;"
                                                  id="workingList">
-                                                <table style="width:100%; padding:0; border-spacing:0;" id="myTable"
+                                                <table style="width:100%; padding:0; border-spacing:0;"
+                                                       id="workingItemsTable"
                                                        border=1>
-                                                    <col style="width:100%">
-                                                    <col style="width:10%">
 
 
                                                 </table>
+
+
                                             </div>
+                                            <br>
+                                            <button style="width:100%" class="btn btn-warning"
+                                                    type="button" onclick="deleteAllWorkingItemsRows();">Clear&nbsp;All
+                                            </button>
+                                            <br>
                                             <br>
                                             <label for="txtBarcode">Fault Item&nbsp;List</label><br>
                                             <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;">
-                                                <table style="width:100%; padding:0; border-spacing:0;" id="myTable1"
+                                                <table style="width:100%; padding:0; border-spacing:0;" id="faultTable"
                                                        border=1>
-                                                    <col style="width:50%">
-                                                    <col style="width:40%">
 
 
                                                 </table>
+
+
                                             </div>
+                                            <br>
+                                            <button style="width:100%" class="btn btn-warning"
+                                                    type="button" onclick="deleteAllFaultItemsRows();">Clear&nbsp;All
+                                            </button>
+                                            <br>
+                                            <br>
                                             <input type="button" id="submit-form"
                                                    hidden="hidden" onclick="validateFormX()" name="submitButton"
                                                    value="Insert Stock">
@@ -594,37 +563,7 @@
 <script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
 
 <script>
-    $(document).ready(function () {
-        document.getElementById("txtBarcode").addEventListener(
-            'keydown',
-            function (event) {
-                if ((event.ctrlKey && event.key === "j")
-                    || (event.ctrlKey && event.key === "b")
-                    || (event.ctrlKey && event.key === "i"))
-                    event.preventDefault();
-                else if (event.keyCode === 13) {
-                    event.preventDefault();
-                    myFirstFunction();
-                }
-            });
-        document.getElementById("txtBarcode1").addEventListener(
-            'keydown',
-            function (event) {
-                if ((event.ctrlKey && event.key === "j")
-                    || (event.ctrlKey && event.key === "b")
-                    || (event.ctrlKey && event.key === "i")
-                    || (event.keyCode === 13))
-                    event.preventDefault();
-            });
-        document.getElementById("fault_description").addEventListener(
-            'keydown',
-            function (event) {
-                if (event.keyCode === 13) {
-                    event.preventDefault();
-                    myFirstFunction1();
-                }
-            });
-    });
+
 </script>
 
 
@@ -637,94 +576,6 @@
     session.removeAttribute("message");
 %>
 <%}%>
-<script>
-    function logValue() {
-        switch (this.value) {
-            case "bar":
-                document.getElementById("resetBtn").setAttribute('type', 'submit');
-                document.getElementById("resetBtn").style.backgroundColor = "green";
-                document.getElementById("txtSearch").setAttribute('type', 'text');
-                document.getElementById("resetBtn").setAttribute('value', 'Search Stock');
-                break;
-            case "stockindate":
-                document.getElementById("txtSearch").setAttribute('type', 'date');
-                document.getElementById("resetBtn").setAttribute('value', 'Reset');
-                document.getElementById("resetBtn").style.backgroundColor = "red";
-                break;
-            default :
-                document.getElementById("resetBtn").setAttribute('type', 'reset');
-                document.getElementById("txtSearch").setAttribute('type', 'text');
-                document.getElementById("resetBtn").style.backgroundColor = "red";
-                document.getElementById("resetBtn").setAttribute('value', 'Reset');
-                break;
-        }
-    }
-
-    var select = document.getElementById("searchType");
-    select.addEventListener('change', logValue, false);
-
-
-    document.getElementById('itemdetailsdropitem').addEventListener('keyup', function (event) {
-        if (event.keyCode === 13) {
-            document.getElementById('itemdetailsitemdisplay').classList.toggle('show');
-        }
-    });
-
-
-</script>
-
-<script>
-
-    function validateFormX() {
-
-        var popup;
-
-        var array = [];
-
-        if (JSON.parse(sessionStorage.getItem("barcodeList")) != null)
-            array = JSON.parse(sessionStorage.getItem("barcodeList"));
-
-        if (document.getElementById('itemdetailsdropitem').value.trim() === "") {
-            popup = document.getElementById("myPopup3");
-            popup.innerHTML = "This is a Required Field!!";
-            document.getElementById("itemdetailsdropitem").focus();
-            document.getElementById("stockItem").scrollIntoView();
-
-            if (!popup.classList.contains("show")) {
-                popup.classList.add("show");
-
-                setTimeout(function () {
-                    popup.classList.remove("show");
-                }, 3000);
-            }
-        } else if (array.length === 0) {
-            popup = document.getElementById("myPopup");
-            popup.innerHTML = "Please Enter at least one Item!!!";
-            document.getElementById("txtBarcode").focus();
-            document.getElementById('workingItems').scrollIntoView();
-
-            if (!popup.classList.contains("show")) {
-                popup.classList.add("show");
-
-                setTimeout(function () {
-                    popup.classList.remove("show");
-                }, 3000);
-            }
-        } else {
-            document.getElementById('mainForm').submit();
-        }
-    }
-
-
-    function clearAllFields() {
-
-        document.getElementById('iteminformation').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
-
-
-    }
-
-
-</script>
 
 
 </body>

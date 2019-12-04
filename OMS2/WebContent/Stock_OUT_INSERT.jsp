@@ -382,23 +382,25 @@
 													style="width: 100%;" type="text" id="txtBarcode"
 													name="barcodeNmber" placeholder="Enter Barcode Here...">
 													<span class="popuptext" id="myPopup"></span>
-												</span> 
+												</span>
 
 												<div
-													style="width: 100%; display: flex; flex-direction: row;">
+														style="width: 100%; display: flex; flex-direction: row;">
 													<button style="width: 50%; margin-right: 2.5px;"
-														class="btn btn-info" type="button"
-														onclick="myFirstFunction();">Add&nbsp;Item</button>
+															class="btn btn-info" type="button"
+															onclick="myFirstFunction();">Add&nbsp;Item
+													</button>
 													<br>
 													<button style="width: 50%; margin-left: 2.5px;"
-														class="btn btn-warning" type="button"
-														onclick="deleteAllRows();">Clear&nbsp;All</button>
+															class="btn btn-warning" type="button"
+															onclick="deleteAllWorkingItemsRows();">Clear&nbsp;All
+													</button>
 												</div>
 												<br>
 												<div
-													style="width: 350px; background-color: lightgrey; padding: 0; height: 150px; overflow: auto; overflow-x: hidden;">
+														style="width: 350px; background-color: lightgrey; padding: 0; height: 150px; overflow: auto; overflow-x: hidden;">
 													<table style="width: 100%; padding: 0; border-spacing: 0;"
-														id="myTable" border=1>
+														   id="myTable" border=1>
 														<col style="width: 100%">
 
 													</table>
@@ -637,7 +639,7 @@
 					barcodeArray.push(selecteditem.value);
 					sessionStorage.setItem("barcodeList", JSON
 							.stringify(barcodeArray));
-					table.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ='+selecteditem.value+' name = "barcode"></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeRow(this)"><i class="fa fa-trash"></i></button></td></tr>';
+					table.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value =' + selecteditem.value + ' name = "barcode"></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow(this)"><i class="fa fa-trash"></i></button></td></tr>';
 					document.getElementById("txtBarcode").value = "";
 					autoFocus();
 
@@ -645,7 +647,7 @@
 					var popup = document.getElementById("myPopup");
 					popup.innerHTML = "Duplicate Barcode Number!!";
 					popup.classList.toggle("show");
-					setTimeout(function() {
+					setTimeout(function () {
 						popup.classList.remove("show");
 					}, 3000);
 					document.getElementById("txtBarcode").value = "";
@@ -669,13 +671,13 @@
 			document.getElementById("txtBarcode").scrollIntoView();
 		}
 
-		function deleteAllRows() {
+		function deleteAllWorkingItemsRows() {
 			document.getElementById("myTable").innerHTML = "";
 			sessionStorage.removeItem("barcodeList");
 			autoFocus();
 		}
 
-		function removeRow(input) {
+		function removeWorkingItemRow(input) {
 			var barcodeArray = JSON
 					.parse(sessionStorage.getItem("barcodeList"));
 			var i = input.parentNode.parentNode.rowIndex;
@@ -685,8 +687,6 @@
 			autoFocus();
 		}
 	</script>
-
-		
 
 
 </body>
