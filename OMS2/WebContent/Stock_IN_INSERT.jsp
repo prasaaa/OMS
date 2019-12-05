@@ -284,7 +284,8 @@
                                             <label for="itemdetailsdropitem" id="stockItem">Stock&nbsp;Item</label><br>
                                             <div class="dropdown">
                                                 <div class="popup" style="width:100%;">
-                                                    <input type="text" id="itemdetailsdropitem" style="cursor: default;"
+                                                    <input type="text" id="itemdetailsdropitem" name="itemID"
+                                                           style="cursor: default;"
                                                            placeholder="Click Here to Select an Item" value="" required
                                                            autocomplete="off" readonly class="form-control"><i
                                                         class="fa fa-caret-down" id="caret"></i><span
@@ -343,7 +344,7 @@
                                             <label for="datePicker">Stock&nbsp;IN&nbsp;Date</label>
                                             <input type="date" name="stockindate" id="datePicker" required
                                                    value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br>
-                                            <label for="txtAreaRemarks">Any&nbsp;other&nbsp;Informations</label>
+                                            <label for="txtAreaRemarks">Any&nbsp;other&nbsp;Information's</label>
 
                                             <textarea id="txtAreaRemarks" name="remarks" rows="4"
                                                       cols="4"

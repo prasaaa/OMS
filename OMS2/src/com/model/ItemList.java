@@ -3,23 +3,10 @@ package com.model;
 public class ItemList {
 
 
-	private String itemID; 
-	
-    private String supplierID;
-
-    private String itemType;
-
-
-
+    private String itemID;
     private Items[] items;
 
-
     public ItemList() {
-
-        supplierID = "";
-        itemType = "";
-
-
     }
 
     public Items[] getItems() {
@@ -28,22 +15,6 @@ public class ItemList {
 
     public void setItems(Items[] item) {
         this.items = item;
-    }
-
-    public String getSupplier() {
-        return this.supplierID;
-    }
-
-    public void setSupplier(String supplier) {
-        this.supplierID = supplier;
-    }
-
-    public String getType() {
-        return this.itemType;
-    }
-
-    public void setType(String itemType) {
-        this.itemType = itemType;
     }
 
 	public String getItemID() {
