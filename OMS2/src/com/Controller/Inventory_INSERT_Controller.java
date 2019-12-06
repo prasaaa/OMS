@@ -23,7 +23,7 @@ import java.util.Date;
 public class Inventory_INSERT_Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private String itemID = "", stockINDate = "", remarks = "", supplierID;
+	private String itemID = "", stockINDate = "", remarks = "";
 	private String[] workingBarcodeList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
 
 	/**
@@ -55,7 +55,6 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 			itemID = request.getParameter("itemID");
 			stockINDate = request.getParameter("stockindate");
-			supplierID = request.getParameter("supplier");
 
 			if (request.getParameter("remarks") != null)
 				remarks = request.getParameter("remarks");
@@ -79,40 +78,54 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 		stock.setDate(stockINDate);
 		stock.setRemarks(remarks);
 
-		Date date = new Date();
-		long time = date.getTime();
-
-		Timestamp timestamp = new Timestamp(time);
-
-		String stockID = "STOCK_IN_".concat(timestamp.toString().trim().replaceAll("[\\s.:-]", "_"));
+		String stockID = "STOCK_IN_".concat(new Timestamp(new Date().getTime()).toString().trim().replaceAll("[\\s.:-]", "_"));
 		stock.setStockID(stockID);
 
+		System.out.println("working : " + workingBarcodeList.length);
+		System.out.println("faulty : " + faultBarcodeList.length);
+
+		int totalItemsLength = workingBarcodeList.length + faultBarcodeList.length;
+
 		ItemList itemList = new ItemList();
-		Items[] items = new Items[workingBarcodeList.length + faultBarcodeList.length];
+		Items[] items = new Items[totalItemsLength];
 
 		itemList.setItemID(itemID);
-		itemList.setSupplierID(supplierID);
 
-		if (workingBarcodeList.length != 0) {
-			for (int i = 0; i < workingBarcodeList.length; i++) {
+
+		for (int i = 0; i < totalItemsLength; i++) {
+
+			if (workingBarcodeList.length != 0 && faultBarcodeList.length != 0) {
+
+				if (i < workingBarcodeList.length) {
+					items[i] = new Items();
+					items[i].setBarcode(workingBarcodeList[i]);
+					items[i].setDescription(workingListDescriptions[i]);
+					items[i].setItemStatus("Working");
+				} else {
+					items[i] = new Items();
+					items[i].setBarcode(faultBarcodeList[i - workingBarcodeList.length]);
+					items[i].setDescription(faultListDescriptions[i - workingBarcodeList.length]);
+					items[i].setItemStatus("faulty");
+
+				}
+
+			} else if (workingBarcodeList.length == 0 && faultBarcodeList.length != 0) {
+				items[i] = new Items();
+				items[i].setBarcode(faultBarcodeList[i]);
+				items[i].setDescription(faultListDescriptions[i]);
+				items[i].setItemStatus("faulty");
+
+
+			} else if (workingBarcodeList.length != 0) {
 				items[i] = new Items();
 				items[i].setBarcode(workingBarcodeList[i]);
 				items[i].setDescription(workingListDescriptions[i]);
 				items[i].setItemStatus("Working");
-
-
 			}
+
+
 		}
 
-		if (faultBarcodeList.length != 0) {
-			for (int i = 0; i < faultBarcodeList.length; i++) {
-				items[i] = new Items();
-				items[i].setBarcode(faultBarcodeList[i]);
-				items[i].setDescription(faultListDescriptions[i]);
-				items[i].setItemStatus("Faulty");
-
-			}
-		}
 
 		itemList.setItems(items);
 
@@ -121,11 +134,11 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 		Inventory_INSERT inventory_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_STOCK);
 		Inventory_INSERT item_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_ITEM_LIST);
 
-		boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID(), stock.getItemList().getSupplierID());
+		boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID());
 
 		boolean boolItems = true;
 		for (Items i : items) {
-			boolItems = item_insert.InsertItemList(itemList.getItemID(), i.getBarcode(), i.getItemStatus(), stock.getStockID(), i.getDescription());
+			boolItems = item_insert.InsertItemList(itemList.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), stock.getStockID());
 
 			if (!boolItems)
 				break;

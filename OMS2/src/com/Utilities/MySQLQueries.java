@@ -11,11 +11,11 @@ public class MySQLQueries {
 
     public static final String QUERY_SELECT_ITEM_ID = "SELECT item_id FROM `item_details_table` WHERE item_model_name = ? AND item_manufacturer = ? AND item_supplier = ?;";
 
-    public static final String QUERY_INSERT_STOCK = "INSERT INTO `stock_in_items_table`(stock_in_id ,stock_in_date, remarks, item_id, supplier_id) VALUES (? , ?, ?, ?, ?);";
+    public static final String QUERY_INSERT_STOCK = "INSERT INTO `stock_in_items_table`(stock_in_id ,stock_in_date, remarks, item_id) VALUES (? , ?, ?, ?);";
 
     public static final String QUERY_SELECT_STOCK_ID = "SELECT stock_in_id FROM stock_in_items_table WHERE item_id = ? AND index_number = (SELECT MAX(index_number) FROM stock_in_items_table WHERE item_id = ?);";
 
-    public static final String QUERY_INSERT_ITEM_LIST = "INSERT INTO `items_list_table` VALUES (?, ?, ?, ?, NULL, ?);";
+    public static final String QUERY_INSERT_ITEM_LIST = "INSERT INTO `items_list_table` VALUES (?, ?, ?, NULL, ?, ?);";
 
     public static final String QUERY_SELECT_BY_STOCK_ID = "SELECT s.stock_in_id, i.item_id, u.supplier_id, i.item_type, s.stock_in_date, s.buying_price, s.quantity FROM `item_details_table` i INNER JOIN `stock_in_items_table` s ON s.item_id = i.item_id INNER JOIN item_supplier_table u ON u.item_id = i.item_id WHERE s.stock_in_id = ?;";
 
@@ -31,8 +31,7 @@ public class MySQLQueries {
 
     public static final String QUERY_SELECT_BY_BARCODE = "SELECT s.stock_in_id, i.item_id, u.supplier_id, i.item_type, s.stock_in_date, s.buying_price, s.quantity FROM `item_details_table` i INNER JOIN `stock_in_items_table` s ON s.item_id = i.item_id INNER JOIN item_supplier_table u ON u.item_id = i.item_id INNER JOIN items_list_table l ON l.stock_in_id = s.stock_in_id WHERE l.barcode_number LIKE CONCAT('%', ? ,'%');";
 
-    public static final String QUERY_SELECT_ALL = "SELECT s.stock_in_id, i.item_id, u.supplier_name, i.item_type, s.stock_in_date, s.buying_price, s.quantity FROM `stock_in_items_table` s INNER JOIN `item_details_table` i  ON s.item_id = i.item_id INNER JOIN `item_supplier_table` t ON i.item_id = t.item_id INNER JOIN `supplier_table` u ON t.supplier_id = u.supplier_id;";
-
+    public static final String QUERY_SELECT_ALL = "SELECT s.stock_in_id, i.item_id, i.item_supplier, i.item_type, s.stock_in_date FROM `stock_in_items_table` s INNER JOIN `item_details_table` i  ON s.item_id = i.item_id ";
     public static final String QUERY_DELETE_ALL_BY_BARCODE = "DELETE FROM items_list_table WHERE barcode_number LIKE CONCAT('%', ? ,'%');";
 
     public static final String QUERY_SELECT_STOCK_ID_BY_BARCODE = "SELECT stock_in_id FROM items_list_table WHERE barcode_number LIKE CONCAT('%', ? ,'%');";
@@ -169,5 +168,5 @@ public class MySQLQueries {
 
 	public static final String QUERY_DELETE_STOCK_OUT_BY_MANUFACTURER = "";
 
-    public static final String QUERY_GET_ALL_ITEM_DETAILS = "SELECT i.item_id, i.item_model_name, i.item_manufacturer, t.supplier_id, s.supplier_name, i.item_type, i.item_details FROM item_details_table i INNER JOIN item_supplier_table t ON t.item_id = i.item_id INNER JOIN supplier_table s ON s.supplier_id = t.supplier_id;";
+    public static final String QUERY_GET_ALL_ITEM_DETAILS = "SELECT i.item_id, i.item_model_name, i.item_manufacturer, i.item_type, i.item_supplier, i.item_details FROM item_details_table i;";
 }

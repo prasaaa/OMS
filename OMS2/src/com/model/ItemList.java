@@ -4,18 +4,9 @@ public class ItemList {
 
 
     private String itemID;
-    private String supplierID;
     private Items[] items;
 
     public ItemList() {
-    }
-
-    public String getSupplierID() {
-        return supplierID;
-    }
-
-    public void setSupplierID(String supplierID) {
-        this.supplierID = supplierID;
     }
 
     public Items[] getItems() {

@@ -77,7 +77,7 @@ public class Inventory_INSERT {
 
     }
 
-    public boolean InsertStock(String stockID, String stockINDate, String remarks, String itemID, String supID) {
+    public boolean InsertStock(String stockID, String stockINDate, String remarks, String itemID) {
 
         try {
 
@@ -86,7 +86,6 @@ public class Inventory_INSERT {
             ps.setString(2, stockINDate);
             ps.setString(3, remarks);
             ps.setString(4, itemID);
-            ps.setString(5, supID);
 
             ps.execute();
 
@@ -162,17 +161,16 @@ public class Inventory_INSERT {
         return quantity;
     }
 
-    public boolean InsertItemList(String itemID, String barcodeNumber, String itemStatus, String stockID, String description) {
+    public boolean InsertItemList(String itemID, String barcodeNumber, String itemStatus, String description, String stockID) {
         try {
             ps = c.prepareStatement(query);
 
             ps.setString(1, itemID);
             ps.setString(2, barcodeNumber);
             ps.setString(3, itemStatus);
-            ps.setString(4, stockID);
-            ps.setString(5, description);
-            
-            
+            ps.setString(4, description);
+            ps.setString(5, stockID);
+
 
             ps.execute();
 
