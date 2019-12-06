@@ -46,23 +46,6 @@ public class Inventory_SELECT_Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        Inventory_SELECT selectStockID = new Inventory_SELECT(ConnectionManager.getConnection(),
-                MySQLQueries.QUERY_SELECT_BY_STOCK_ID);
-        Inventory_SELECT selectModel = new Inventory_SELECT(ConnectionManager.getConnection(),
-                MySQLQueries.QUERY_SELECT_BY_ITEM_MODEL);
-
-        Inventory_SELECT selectManuFacturer = new Inventory_SELECT(ConnectionManager.getConnection(),
-                MySQLQueries.QUERY_SELECT_BY_MANUFACTURER);
-
-        Inventory_SELECT selectSupplier = new Inventory_SELECT(ConnectionManager.getConnection(),
-                MySQLQueries.QUERY_SELECT_BY_SUPPLIER);
-
-        Inventory_SELECT selectType = new Inventory_SELECT(ConnectionManager.getConnection(),
-                MySQLQueries.QUERY_SELECT_BY_TYPE);
-
-        Inventory_SELECT selectDate = new Inventory_SELECT(ConnectionManager.getConnection(),
-                MySQLQueries.QUERY_SELECT_BY_DATE);
-
         Inventory_SELECT selectBarcode = new Inventory_SELECT(ConnectionManager.getConnection(),
                 MySQLQueries.QUERY_SELECT_BY_BARCODE);
 
@@ -94,19 +77,7 @@ public class Inventory_SELECT_Controller extends HttpServlet {
                 response.sendRedirect("Inventory_Servlet?status=deleteReset");
                 return;
             }
-        } else if (queryType.equals("stockid"))
-            results = selectStockID.retreiveQueryData(queryValue);
-        else if (queryType.equals("iname"))
-            results = selectModel.retreiveQueryData(queryValue);
-        else if (queryType.equals("manu"))
-            results = selectManuFacturer.retreiveQueryData(queryValue);
-        else if (queryType.equals("sup"))
-            results = selectSupplier.retreiveQueryData(queryValue);
-        else if (queryType.equals("itype"))
-            results = selectType.retreiveQueryData(queryValue);
-        else if (queryType.equals("stockindate"))
-            results = selectDate.retreiveQueryData(queryValue);
-        else if (queryType.equalsIgnoreCase("bar")) {
+        } else if (queryType.equalsIgnoreCase("bar")) {
             results = selectBarcode.retreiveQueryData(queryValue);
         }
 

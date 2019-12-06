@@ -68,17 +68,10 @@
     </style>
 
 
-    <script>
-        function clearSessions() {
-            sessionStorage.clear();
-        }
-    </script>
-
-
 </head>
 
 
-<body onload="clearSessions();">
+<body>
 <%
     if (session.getAttribute("REFRESH") != null) {
         if (session.getAttribute("REFRESH").toString().equalsIgnoreCase("TRUE"))
@@ -230,6 +223,7 @@
                                 <tr>
                                     <td style="padding-top: 0px; padding-bottom: 0px;"><input
                                             class="btn-block" name="queryValue" id="txtSearch"
+                                            oninput="searchfunction()"
                                             type="text" placeholder="Type Here to Search..." required
                                         <%if (session.getAttribute("results") != null) {%> disabled
                                         <%}%>></td>
@@ -251,11 +245,12 @@
                                         <input
 
                                             <%if (session.getAttribute("results") != null) {%>
-                                                name="search" type="reset" class="btn-block"
+                                                name="search" type="reset" class="btn-block btn-danger"
                                                 value="Reset" id="resetBtn1"
+                                                onclick="window.location.replace('http://localhost:8080/OMS2/Stock_IN_INSERT.jsp');"
                                             <%} else {%>
                                                 name="search" type="reset" class="btn-block"
-                                                value="Reset" id="resetBtn"
+                                                value="Reset" id="resetBtn" onclick="clearTable()"
                                             <%}%>></td>
                                 </tr>
                             </table>
@@ -458,7 +453,7 @@
                         <div class="table-wrapper-scroll-y my-custom-scrollbar"
                              style="height: 525px; position: relative;">
 
-                            <table class="table table-bordered table-striped mb-0">
+                            <table class="table table-bordered table-striped mb-0" id="mainTable">
                                 <thead>
                                 <tr>
                                     <th>Stock&nbsp;IN&nbsp;ID</th>
@@ -472,6 +467,29 @@
                                 </thead>
                                 <tbody>
                                 <%
+                                    if (session.getAttribute("results") != null) {
+
+                                        ResultSet resultSet = (ResultSet) session.getAttribute("results");
+
+                                        do {
+                                %>
+                                <tr>
+                                    <td><%=resultSet.getString(1)%>
+                                    </td>
+                                    <td><%=resultSet.getString(2)%>
+                                    </td>
+                                    <td><%=resultSet.getString(3)%>
+                                    </td>
+                                    <td><%=resultSet.getString(4)%>
+                                    </td>
+                                    <td><%=resultSet.getString(5)%>
+                                    </td>
+                                </tr>
+                                <%
+                                    } while (resultSet.next());
+
+                                } else {
+
                                     ResultSet result;
                                     Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
                                             MySQLQueries.QUERY_SELECT_ALL);
@@ -491,14 +509,15 @@
                                     <td><%=result.getString(5)%>
                                     </td>
 
+
                                 </tr>
 
                                 <%
+                                            }
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
                                         }
-                                    } catch (SQLException e) {
-                                        e.printStackTrace();
                                     }
-
 
                                 %>
                                 </tbody>
@@ -571,6 +590,7 @@
 <%
     session.removeAttribute("color");
     session.removeAttribute("message");
+    session.removeAttribute("results");
 %>
 <%}%>
 

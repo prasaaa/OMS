@@ -160,10 +160,11 @@ input[type=submit]:disabled, input[type=button]:disabled {
 }
 
 
-#resetBtn {
+#resetBtn, #resetBtn1 {
 	background-color: #ff4040;
 	color: white;
-	margin-top: 7px; padding : 8px 20px;
+	margin-top: 7px;
+	padding: 8px 20px;
 	border: none;
 	border-radius: 4px;
 	cursor: pointer;
@@ -190,7 +191,7 @@ input[type=reset]:hover {
 	background-color: #ff2709;
 }
 
-#resetBtn:hover {
+#resetBtn:hover, #resetBtn1:hover {
 	background-color: #ec0000;
 }
 

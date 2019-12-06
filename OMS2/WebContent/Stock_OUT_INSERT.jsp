@@ -49,12 +49,7 @@
 <!-- Custom styles for this template -->
 <link href="css/simple-sidebar3.css" rel="stylesheet">
 
-<script>
-	function clearSessions() {
-		sessionStorage.clear();
 
-    }
-</script>
 
 </head>
 

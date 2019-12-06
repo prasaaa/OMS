@@ -20,11 +20,37 @@ public class Inventory_INSERT {
         this.query = query;
     }
 
+    public boolean checkAvailability(String barcodeNumber) {
+        try {
+            ps = c.prepareStatement(query);
+            ps.setString(1, barcodeNumber);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                rs.close();
+                return false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return true;
+    }
+
     public boolean Insert_Item(String itemID, String modelName, String manufacturer, String itemType, double sppitem) {
         try {
 
             ps = c.prepareStatement(query);
-            
+
             ps.setString(1, itemID);
             ps.setString(2, modelName);
             ps.setString(3, manufacturer);
@@ -59,7 +85,7 @@ public class Inventory_INSERT {
                 itemID = rs.getString(1);
 
             }
-            
+
             return itemID;
 
         } catch (Exception e) {
@@ -119,7 +145,7 @@ public class Inventory_INSERT {
 
 
             return stockID;
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -133,7 +159,7 @@ public class Inventory_INSERT {
 
         return stockID;
     }
-    
+
     public long getQuantity(String stockID) {
 
         long quantity = 0;
@@ -152,11 +178,11 @@ public class Inventory_INSERT {
             }
 
             return quantity;
-            
+
 
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
 
         return quantity;
     }
@@ -209,7 +235,7 @@ public class Inventory_INSERT {
         try {
             ps = c.prepareStatement(query);
 
-            ps.setString(1,itemID);
+            ps.setString(1, itemID);
             ps.setString(2, supplerId);
             ps.setDouble(3, buyingPrice);
 

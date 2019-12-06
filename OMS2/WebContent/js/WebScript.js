@@ -276,6 +276,8 @@ function clearAllFields() {
 }
 
 
+let oldTable = "";
+
 $(document).ready(function () {
     document.getElementById("txtBarcode").addEventListener(
         'keydown',
@@ -289,14 +291,11 @@ $(document).ready(function () {
         });
 
 
-    /*document.getElementById("description").addEventListener(
-        'keydown',
-        function (event) {
-            if (event.key === "enter") {
-                event.preventDefault();
-                myFirstFunction();
-            }
-        });*/
+    window.onload = function () {
+        oldTable = document.getElementById("mainTable").innerHTML;
+        sessionStorage.clear();
+
+    };
 });
 
 
@@ -311,6 +310,7 @@ function logValue() {
         case "stockindate":
             document.getElementById("txtSearch").setAttribute('type', 'date');
             document.getElementById("resetBtn").setAttribute('value', 'Reset');
+            document.getElementById("resetBtn").setAttribute('type', 'reset');
             document.getElementById("resetBtn").style.backgroundColor = "red";
             break;
         default :
@@ -371,3 +371,55 @@ window.onclick = function (event) {
     }
 };
 
+
+//to search main table
+function searchfunction() {
+    var input, filter, table, tr, td, i, txtValue, catval, colno;
+
+
+    input = document.getElementById("txtSearch");
+    catval = document.getElementById("searchType").value;
+    filter = input.value.toUpperCase();
+    table = document.getElementById("mainTable");
+
+
+    tr = table.getElementsByTagName("tr");
+    switch (catval) {
+        case "stockid":
+            colno = 0;
+            break;
+        case "iname":
+            colno = 1;
+            break;
+        case "manu":
+            colno = 1;
+            break;
+        case "sup":
+            colno = 2;
+            break;
+        case "itype":
+            colno = 3;
+            break;
+        case "stockindate":
+            colno = 4;
+            break;
+        default:
+            return false;
+    }
+    for (i = 0; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[colno];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+
+function clearTable() {
+    document.getElementById("mainTable").innerHTML = oldTable;
+    document.getElementById("txtSearch").setAttribute('type', 'text');
+}

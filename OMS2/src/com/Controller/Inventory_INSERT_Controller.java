@@ -75,8 +75,8 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 		InventoryStock stock = new InventoryStock();
 
-		stock.setDate(stockINDate);
-		stock.setRemarks(remarks);
+		stock.setDate(stockINDate.trim());
+		stock.setRemarks(remarks.trim());
 
 		String stockID = "STOCK_IN_".concat(new Timestamp(new Date().getTime()).toString().trim().replaceAll("[\\s.:-]", "_"));
 		stock.setStockID(stockID);
@@ -89,7 +89,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 		ItemList itemList = new ItemList();
 		Items[] items = new Items[totalItemsLength];
 
-		itemList.setItemID(itemID);
+		itemList.setItemID(itemID.trim());
 
 
 		for (int i = 0; i < totalItemsLength; i++) {
@@ -98,28 +98,28 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 				if (i < workingBarcodeList.length) {
 					items[i] = new Items();
-					items[i].setBarcode(workingBarcodeList[i]);
-					items[i].setDescription(workingListDescriptions[i]);
+					items[i].setBarcode(workingBarcodeList[i].trim());
+					items[i].setDescription(workingListDescriptions[i].trim());
 					items[i].setItemStatus("Working");
 				} else {
 					items[i] = new Items();
-					items[i].setBarcode(faultBarcodeList[i - workingBarcodeList.length]);
-					items[i].setDescription(faultListDescriptions[i - workingBarcodeList.length]);
+					items[i].setBarcode(faultBarcodeList[i - workingBarcodeList.length].trim());
+					items[i].setDescription(faultListDescriptions[i - workingBarcodeList.length].trim());
 					items[i].setItemStatus("faulty");
 
 				}
 
 			} else if (workingBarcodeList.length == 0 && faultBarcodeList.length != 0) {
 				items[i] = new Items();
-				items[i].setBarcode(faultBarcodeList[i]);
-				items[i].setDescription(faultListDescriptions[i]);
+				items[i].setBarcode(faultBarcodeList[i].trim());
+				items[i].setDescription(faultListDescriptions[i].trim());
 				items[i].setItemStatus("faulty");
 
 
 			} else if (workingBarcodeList.length != 0) {
 				items[i] = new Items();
-				items[i].setBarcode(workingBarcodeList[i]);
-				items[i].setDescription(workingListDescriptions[i]);
+				items[i].setBarcode(workingBarcodeList[i].trim());
+				items[i].setDescription(workingListDescriptions[i].trim());
 				items[i].setItemStatus("Working");
 			}
 
@@ -134,24 +134,41 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 		Inventory_INSERT inventory_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_STOCK);
 		Inventory_INSERT item_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_ITEM_LIST);
 
-		boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID());
+		Inventory_INSERT checkDuplicate = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_SELECT_ITEM_BY_BARCODE);
 
-		boolean boolItems = true;
+		boolean boolItemsList = true;
 		for (Items i : items) {
-			boolItems = item_insert.InsertItemList(itemList.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), stock.getStockID());
+			boolItemsList = checkDuplicate.checkAvailability(i.getBarcode());
 
-			if (!boolItems)
+			if (!boolItemsList)
 				break;
 
 
 		}
 
-		if (boolStock && boolItems) {
-			response.sendRedirect("Inventory_Servlet?status=insertSuccess");
+		if (boolItemsList) {
+			boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID());
 
+			boolean boolItems = true;
+			for (Items i : items) {
+				boolItems = item_insert.InsertItemList(itemList.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), stock.getStockID());
+
+				if (!boolItems)
+					break;
+
+
+			}
+
+			if (boolStock && boolItems) {
+				response.sendRedirect("Inventory_Servlet?status=insertSuccess");
+
+			} else {
+				response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
+			}
 		} else {
-			response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
+			response.sendRedirect("Inventory_Servlet?status=insertError");
 		}
+
 
 	}
 
