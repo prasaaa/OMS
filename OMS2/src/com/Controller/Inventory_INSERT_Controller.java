@@ -1,5 +1,8 @@
 package com.Controller;
 
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Inventory_INSERT;
+import com.Utilities.MySQLQueries;
 import com.model.InventoryStock;
 import com.model.ItemList;
 import com.model.Items;
@@ -20,7 +23,7 @@ import java.util.Date;
 public class Inventory_INSERT_Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private String itemID = "", stockINDate = "", remarks = "";
+	private String itemID = "", stockINDate = "", remarks = "", supplierID;
 	private String[] workingBarcodeList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
 
 	/**
@@ -52,6 +55,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 			itemID = request.getParameter("itemID");
 			stockINDate = request.getParameter("stockindate");
+			supplierID = request.getParameter("supplier");
 
 			if (request.getParameter("remarks") != null)
 				remarks = request.getParameter("remarks");
@@ -86,6 +90,9 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 		ItemList itemList = new ItemList();
 		Items[] items = new Items[workingBarcodeList.length + faultBarcodeList.length];
 
+		itemList.setItemID(itemID);
+		itemList.setSupplierID(supplierID);
+
 		if (workingBarcodeList.length != 0) {
 			for (int i = 0; i < workingBarcodeList.length; i++) {
 				items[i] = new Items();
@@ -111,10 +118,27 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
 		stock.setItemList(itemList);
 
-		System.out.println(stock.getStockID());
+		Inventory_INSERT inventory_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_STOCK);
+		Inventory_INSERT item_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_ITEM_LIST);
 
-		response.sendRedirect("Stock_IN_INSERT.jsp");
+		boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID(), stock.getItemList().getSupplierID());
 
+		boolean boolItems = true;
+		for (Items i : items) {
+			boolItems = item_insert.InsertItemList(itemList.getItemID(), i.getBarcode(), i.getItemStatus(), stock.getStockID(), i.getDescription());
+
+			if (!boolItems)
+				break;
+
+
+		}
+
+		if (boolStock && boolItems) {
+			response.sendRedirect("Inventory_Servlet?status=insertSuccess");
+
+		} else {
+			response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
+		}
 
 	}
 

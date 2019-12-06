@@ -309,13 +309,14 @@
                                                            tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
                                                         </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultset_for_items.getString("item_type")%>
                                                             <br>Manufacturer&nbsp;:&nbsp;<%=resultset_for_items.getString("item_manufacturer")%>
-                                                            <br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("item_supplier")%>
+                                                            <br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("supplier_name")%>
                                                             <br>Description&nbsp;:&nbsp;<%=resultset_for_items.getString("item_details")%>
                                                         </a>
                                                         <script>
                                                             document.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener('click', function () {
                                                                 document.getElementById('itemdetailsdropitem').value = '<%=resultset_for_items.getString("item_id")%>';
                                                                 document.getElementById('iteminformation').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>').innerHTML + '</p>';
+                                                                document.getElementById("supplier_id").value = '<%=resultset_for_items.getString("supplier_id")%>';
                                                                 document.getElementById('itemdetailsmyInput').value = "";
                                                             });
 
@@ -340,7 +341,7 @@
                                                 <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
                                             </div>
                                             <br>
-
+                                            <input type="text" hidden id="supplier_id" name="supplier" value="">
                                             <label for="datePicker">Stock&nbsp;IN&nbsp;Date</label>
                                             <input type="date" name="stockindate" id="datePicker" required
                                                    value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br>
