@@ -1,12 +1,15 @@
 package com.Utilities;
 
+import org.intellij.lang.annotations.Language;
+
 public class MySQLQueries {
+
 
     public static final String QUERY_INSERT_ITEM_MODEL = "INSERT INTO `item_model_table` VALUES (?) ON DUPLICATE KEY UPDATE item_model_name = item_model_name;";
 
     public static final String QUERY_INSERT_ITEM = "INSERT INTO `item_details_table` VALUES (?, ?, ?, ?, ?)" +
             "  ON DUPLICATE KEY UPDATE selling_price = VALUES(selling_price);";
-    
+
     public static final String QUERY_INSERT_ITEM_SUPPLIER = "INSERT INTO `item_supplier_table` VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE buying_price = VALUES(buying_price);";
 
     public static final String QUERY_SELECT_ITEM_ID = "SELECT item_id FROM `item_details_table` WHERE item_model_name = ? AND item_manufacturer = ? AND item_supplier = ?;";
@@ -167,6 +170,6 @@ public class MySQLQueries {
 	public static final String QUERY_SELECT_STOCK_OUT_BY_MANUFACTURER = "SELECT s.stock_out_id, s.item_id, i.item_type, s.stock_out_date, s.selling_price, s.quantity, s.customer_order_id FROM `stock_out_items_table` s INNER JOIN `item_details_table` i ON i.item_id = s.item_id WHERE i.item_manufacturer = ?";
 
 	public static final String QUERY_DELETE_STOCK_OUT_BY_MANUFACTURER = "";
-
+    @Language("MySQL")
     public static final String QUERY_GET_ALL_ITEM_DETAILS = "SELECT i.item_id, i.item_model_name, i.item_manufacturer, i.item_type, i.item_supplier, i.item_details FROM item_details_table i;";
 }
