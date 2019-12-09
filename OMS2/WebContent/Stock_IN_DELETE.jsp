@@ -1,14 +1,11 @@
 <%--suppress XmlDuplicatedId --%>
 
-<%@page import="com.model.CurrentUser"%>
+<%@page import="com.DBConnection.ConnectionManager" %>
 <%@page import="com.DatabaseHandle.Inventory_SELECT"%>
-<%@page import="com.DBConnection.ConnectionManager"%>
+<%@page import="com.Utilities.MySQLQueries" %>
 <%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.ResultSetMetaData"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="com.Utilities.MySQLQueries"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+		 pageEncoding="ISO-8859-1" %>
 
 
 <!DOCTYPE html>
@@ -57,27 +54,23 @@
 	crossorigin="anonymous"></script>
 
 
-
-
-<!-- Custom styles for this template -->
-<link href="css/simple-sidebar3.css" rel="stylesheet">
-
-
-
+	<!-- Custom styles for this template -->
+	<link href="css/simple-sidebar3.css" rel="stylesheet">
 
 
 </head>
 <body>
-	<%
-		System.out.println("this is user " + CurrentUser.getUsername());
-		if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
-			response.sendRedirect("login.jsp");
-		}
-	%>
+<%--
+    System.out.println("this is user " + CurrentUser.getUsername());
+    if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
+        response.sendRedirect("login.jsp");
+    }
 
-	<%
-		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); //HTTP 1.1 
-		response.setHeader("Pragma", "no-cache"); //HTTP 1.0 
+
+    --%>
+<%
+	response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); //HTTP 1.1
+	response.setHeader("Pragma", "no-cache"); //HTTP 1.0
 		response.setDateHeader("Expires", 0); //prevents caching at the proxy server
 	%>
 	<div class="d-flex" id="wrapper">
@@ -91,24 +84,23 @@
 						Automated Barcode<br>Solution
 					</div>
 					<div class="list-group list-group-flush">
-						<%
+						<%--
 							if (CurrentUser.getUsername().equals("admin")) {
-						%>
+						--%>
 						<a href="Supplier_Order_Insert.jsp"
-							class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
-						<%
+						   class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
+						<%--
 							}
-						%>
-						<%
+						--%>
+						<%--
 							if (CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant")
 									|| CurrentUser.getUsername().equals("manager")) {
-						%>
+						--%>
 						<a
-							class="list-group-item list-group-item-action bg-light dropdown-toggle"
-							data-toggle="collapse" href="#collapseExample" role="button"
-							aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+								class="list-group-item list-group-item-action bg-light dropdown-toggle"
+								data-toggle="collapse" href="#collapseExample" role="button"
+								aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
 						<div class="collapse" id="collapseExample">
-
 
 
 							<a href="Stock_IN_INSERT.jsp"
@@ -128,18 +120,18 @@
 						<a href="Repair_INSERT.jsp"
 							class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
 						<a href="Admin_Customer_Order_Conformation.jsp"
-							class="list-group-item list-group-item-action bg-light">Customer
+						   class="list-group-item list-group-item-action bg-light">Customer
 							Order &nbsp;Confirm</a> <a href="Emp_Management.jsp"
-							class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
+													   class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
 						<a href="Emp_REPORT.jsp"
-							class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
+						   class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
 						<a href="IT_Manager_Assign_Emp.jsp"
-							class="list-group-item list-group-item-action bg-light">Employee
+						   class="list-group-item list-group-item-action bg-light">Employee
 							Assign &nbsp;Management</a>
 					</div>
-					<%
+					<%--
 						}
-					%>
+					--%>
 				</div>
 			</div>
 		</div>
@@ -215,11 +207,11 @@
 						</td>
 						<td style="padding-top: 1px; padding-bottom: 0px;">
 							<form action="Inventory_DELETE_Controller" name="deleteForm"
-								method="POST">
-								<input type="text" hidden="true" name="queryType"
-									value="<%if (request.getAttribute("queryType") != null) {%><%=request.getAttribute("queryType")%><%}%>">
-								<input type="text" hidden="true" name="queryValue"
-									value="<%if (request.getAttribute("queryValue") != null) {%><%=request.getAttribute("queryValue")%><%}%>">
+								  method="POST">
+								<input type="text" hidden name="queryType"
+									   value="<%if (request.getAttribute("queryType") != null) {%><%=request.getAttribute("queryType")%><%}%>">
+								<input type="text" hidden name="queryValue"
+									   value="<%if (request.getAttribute("queryValue") != null) {%><%=request.getAttribute("queryValue")%><%}%>">
 								<button style="margin-top: 7px"
 									class="btn btn-success btn-block confirmModal" type="button"
 									name="deleteAll" value="Delete Stocks"
@@ -241,82 +233,182 @@
 								style="height: 545px; position: relative; top: 0">
 
 
-
-
 								<!-- -----------CHANGE STARTS HERE FIRST TABLE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 								<table id="MainTable"
-									class="table table-bordered table-striped mb-0">
+									   class="table table-bordered table-striped mb-0">
 									<thead>
 
 
+									<tr>
+										<th>Stock&nbsp;ID</th>
+										<th>Item's<br>Model&nbsp;Name</th>
+										<th>Manufacturer</th>
+										<th>Supplier</th>
+										<th>Item&nbsp;Type</th>
+										<th>Received&nbsp;Date</th>
+										<th>Number&nbsp;of<br>Working&nbsp;Items</th>
+										<th>Number&nbsp;of<br>Fault&nbsp;Items</th>
+										<th>Delete&nbsp;Stock</th>
 
-										<tr>
-											<th>Stock&nbsp;ID</th>
-											<th>Item's&nbsp;ID</th>
-											<th>Supplier</th>
-											<th>Item&nbsp;Type</th>
-											<th>Received&nbsp;Date</th>
-											<th>Buying&nbsp;Price</th>
-											<th>Quantity</th>
 
-
-
-
-										</tr>
+									</tr>
 									</thead>
 
 
 									<tbody>
-										<%
+									<%
 											if (session.getAttribute("results") != null) {
 
 												ResultSet results = (ResultSet) session.getAttribute("results");
 
 												do {
-										%>
-										<tr>
-											<td><%=results.getString(1)%></td>
-											<td><%=results.getString(2)%></td>
-											<td><%=results.getString(3)%></td>
-											<td><%=results.getString(4)%></td>
-											<td><%=results.getString(5)%></td>
-											<td><%=results.getString(6)%></td>
-											<td><%=results.getLong(7)%></td>
-
-										</tr>
-
-										<%
-											} while (results.next());
-
-												session.removeAttribute("results");
-
-											} else {
-
-												ResultSet result;
-												Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
-														MySQLQueries.QUERY_SELECT_ALL);
-												result = si.get_inventory_table();
-
-												while (result.next()) {
-										%>
-
-										<tr>
-											<td><%=result.getString(1)%></td>
-											<td><%=result.getString(2)%></td>
-											<td><%=result.getString(3)%></td>
-											<td><%=result.getString(4)%></td>
-											<td><%=result.getString(5)%></td>
-											<td><%=result.getString(6)%></td>
-											<td><%=result.getLong(7)%></td>
+									%>
+									<tr>
+										<td><%=results.getString(1)%>
+										</td>
+										<td><%=results.getString(2)%>
+										</td>
+										<td><%=results.getString(3)%>
+										</td>
+										<td><%=results.getString(4)%>
+										</td>
+										<td><%=results.getString(5)%>
+										</td>
+										<td><%=results.getString(6)%>
+										</td>
+										<td><%=results.getInt(7)%>
+										</td>
+										<td><%=results.getInt(8)%>
+										</td>
+										<td>
+											<form action="Delete_Emp" method="post">
+												<input type="hidden" name="emp_id" value="<%=results.getString(1) %>">
+												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 
-										</tr>
+												<!-- Button trigger modal -->
+												<button type="button" class="btn btn-primary" data-toggle="modal"
+														data-target="#e<%out.print(results.getString(1));%>">
+													Launch demo modal
+												</button>
 
-										<%
+												<!-- Modal -->
+												<div class="modal fade" id="e<%out.print(results.getString(1));%>"
+													 tabindex="-1" role="dialog"
+													 aria-labelledby="<%=results.getString(1) %>" aria-hidden="true">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLabel">Confirm
+																	Delete</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																		aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body">
+																Are you Sure you want to delete this record?
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close
+																</button>
+																<input type="submit" class="btn btn-primary"
+																	   value="Delete">
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+											</form>
+										</td>
+
+									</tr>
+
+									<%
+										} while (results.next());
+
+										session.removeAttribute("results");
+
+									} else {
+
+										ResultSet result;
+										Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
+												MySQLQueries.QUERY_GET_STOCK_TABLE);
+										result = si.get_inventory_table();
+
+										while (result.next()) {
+									%>
+
+									<tr>
+										<td><%=result.getString(1)%>
+										</td>
+										<td><%=result.getString(2)%>
+										</td>
+										<td><%=result.getString(3)%>
+										</td>
+										<td><%=result.getString(4)%>
+										</td>
+										<td><%=result.getString(5)%>
+										</td>
+										<td><%=result.getString(6)%>
+										</td>
+										<td><%=result.getInt(7)%>
+										</td>
+										<td><%=result.getInt(8)%>
+										</td>
+										<td>
+											<form action="Delete_Emp" method="post">
+												<input type="hidden" name="emp_id" value="<%=result.getString(1) %>">
+												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
+
+
+												<!-- Button trigger modal -->
+												<button type="button" class="btn btn-primary" data-toggle="modal"
+														data-target="#e<%out.print(result.getString(1));%>">Delete
+												</button>
+
+												<!-- Modal -->
+												<div class="modal fade" id="e<%out.print(result.getString(1));%>"
+													 tabindex="-1" role="dialog"
+													 aria-labelledby="<%=result.getString(1) %>" aria-hidden="true">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLabel">Confirm
+																	Delete</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																		aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body">
+																Are you Sure you want to delete this record?
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-secondary"
+																		data-dismiss="modal">Close
+																</button>
+																<input type="submit" class="btn btn-primary"
+																	   value="Delete">
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+											</form>
+										</td>
+
+
+									</tr>
+
+									<%
 											}
 
-											}
-										%>
+										}
+									%>
 									</tbody>
 								</table>
 
@@ -363,12 +455,7 @@
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 
-	<script
-		src="${pageContext.request.contextPath}/js/jquery.confirmModal.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/js/jquery.confirmModal.js"></script>
-
-	<!-- Menu Toggle Script -->
+<!-- Menu Toggle Script -->
 
 	<script>
 		$("#menu-toggle").click(function(e) {
@@ -391,58 +478,10 @@
 	<%
 		}
 	%>
-	<script>
-		function logValue() {
-			switch (this.value) {
-			case "stockindate":
-				document.getElementById("txtSearch").setAttribute('type',
-						'date');
-				break;
-			default:
-				document.getElementById("txtSearch").setAttribute('type',
-						'text');
-				break;
-			}
-		}
-
-		var select = document.getElementById("searchType");
-		select.addEventListener('change', logValue, false);
-	</script>
 
 
-	<script>
-		$(document).ready(function() {
 
-			$('.confirmModal').click(function(e) {
-				e.preventDefault();
 
-				if ($defaultsConfirmModal !== undefined) {
-					var copy = $defaultsConfirmModal;
-					$defaultsConfirmModal = {
-						confirmButton : 'OK',
-						cancelButton : 'Cancel',
-						messageHeader : '&nbsp;',
-						modalBoxWidth : 'auto',
-						modalVerticalCenter : false,
-						fadeAnimation : false,
-						backgroundBlur : false,
-						autoFocusOnConfirmBtn : false
-					};
-				}
-
-				$.confirmModal('Are you sure you want to delete this?', {
-					messageHeader : "Confirm Delete"
-				}, function(el) {
-
-					document.deleteForm.submit();
-
-				});
-
-				$defaultsConfirmModal = copy;
-			});
-
-		});
-	</script>
 
 
 </body>

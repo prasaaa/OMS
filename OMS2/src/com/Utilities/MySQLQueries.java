@@ -31,7 +31,7 @@ public class MySQLQueries {
     public static final String QUERY_SELECT_BY_TYPE = "SELECT s.stock_in_id, i.item_id, u.supplier_id, i.item_type, s.stock_in_date, s.buying_price, s.quantity FROM `item_details_table` i INNER JOIN `stock_in_items_table` s ON s.item_id = i.item_id INNER JOIN item_supplier_table u ON u.item_id = i.item_id WHERE i.item_type = ?;";
 
     public static final String QUERY_SELECT_BY_DATE = "SELECT s.stock_in_id, i.item_id, u.supplier_id, i.item_type, s.stock_in_date, s.buying_price, s.quantity FROM `item_details_table` i INNER JOIN `stock_in_items_table` s ON s.item_id = i.item_id INNER JOIN item_supplier_table u ON u.item_id = i.item_id WHERE s.stock_in_date= ?;";
-    @Language("MySQL")
+
     public static final String QUERY_SELECT_BY_BARCODE = "SELECT DISTINCT s.stock_in_id, i.item_id, idt.item_supplier, idt.item_type, s.stock_in_date FROM `stock_in_items_table` s INNER JOIN items_list_table i ON s.stock_in_id = i.stock_in_id INNER JOIN item_details_table idt on i.item_id = idt.item_id WHERE i.barcode_number = ?;";
 
     public static final String QUERY_SELECT_ITEM_BY_BARCODE = "SELECT * FROM items_list_table WHERE barcode_number = ?;";
@@ -164,13 +164,17 @@ public class MySQLQueries {
 
 	public static final String QUERY_GET_ITEM_BY_ITEM_MODEL = "SELECT item_model_name, item_manufacturer, item_type, item_id FROM item_details_table WHERE item_model_name =?;";
 
-	public static final String QUERY_GET_WORKING_ITEMS = "SELECT COUNT(barcode_number) FROM items_list_table WHERE item_id = ? AND stock_out_id IS NULL AND item_status LIKE '%Working%';";
+    public static final String QUERY_GET_WORKING_ITEMS = "SELECT COUNT(barcode_number) FROM items_list_table WHERE item_id = ? AND stock_out_id IS NULL AND item_status LIKE '%Working%';";
 
-	public static final String QUERY_GET_FAULTY_ITEMS = "SELECT COUNT(barcode_number) FROM items_list_table WHERE item_id = ? AND stock_out_id IS NULL AND item_status LIKE '%Faulty%';";
+    public static final String QUERY_GET_FAULTY_ITEMS = "SELECT COUNT(barcode_number) FROM items_list_table WHERE item_id = ? AND stock_out_id IS NULL AND item_status LIKE '%Faulty%';";
 
-	public static final String QUERY_SELECT_STOCK_OUT_BY_MANUFACTURER = "SELECT s.stock_out_id, s.item_id, i.item_type, s.stock_out_date, s.selling_price, s.quantity, s.customer_order_id FROM `stock_out_items_table` s INNER JOIN `item_details_table` i ON i.item_id = s.item_id WHERE i.item_manufacturer = ?";
+    public static final String QUERY_SELECT_STOCK_OUT_BY_MANUFACTURER = "SELECT s.stock_out_id, s.item_id, i.item_type, s.stock_out_date, s.selling_price, s.quantity, s.customer_order_id FROM `stock_out_items_table` s INNER JOIN `item_details_table` i ON i.item_id = s.item_id WHERE i.item_manufacturer = ?";
 
-	public static final String QUERY_DELETE_STOCK_OUT_BY_MANUFACTURER = "";
-    @Language("MySQL")
+    public static final String QUERY_DELETE_STOCK_OUT_BY_MANUFACTURER = "";
+
     public static final String QUERY_GET_ALL_ITEM_DETAILS = "SELECT i.item_id, i.item_model_name, i.item_manufacturer, i.item_type, i.item_supplier, i.item_details FROM item_details_table i;";
+    @Language("MySQL")
+    public static final String QUERY_GET_STOCK_TABLE = "SELECT s.stock_in_id,idt.item_model_name,idt.item_manufacturer,idt.item_supplier,idt.item_type, s.stock_in_date, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id GROUP BY s.stock_in_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type;";
+
+
 }

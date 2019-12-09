@@ -221,12 +221,6 @@
                             <table class="table table-bordered table-striped mb-0"
                                    style="width: 100%;">
                                 <tr>
-                                    <td style="padding-top: 0px; padding-bottom: 0px;"><input
-                                            class="btn-block" name="queryValue" id="txtSearch"
-                                            oninput="searchfunction()"
-                                            type="text" placeholder="Type Here to Search..." required
-                                        <%if (session.getAttribute("results") != null) {%> disabled
-                                        <%}%>></td>
                                     <td style="padding-top: 0px; padding-bottom: 0px;"><select
                                             required class="btn-block" name="queryType" id="searchType"
                                             <%if (session.getAttribute("results") != null) {%> disabled
@@ -241,6 +235,13 @@
                                         <option value="itype">Item&nbsp;Type</option>
                                         <option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
                                     </select></td>
+                                    <td style="padding-top: 0px; padding-bottom: 0px;"><input
+                                            class="btn-block" name="queryValue" id="txtSearch"
+                                            oninput="searchfunction()"
+                                            type="text" placeholder="Type Here to Search..." required
+                                        <%if (session.getAttribute("results") != null) {%> disabled
+                                        <%}%>></td>
+
                                     <td style="padding-top: 0; padding-bottom: 0;">
                                         <input
 
