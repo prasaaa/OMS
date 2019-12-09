@@ -170,56 +170,50 @@
 			<!--create the big table -->
 			<div style="top: 0">
 				<table class="table table-bordered table-striped mb-0"
-					style="width: 100%; height: 80%;">
+					   style="width: 100%; height: 80%;">
 					<tr>
 						<td style="padding: 0px 0px 0px 0px;">
 							<form action="Inventory_SELECT_Controller?jspPage=delete"
-								method="POST" id="searchForm" name="searchForm">
+								  method="POST" id="searchForm" name="searchForm">
 								<table style="width: 100%;">
 									<tr>
-										<td style="padding-top: 0px; padding-bottom: 0px;"><input
-											class="btn-block" id="txtSearch" name="queryValue"
-											type="text" placeholder="Search Here..." required
-											<%if (session.getAttribute("results") != null) {%> disabled
-											<%}%>></td>
 										<td style="padding-top: 0px; padding-bottom: 0px;"><select
-											class="btn-block" name="queryType" required id="searchType"
-											<%if (session.getAttribute("results") != null) {%> disabled
-											<%}%>>
-												<option value="" disabled selected>Search&nbsp;By...</option>
-												<option value="bar">Barcode&nbsp;Number</option>
-												<option value="stockid">Stock&nbsp;ID</option>
-												<option value="iname">Item&nbsp;Model</option>
-												<option value="manu">Manufacturer</option>
-												<option value="sup">Supplier</option>
-												<option value="itype">Item&nbsp;Type</option>
-												<option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
+												required class="btn-block" name="queryType" id="searchType"
+												<%if (session.getAttribute("results") != null) {%> disabled
+												<%}%>>
+
+											<option value="" disabled selected>Search&nbsp;By...</option>
+											<option value="bar">Barcode&nbsp;Number</option>
+											<option value="stockid">Stock&nbsp;ID</option>
+											<option value="iname">Item&nbsp;Model</option>
+											<option value="manu">Manufacturer</option>
+											<option value="sup">Supplier</option>
+											<option value="itype">Item&nbsp;Type</option>
+											<option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
 										</select></td>
 										<td style="padding-top: 0px; padding-bottom: 0px;"><input
-											name="search" type="submit" class="btn-block"
-											<%if (session.getAttribute("results") != null) {%>
-											value="Reset" id="resetBtn" formnovalidate <%} else {%>
-											value="Search Stock" <%}%>></td>
+												class="btn-block" name="queryValue" id="txtSearch"
+												oninput="searchfunction()"
+												type="text" placeholder="Type Here to Search..." required
+											<%if (session.getAttribute("results") != null) {%> disabled
+											<%}%>></td>
 
+										<td style="padding-top: 8px;">
+											<input
+
+												<%if (session.getAttribute("results") != null) {%>
+													name="search" type="reset" class="btn btn-danger btn-block"
+													value="Reset" id="resetBtn1"
+													onclick="window.location.replace('http://localhost:8080/OMS2/Stock_IN_DELETE.jsp');"
+												<%} else {%>
+													name="search" type="reset" class="btn btn-danger btn-block"
+													value="Reset" id="resetBtn" onclick="clearTable()"
+												<%}%>></td>
 									</tr>
 								</table>
 							</form>
 						</td>
-						<td style="padding-top: 1px; padding-bottom: 0px;">
-							<form action="Inventory_DELETE_Controller" name="deleteForm"
-								  method="POST">
-								<input type="text" hidden name="queryType"
-									   value="<%if (request.getAttribute("queryType") != null) {%><%=request.getAttribute("queryType")%><%}%>">
-								<input type="text" hidden name="queryValue"
-									   value="<%if (request.getAttribute("queryValue") != null) {%><%=request.getAttribute("queryValue")%><%}%>">
-								<button style="margin-top: 7px"
-									class="btn btn-success btn-block confirmModal" type="button"
-									name="deleteAll" value="Delete Stocks"
-									<%if (session.getAttribute("results") != null) {
-			} else {%>
-									disabled <%}%>>Delete&nbsp;Stocks</button>
-							</form>
-						</td>
+
 					</tr>
 
 
@@ -230,11 +224,11 @@
 						<td colspan="2">
 							<!--inside the first column -->
 							<div class="table-wrapper-scroll-y my-custom-scrollbar"
-								style="height: 545px; position: relative; top: 0">
+								 style="height: 545px; position: relative; top: 0">
 
 
 								<!-- -----------CHANGE STARTS HERE FIRST TABLE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
-								<table id="MainTable"
+								<table id="mainTable"
 									   class="table table-bordered table-striped mb-0">
 									<thead>
 
@@ -287,10 +281,9 @@
 
 
 												<!-- Button trigger modal -->
-												<button type="button" class="btn btn-primary" data-toggle="modal"
-														data-target="#e<%out.print(results.getString(1));%>">
-													Launch demo modal
-												</button>
+												<input type="button" class="btn btn-outline-danger" data-toggle="modal"
+													   data-target="#e<%out.print(results.getString(1));%>"
+													   value="Delete">
 
 												<!-- Modal -->
 												<div class="modal fade" id="e<%out.print(results.getString(1));%>"
@@ -299,8 +292,7 @@
 													<div class="modal-dialog" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
-																<h5 class="modal-title" id="exampleModalLabel">Confirm
-																	Delete</h5>
+																<h5 class="modal-title" id="exampleModalLabel">Confirm&nbsp;Delete</h5>
 																<button type="button" class="close" data-dismiss="modal"
 																		aria-label="Close">
 																	<span aria-hidden="true">&times;</span>
@@ -310,10 +302,9 @@
 																Are you Sure you want to delete this record?
 															</div>
 															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary"
-																		data-dismiss="modal">Close
-																</button>
-																<input type="submit" class="btn btn-primary"
+																<input type="button" class="btn btn-outline-secondary"
+																	   data-dismiss="modal" value="Close">
+																<input type="submit" class="btn btn-outline-danger"
 																	   value="Delete">
 															</div>
 														</div>
@@ -365,9 +356,10 @@
 
 
 												<!-- Button trigger modal -->
-												<button type="button" class="btn btn-primary" data-toggle="modal"
-														data-target="#e<%out.print(result.getString(1));%>">Delete
-												</button>
+												<input type="button" class="btn btn-outline-danger" data-toggle="modal"
+													   data-target="#e<%out.print(result.getString(1));%>"
+													   value="Delete">
+
 
 												<!-- Modal -->
 												<div class="modal fade" id="e<%out.print(result.getString(1));%>"
@@ -376,8 +368,7 @@
 													<div class="modal-dialog" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
-																<h5 class="modal-title" id="exampleModalLabel">Confirm
-																	Delete</h5>
+																<h5 class="modal-title" id="exampleModalLabel">Confirm&nbsp;Delete</h5>
 																<button type="button" class="close" data-dismiss="modal"
 																		aria-label="Close">
 																	<span aria-hidden="true">&times;</span>
@@ -387,10 +378,9 @@
 																Are you Sure you want to delete this record?
 															</div>
 															<div class="modal-footer">
-																<button type="button" class="btn btn-secondary"
-																		data-dismiss="modal">Close
-																</button>
-																<input type="submit" class="btn btn-primary"
+																<input type="button" class="btn btn-outline-secondary"
+																	   data-dismiss="modal" value="Close">
+																<input type="submit" class="btn btn-outline-danger"
 																	   value="Delete">
 															</div>
 														</div>
@@ -472,8 +462,9 @@
 		myFunction();
 	</script>
 	<%
+		session.removeAttribute("results");
 		session.removeAttribute("color");
-			session.removeAttribute("message");
+		session.removeAttribute("message");
 	%>
 	<%
 		}

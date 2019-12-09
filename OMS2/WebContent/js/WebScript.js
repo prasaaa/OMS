@@ -291,19 +291,20 @@ $(document).ready(function () {
         });
 
 
-    window.onload = function () {
-        oldTable = document.getElementById("mainTable").innerHTML;
-        sessionStorage.clear();
-
-    };
 });
+
+window.onload = function () {
+    oldTable = document.getElementById("mainTable").innerHTML;
+    sessionStorage.clear();
+
+};
 
 
 function logValue() {
     switch (this.value) {
         case "bar":
             document.getElementById("resetBtn").setAttribute('type', 'submit');
-            document.getElementById("resetBtn").style.backgroundColor = "green";
+            document.getElementById("resetBtn").className = "btn btn-success btn-block";
             document.getElementById("txtSearch").setAttribute('type', 'text');
             document.getElementById("resetBtn").setAttribute('value', 'Search Stock');
             break;
@@ -311,12 +312,12 @@ function logValue() {
             document.getElementById("txtSearch").setAttribute('type', 'date');
             document.getElementById("resetBtn").setAttribute('value', 'Reset');
             document.getElementById("resetBtn").setAttribute('type', 'reset');
-            document.getElementById("resetBtn").style.backgroundColor = "red";
+            document.getElementById("resetBtn").className = "btn btn-danger btn-block";
             break;
         default :
             document.getElementById("resetBtn").setAttribute('type', 'reset');
             document.getElementById("txtSearch").setAttribute('type', 'text');
-            document.getElementById("resetBtn").style.backgroundColor = "red";
+            document.getElementById("resetBtn").className = "btn btn-danger btn-block";
             document.getElementById("resetBtn").setAttribute('value', 'Reset');
             break;
     }
@@ -392,16 +393,16 @@ function searchfunction() {
             colno = 1;
             break;
         case "manu":
-            colno = 1;
-            break;
-        case "sup":
             colno = 2;
             break;
-        case "itype":
+        case "sup":
             colno = 3;
             break;
-        case "stockindate":
+        case "itype":
             colno = 4;
+            break;
+        case "stockindate":
+            colno = 5;
             break;
         default:
             return false;

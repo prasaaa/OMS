@@ -137,7 +137,7 @@ input[type=text], select, textarea, input[type=date], input[type=number]
 	resize: vertical;
 }
 
-
+/*
 
 input[type=submit], input[type=button] {
 	background-color: #4CAF50;
@@ -194,7 +194,7 @@ input[type=reset]:hover {
 #resetBtn:hover, #resetBtn1:hover {
 	background-color: #ec0000;
 }
-
+*/
 #snackbar {
   visibility: hidden;
   min-width: 250px;

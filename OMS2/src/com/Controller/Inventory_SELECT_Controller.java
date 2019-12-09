@@ -49,6 +49,7 @@ public class Inventory_SELECT_Controller extends HttpServlet {
         Inventory_SELECT selectBarcode = new Inventory_SELECT(ConnectionManager.getConnection(),
                 MySQLQueries.QUERY_SELECT_BY_BARCODE);
 
+
         String queryValue = "";
         String queryType = "";
         String type = "";
@@ -91,8 +92,7 @@ public class Inventory_SELECT_Controller extends HttpServlet {
                         response.sendRedirect("Inventory_Servlet?status=insertResultsFound");
                         return;
                     } else if (request.getParameter("jspPage").equals("delete")) {
-                        response.sendRedirect("Inventory_Servlet?status=deleteResultsFound&queryValue=" + queryValue
-                                + "&queryType=" + queryType);
+                        response.sendRedirect("Inventory_Servlet?status=deleteResultsFound");
                         return;
                     }
 

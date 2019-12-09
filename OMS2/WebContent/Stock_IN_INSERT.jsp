@@ -15,7 +15,7 @@
 <head>
     <meta charset="ISO-8859-1">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no">
+          content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -221,7 +221,7 @@
                             <table class="table table-bordered table-striped mb-0"
                                    style="width: 100%;">
                                 <tr>
-                                    <td style="padding-top: 0px; padding-bottom: 0px;"><select
+                                    <td style="padding-top: 0; padding-bottom: 0"><select
                                             required class="btn-block" name="queryType" id="searchType"
                                             <%if (session.getAttribute("results") != null) {%> disabled
                                             <%}%>>
@@ -235,22 +235,22 @@
                                         <option value="itype">Item&nbsp;Type</option>
                                         <option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
                                     </select></td>
-                                    <td style="padding-top: 0px; padding-bottom: 0px;"><input
+                                    <td style="padding-top: 0; padding-bottom: 0"><input
                                             class="btn-block" name="queryValue" id="txtSearch"
                                             oninput="searchfunction()"
                                             type="text" placeholder="Type Here to Search..." required
                                         <%if (session.getAttribute("results") != null) {%> disabled
                                         <%}%>></td>
 
-                                    <td style="padding-top: 0; padding-bottom: 0;">
+                                    <td style="padding-top: 8px;">
                                         <input
 
                                             <%if (session.getAttribute("results") != null) {%>
-                                                name="search" type="reset" class="btn-block btn-danger"
+                                                name="search" type="reset" class="btn btn-danger btn-block"
                                                 value="Reset" id="resetBtn1"
                                                 onclick="window.location.replace('http://localhost:8080/OMS2/Stock_IN_INSERT.jsp');"
                                             <%} else {%>
-                                                name="search" type="reset" class="btn-block"
+                                                name="search" type="reset" class="btn btn-danger btn-block"
                                                 value="Reset" id="resetBtn" onclick="clearTable()"
                                             <%}%>></td>
                                 </tr>
@@ -417,12 +417,12 @@
                                             </button>
                                             <br>
                                             <br>
-                                            <input type="button" id="submit-form"
-                                                   hidden="hidden" onclick="validateFormX()" name="submitButton"
+                                            <input type="button" id="submit-form" class="btn btn-success btn-lg"
+                                                   hidden onclick="validateFormX()"
                                                    value="Insert Stock">
-                                            <input type="reset" hidden="hidden" id="reset-form"
+                                            <input type="reset" hidden id="reset-form" class="btn btn-danger btn-lg"
                                                    onclick="clearAllFields();"
-                                                   name="resetButton" value="Reset Fields">
+                                                   value="Reset Fields">
 
                                         </form>
 
@@ -434,15 +434,16 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div style="width: 100%; display: flex; flex-direction: row;">
-                                        <button
+                                    <div class="btn-group btn-block" role="group" aria-label="Basic example">
+                                        <button type="button"
                                                 onclick="document.getElementById('submit-form').click()"
-                                                class="buttonLabel btn btn-success btn-block btn-lg">Insert&nbsp;Stock
+                                                class="btn btn-success btn-lg" value="Insert Stock">Insert&nbsp;Stock
                                         </button>
-                                        <button id="rstBtn"
+                                        <button type="button"
                                                 onclick="document.getElementById('reset-form').click()"
-                                                class=" buttonLabel btn btn-danger btn-block btn-lg">Reset&nbsp;Fields
+                                                class="btn btn-danger btn-lg" value="Reset Fields">Reset&nbsp;Fields
                                         </button>
+
                                     </div>
 
                                 </td>
@@ -457,8 +458,9 @@
                             <table class="table table-bordered table-striped mb-0" id="mainTable">
                                 <thead>
                                 <tr>
-                                    <th>Stock&nbsp;IN&nbsp;ID</th>
-                                    <th>Item&nbsp;ID</th>
+                                    <th>Stock&nbsp;ID</th>
+                                    <th>Item's<br>Model&nbsp;Name</th>
+                                    <th>Manufacturer</th>
                                     <th>Supplier</th>
                                     <th>Item&nbsp;Type</th>
                                     <th>Received&nbsp;Date</th>
@@ -485,6 +487,8 @@
                                     </td>
                                     <td><%=resultSet.getString(5)%>
                                     </td>
+                                    <td><%=resultSet.getString(6)%>
+                                    </td>
                                 </tr>
                                 <%
                                     } while (resultSet.next());
@@ -493,7 +497,7 @@
 
                                     ResultSet result;
                                     Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
-                                            MySQLQueries.QUERY_SELECT_ALL);
+                                            MySQLQueries.QUERY_GET_STOCK_TABLE);
                                     result = si.get_inventory_table();
                                     try {
                                         while (result.next()) {
@@ -508,6 +512,8 @@
                                     <td><%=result.getString(4)%>
                                     </td>
                                     <td><%=result.getString(5)%>
+                                    </td>
+                                    <td><%=result.getString(6)%>
                                     </td>
 
 
