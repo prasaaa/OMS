@@ -248,7 +248,7 @@
                                             <%if (session.getAttribute("results") != null) {%>
                                                 name="search" type="reset" class="btn btn-danger btn-block"
                                                 value="Reset" id="resetBtn1"
-                                                onclick="window.location.replace('http://localhost:8080/OMS2/Stock_IN_INSERT.jsp');"
+                                                onclick="window.location.replace(location.href);"
                                             <%} else {%>
                                                 name="search" type="reset" class="btn btn-danger btn-block"
                                                 value="Reset" id="resetBtn" onclick="clearTable()"

@@ -204,7 +204,7 @@
 												<%if (session.getAttribute("results") != null) {%>
 													name="search" type="reset" class="btn btn-danger btn-block"
 													value="Reset" id="resetBtn1"
-													onclick="window.location.replace('http://localhost:8080/OMS2/Stock_IN_DELETE.jsp');"
+													onclick="window.location.replace(location.href);"
 												<%} else {%>
 													name="search" type="reset" class="btn btn-danger btn-block"
 													value="Reset" id="resetBtn" onclick="clearTable()"
@@ -275,8 +275,9 @@
 										<td><%=results.getInt(8)%>
 										</td>
 										<td>
-											<form action="Delete_Emp" method="post">
-												<input type="hidden" name="emp_id" value="<%=results.getString(1) %>">
+											<form action="Inventory_DELETE_Controller" method="post">
+												<input type="hidden" name="stock_in_id"
+													   value="<%=results.getString(1) %>">
 												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 
@@ -350,8 +351,9 @@
 										<td><%=result.getInt(8)%>
 										</td>
 										<td>
-											<form action="Delete_Emp" method="post">
-												<input type="hidden" name="emp_id" value="<%=result.getString(1) %>">
+											<form action="Inventory_DELETE_Controller" method="post">
+												<input type="hidden" name="stock_in_id"
+													   value="<%=result.getString(1) %>">
 												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 

@@ -97,7 +97,7 @@ public class Inventory_SELECT_Controller extends HttpServlet {
                     }
 
                 } else {
-                    session.removeAttribute("results");
+
                     if (request.getParameter("jspPage").equals("insert")) {
                         response.sendRedirect("Inventory_Servlet?status=noInsertResults");
                         return;
