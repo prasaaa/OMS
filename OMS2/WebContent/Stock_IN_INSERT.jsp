@@ -459,11 +459,10 @@
                                 <thead>
                                 <tr>
                                     <th>Stock&nbsp;ID</th>
-                                    <th>Item's<br>Model&nbsp;Name</th>
-                                    <th>Manufacturer</th>
-                                    <th>Supplier</th>
-                                    <th>Item&nbsp;Type</th>
+                                    <th>Item&nbsp;ID</th>
                                     <th>Received&nbsp;Date</th>
+                                    <th>Number&nbsp;of<br>Working&nbsp;Items</th>
+                                    <th>Number&nbsp;of<br>Fault&nbsp;Items</th>
 
 
                                 </tr>
@@ -477,17 +476,15 @@
                                         do {
                                 %>
                                 <tr>
-                                    <td><%=resultSet.getString(1)%>
+                                    <td><%=resultSet.getString("stock_in_id")%>
                                     </td>
-                                    <td><%=resultSet.getString(2)%>
+                                    <td><%=resultSet.getString("item_id")%>
                                     </td>
-                                    <td><%=resultSet.getString(3)%>
+                                    <td><%=resultSet.getString("stock_in_date")%>
                                     </td>
-                                    <td><%=resultSet.getString(4)%>
+                                    <td><%=resultSet.getInt("workingCount")%>
                                     </td>
-                                    <td><%=resultSet.getString(5)%>
-                                    </td>
-                                    <td><%=resultSet.getString(6)%>
+                                    <td><%=resultSet.getInt("faultCount")%>
                                     </td>
                                 </tr>
                                 <%
@@ -503,17 +500,15 @@
                                         while (result.next()) {
                                 %>
                                 <tr>
-                                    <td><%=result.getString(1)%>
+                                    <td><%=result.getString("stock_in_id")%>
                                     </td>
-                                    <td><%=result.getString(2)%>
+                                    <td><%=result.getString("item_id")%>
                                     </td>
-                                    <td><%=result.getString(3)%>
+                                    <td><%=result.getString("stock_in_date")%>
                                     </td>
-                                    <td><%=result.getString(4)%>
+                                    <td><%=result.getInt("workingCount")%>
                                     </td>
-                                    <td><%=result.getString(5)%>
-                                    </td>
-                                    <td><%=result.getString(6)%>
+                                    <td><%=result.getInt("faultCount")%>
                                     </td>
 
 

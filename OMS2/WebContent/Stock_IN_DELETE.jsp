@@ -235,14 +235,13 @@
 
 									<tr>
 										<th>Stock&nbsp;ID</th>
-										<th>Item's<br>Model&nbsp;Name</th>
-										<th>Manufacturer</th>
-										<th>Supplier</th>
-										<th>Item&nbsp;Type</th>
+										<th>Item&nbsp;ID</th>
 										<th>Received&nbsp;Date</th>
 										<th>Number&nbsp;of<br>Working&nbsp;Items</th>
 										<th>Number&nbsp;of<br>Fault&nbsp;Items</th>
-										<th>Delete&nbsp;Stock</th>
+										<th>View</th>
+										<th>Update</th>
+										<th>Delete</th>
 
 
 									</tr>
@@ -251,45 +250,127 @@
 
 									<tbody>
 									<%
-											if (session.getAttribute("results") != null) {
+										if (session.getAttribute("results") != null) {
 
-												ResultSet results = (ResultSet) session.getAttribute("results");
+											ResultSet results = (ResultSet) session.getAttribute("results");
 
-												do {
+											do {
 									%>
 									<tr>
-										<td><%=results.getString(1)%>
+										<td><%=results.getString("stock_in_id")%>
 										</td>
-										<td><%=results.getString(2)%>
+										<td><%=results.getString("item_id")%>
 										</td>
-										<td><%=results.getString(3)%>
+										<td><%=results.getString("stock_in_date")%>
 										</td>
-										<td><%=results.getString(4)%>
+										<td><%=results.getInt("workingCount")%>
 										</td>
-										<td><%=results.getString(5)%>
+										<td><%=results.getInt("faultCount")%>
 										</td>
-										<td><%=results.getString(6)%>
+										<td>
+
+											<input type="hidden" name="stock_in_id"
+												   value="<%=results.getString("stock_in_id") %>">
+											<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
+
+
+											<!-- Button trigger modal -->
+											<input type="button" class="btn btn-outline-secondary" data-toggle="modal"
+												   data-target="#v<%out.print(results.getString("stock_in_id"));%>"
+												   value="View">
+
+
+											<!-- Modal -->
+											<div class="modal fade"
+												 id="v<%out.print(results.getString("stock_in_id"));%>"
+												 tabindex="-1" role="dialog"
+												 aria-labelledby="v<%=results.getString("stock_in_id") %>"
+												 aria-hidden="true">
+												<div class="modal-dialog" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel"></h5>
+															<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+
+														</div>
+														<div class="modal-footer">
+															<input type="button" class="btn btn-outline-secondary"
+																   data-dismiss="modal" value="Close">
+
+														</div>
+													</div>
+												</div>
+											</div>
+
+
 										</td>
-										<td><%=results.getInt(7)%>
-										</td>
-										<td><%=results.getInt(8)%>
+										<td>
+											<form action="Inventory_UPDATE_Controller" method="post">
+												<input type="hidden" name="stock_in_id"
+													   value="<%=results.getString("stock_in_id") %>">
+												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
+
+
+												<!-- Button trigger modal -->
+												<input type="button" class="btn btn-outline-info" data-toggle="modal"
+													   data-target="#u<%out.print(results.getString("stock_in_id"));%>"
+													   value="Update">
+
+
+												<!-- Modal -->
+												<div class="modal fade"
+													 id="u<%out.print(results.getString("stock_in_id"));%>"
+													 tabindex="-1" role="dialog"
+													 aria-labelledby="u<%=results.getString("stock_in_id") %>"
+													 aria-hidden="true">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLabel">Update&nbsp;Stock</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																		aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body">
+
+															</div>
+															<div class="modal-footer">
+																<input type="button" class="btn btn-outline-secondary"
+																	   data-dismiss="modal" value="Close">
+																<input type="submit" class="btn btn-outline-success"
+																	   value="Update">
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+											</form>
 										</td>
 										<td>
 											<form action="Inventory_DELETE_Controller" method="post">
 												<input type="hidden" name="stock_in_id"
-													   value="<%=results.getString(1) %>">
+													   value="<%=results.getString("stock_in_id") %>">
 												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 
 												<!-- Button trigger modal -->
 												<input type="button" class="btn btn-outline-danger" data-toggle="modal"
-													   data-target="#e<%out.print(results.getString(1));%>"
+													   data-target="#d<%out.print(results.getString("stock_in_id"));%>"
 													   value="Delete">
 
 												<!-- Modal -->
-												<div class="modal fade" id="e<%out.print(results.getString(1));%>"
+												<div class="modal fade"
+													 id="d<%out.print(results.getString("stock_in_id"));%>"
 													 tabindex="-1" role="dialog"
-													 aria-labelledby="<%=results.getString(1) %>" aria-hidden="true">
+													 aria-labelledby="d<%=results.getString("stock_in_id") %>"
+													 aria-hidden="true">
 													<div class="modal-dialog" role="document">
 														<div class="modal-content">
 															<div class="modal-header">
@@ -334,39 +415,121 @@
 									%>
 
 									<tr>
-										<td><%=result.getString(1)%>
+										<td><%=result.getString("stock_in_id")%>
 										</td>
-										<td><%=result.getString(2)%>
+										<td><%=result.getString("item_id")%>
 										</td>
-										<td><%=result.getString(3)%>
+										<td><%=result.getString("stock_in_date")%>
 										</td>
-										<td><%=result.getString(4)%>
+										<td><%=result.getInt("workingCount")%>
 										</td>
-										<td><%=result.getString(5)%>
+										<td><%=result.getInt("faultCount")%>
 										</td>
-										<td><%=result.getString(6)%>
+										<td>
+
+											<input type="hidden" name="stock_in_id"
+												   value="<%=result.getString("stock_in_id") %>">
+											<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
+
+
+											<!-- Button trigger modal -->
+											<input type="button" class="btn btn-outline-secondary" data-toggle="modal"
+												   data-target="#v<%out.print(result.getString("stock_in_id"));%>"
+												   value="View">
+
+
+											<!-- Modal -->
+											<div class="modal fade"
+												 id="v<%out.print(result.getString("stock_in_id"));%>"
+												 tabindex="-1" role="dialog"
+												 aria-labelledby="v<%=result.getString("stock_in_id") %>"
+												 aria-hidden="true">
+												<div class="modal-dialog" role="document">
+													<div class="modal-content">
+														<div class="modal-header">
+															<h5 class="modal-title" id="exampleModalLabel"></h5>
+															<button type="button" class="close" data-dismiss="modal"
+																	aria-label="Close">
+																<span aria-hidden="true">&times;</span>
+															</button>
+														</div>
+														<div class="modal-body">
+
+														</div>
+														<div class="modal-footer">
+															<input type="button" class="btn btn-outline-secondary"
+																   data-dismiss="modal" value="Close">
+
+														</div>
+													</div>
+												</div>
+											</div>
+
+
 										</td>
-										<td><%=result.getInt(7)%>
-										</td>
-										<td><%=result.getInt(8)%>
+										<td>
+											<form action="Inventory_UPDATE_Controller" method="post">
+												<input type="hidden" name="stock_in_id"
+													   value="<%=result.getString("stock_in_id") %>">
+												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
+
+
+												<!-- Button trigger modal -->
+												<input type="button" class="btn btn-outline-info" data-toggle="modal"
+													   data-target="#u<%out.print(result.getString("stock_in_id"));%>"
+													   value="Update">
+
+
+												<!-- Modal -->
+												<div class="modal fade"
+													 id="u<%out.print(result.getString("stock_in_id"));%>"
+													 tabindex="-1" role="dialog"
+													 aria-labelledby="u<%=result.getString("stock_in_id") %>"
+													 aria-hidden="true">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 class="modal-title" id="exampleModalLabel">Update&nbsp;Stock</h5>
+																<button type="button" class="close" data-dismiss="modal"
+																		aria-label="Close">
+																	<span aria-hidden="true">&times;</span>
+																</button>
+															</div>
+															<div class="modal-body">
+
+															</div>
+															<div class="modal-footer">
+																<input type="button" class="btn btn-outline-secondary"
+																	   data-dismiss="modal" value="Close">
+																<input type="submit" class="btn btn-outline-success"
+																	   value="Update">
+															</div>
+														</div>
+													</div>
+												</div>
+
+
+											</form>
 										</td>
 										<td>
 											<form action="Inventory_DELETE_Controller" method="post">
 												<input type="hidden" name="stock_in_id"
-													   value="<%=result.getString(1) %>">
+													   value="<%=result.getString("stock_in_id") %>">
 												<!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 
 												<!-- Button trigger modal -->
 												<input type="button" class="btn btn-outline-danger" data-toggle="modal"
-													   data-target="#e<%out.print(result.getString(1));%>"
+													   data-target="#d<%out.print(result.getString("stock_in_id"));%>"
 													   value="Delete">
 
 
 												<!-- Modal -->
-												<div class="modal fade" id="e<%out.print(result.getString(1));%>"
+												<div class="modal fade"
+													 id="d<%out.print(result.getString("stock_in_id"));%>"
 													 tabindex="-1" role="dialog"
-													 aria-labelledby="<%=result.getString(1) %>" aria-hidden="true">
+													 aria-labelledby="d<%=result.getString("stock_in_id") %>"
+													 aria-hidden="true">
 													<div class="modal-dialog" role="document">
 														<div class="modal-content">
 															<div class="modal-header">

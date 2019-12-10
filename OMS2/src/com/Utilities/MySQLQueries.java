@@ -174,7 +174,7 @@ public class MySQLQueries {
 
     public static final String QUERY_GET_ALL_ITEM_DETAILS = "SELECT i.item_id, i.item_model_name, i.item_manufacturer, i.item_type, i.item_supplier, i.item_details FROM item_details_table i;";
     @Language("MySQL")
-    public static final String QUERY_GET_STOCK_TABLE = "SELECT s.stock_in_id,idt.item_model_name,idt.item_manufacturer,idt.item_supplier,idt.item_type, s.stock_in_date, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id GROUP BY s.stock_in_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type;";
+    public static final String QUERY_GET_STOCK_TABLE = "SELECT s.stock_in_id, idt.item_id, s.stock_in_date, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id GROUP BY s.stock_in_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type;";
 
 
 }
