@@ -299,7 +299,10 @@
 
                                                     <div style="overflow-x:hidden;">
 
-                                                        <% while (resultset_for_items.next()) {%>
+
+                                                        <%
+                                                            try {
+                                                                while (resultset_for_items.next()) {%>
                                                         <a style="cursor: pointer;"
                                                            id='<%=resultset_for_items.getString("item_id") %>'
                                                            tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
@@ -323,7 +326,10 @@
                                                             });
 
                                                         </script>
-                                                        <% } %>
+                                                        <% }
+                                                        } catch (Exception e) {
+                                                            e.printStackTrace();
+                                                        }%>
 
                                                     </div>
 
@@ -469,16 +475,40 @@
                                 </thead>
                                 <tbody>
                                 <%
+
+                                    ResultSet resultSet;
                                     if (session.getAttribute("results") != null) {
 
-                                        ResultSet resultSet = (ResultSet) session.getAttribute("results");
+                                        resultSet = (ResultSet) session.getAttribute("results");
+                                        try {
+                                            resultSet.beforeFirst();
+                                        } catch (SQLException e) {
+                                            e.printStackTrace();
+                                        }
 
-                                        do {
+                                    } else {
+                                        Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
+                                                MySQLQueries.QUERY_GET_STOCK_TABLE);
+                                        resultSet = si.get_inventory_table();
+                                    }
+
+                                    if (resultSet != null) {
+
+                                        try {
+                                            while (resultSet.next()) {
                                 %>
                                 <tr>
                                     <td><%=resultSet.getString("stock_in_id")%>
                                     </td>
                                     <td><%=resultSet.getString("item_id")%>
+                                    </td>
+                                    <td hidden><%=resultSet.getString("item_model_name")%>
+                                    </td>
+                                    <td hidden><%=resultSet.getString("item_manufacturer")%>
+                                    </td>
+                                    <td hidden><%=resultSet.getString("item_supplier")%>
+                                    </td>
+                                    <td hidden><%=resultSet.getString("item_type")%>
                                     </td>
                                     <td><%=resultSet.getString("stock_in_date")%>
                                     </td>
@@ -488,40 +518,12 @@
                                     </td>
                                 </tr>
                                 <%
-                                    } while (resultSet.next());
-
-                                } else {
-
-                                    ResultSet result;
-                                    Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
-                                            MySQLQueries.QUERY_GET_STOCK_TABLE);
-                                    result = si.get_inventory_table();
-                                    try {
-                                        while (result.next()) {
-                                %>
-                                <tr>
-                                    <td><%=result.getString("stock_in_id")%>
-                                    </td>
-                                    <td><%=result.getString("item_id")%>
-                                    </td>
-                                    <td><%=result.getString("stock_in_date")%>
-                                    </td>
-                                    <td><%=result.getInt("workingCount")%>
-                                    </td>
-                                    <td><%=result.getInt("faultCount")%>
-                                    </td>
-
-
-                                </tr>
-
-                                <%
                                             }
-                                        } catch (SQLException e) {
+                                        } catch (Exception e) {
                                             e.printStackTrace();
                                         }
-                                    }
 
-                                %>
+                                    } %>
                                 </tbody>
                             </table>
 
@@ -540,10 +542,9 @@
                     <td><a href="Stock_IN_INSERT.jsp"
                            class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
 
-                    <td><a href="Stock_IN_DELETE.jsp"
-                           class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
-                    <td><a href="Stock_Report.jsp"
-                           class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></td>
+                    <td><a href="Stock_IN_MANAGE.jsp"
+                           class=" btn btn-dark btn-lg btn-block">Manage&nbsp;Stocks</a></td>
+
 
                 </tr>
 
@@ -590,11 +591,11 @@
     myFunction();
 </script>
 <%
-    session.removeAttribute("color");
-    session.removeAttribute("message");
-    session.removeAttribute("results");
-%>
-<%}%>
+        session.removeAttribute("color");
+        session.removeAttribute("message");
+        session.removeAttribute("results");
+
+    }%>
 
 
 </body>

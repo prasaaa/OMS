@@ -323,14 +323,16 @@
 				</table>
 				<table style="width:100%;">
 					<!-- second column inside table end here -->
-				
+
 					<tr>
 
 						<td><a href="Stock_IN_INSERT.jsp"
-							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a> </td>
-							<td><a
-							href="Stock_IN_DELETE.jsp" class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
-							<td><a href="Stock_Report.jsp" class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></td>
+							   class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
+						<td><a
+								href="Stock_IN_MANAGE.jsp" class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a>
+						</td>
+						<td><a href="Stock_Report.jsp" class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a>
+						</td>
 
 					</tr>
 

@@ -47,7 +47,7 @@ public class Inventory_Servlet extends HttpServlet {
                 color = "green";
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
-                response.sendRedirect("Stock_IN_DELETE.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "insertResultsFound":
                 message = "Results Found!!";
@@ -78,7 +78,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_DELETE.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "insertSuccess":
                 message = "Stock Inserted SuccessFully!!";
@@ -102,7 +102,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_DELETE.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "insertFail":
                 message = "Failed to Insert Stock!!";
@@ -126,7 +126,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_DELETE.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "warning":
                 message = "Nothing to Delete!!";
@@ -134,7 +134,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_DELETE.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             default:
                 break;

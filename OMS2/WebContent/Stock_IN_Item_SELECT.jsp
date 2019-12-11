@@ -1,21 +1,18 @@
-
-<%@page import="com.model.CurrentUser"%>
-<%@page import="com.DatabaseHandle.Inventory_SELECT"%>
-<%@page import="com.DBConnection.ConnectionManager"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.ResultSetMetaData"%>
-<%@page import="java.sql.Connection"%>
-<%@page import="com.Utilities.MySQLQueries"%>
+<%@page import="com.DBConnection.ConnectionManager" %>
+<%@page import="com.DatabaseHandle.Inventory_SELECT" %>
+<%@page import="com.Utilities.MySQLQueries" %>
+<%@page import="com.model.CurrentUser" %>
+<%@page import="java.sql.ResultSet" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+		 pageEncoding="ISO-8859-1" %>
 
 
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta charset="ISO-8859-1">
+	<meta name="viewport"
+		  content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
 
@@ -316,12 +313,12 @@
 					<tr>
 
 						<td><a href="Stock_IN_INSERT.jsp"
-							class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
+							   class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
 
-						<td><a href="Stock_IN_DELETE.jsp"
-							class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
+						<td><a href="Stock_IN_MANAGE.jsp"
+							   class=" btn btn-dark btn-lg btn-block">Delete&nbsp;Stocks</a></td>
 						<td><a href="Stock_Report.jsp"
-							class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></td>
+							   class=" btn btn-dark btn-lg btn-block">Generate&nbsp;Reports</a></td>
 
 					</tr>
 

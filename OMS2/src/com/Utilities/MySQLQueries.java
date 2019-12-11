@@ -5,18 +5,7 @@ import org.intellij.lang.annotations.Language;
 public class MySQLQueries {
 
 
-    public static final String QUERY_INSERT_ITEM_MODEL = "INSERT INTO `item_model_table` VALUES (?) ON DUPLICATE KEY UPDATE item_model_name = item_model_name;";
-
-    public static final String QUERY_INSERT_ITEM = "INSERT INTO `item_details_table` VALUES (?, ?, ?, ?, ?)" +
-            "  ON DUPLICATE KEY UPDATE selling_price = VALUES(selling_price);";
-
-    public static final String QUERY_INSERT_ITEM_SUPPLIER = "INSERT INTO `item_supplier_table` VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE buying_price = VALUES(buying_price);";
-
-    public static final String QUERY_SELECT_ITEM_ID = "SELECT item_id FROM `item_details_table` WHERE item_model_name = ? AND item_manufacturer = ? AND item_supplier = ?;";
-
     public static final String QUERY_INSERT_STOCK = "INSERT INTO `stock_in_items_table`(stock_in_id ,stock_in_date, remarks, item_id) VALUES (? , ?, ?, ?);";
-
-    public static final String QUERY_SELECT_STOCK_ID = "SELECT stock_in_id FROM stock_in_items_table WHERE item_id = ? AND index_number = (SELECT MAX(index_number) FROM stock_in_items_table WHERE item_id = ?);";
 
     public static final String QUERY_INSERT_ITEM_LIST = "INSERT INTO `items_list_table` VALUES (?, ?, ?, NULL, ?, ?);";
 
@@ -32,63 +21,28 @@ public class MySQLQueries {
 
     public static final String QUERY_SELECT_BY_DATE = "SELECT s.stock_in_id, i.item_id, u.supplier_id, i.item_type, s.stock_in_date, s.buying_price, s.quantity FROM `item_details_table` i INNER JOIN `stock_in_items_table` s ON s.item_id = i.item_id INNER JOIN item_supplier_table u ON u.item_id = i.item_id WHERE s.stock_in_date= ?;";
     @Language("MySQL")
-    public static final String QUERY_SELECT_BY_BARCODE = "SELECT s.stock_in_id,idt.item_model_name,idt.item_manufacturer,idt.item_supplier,idt.item_type, s.stock_in_date, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id WHERE ilt.barcode_number = ? GROUP BY s.stock_in_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type;";
+    public static final String QUERY_SELECT_BY_BARCODE = "SELECT s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id " +
+            "WHERE s.stock_in_id = (SELECT st.stock_in_id FROM items_list_table st WHERE st.barcode_number LIKE CONCAT('%' + ? + '%') ) " +
+            "GROUP BY s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks;";
 
     public static final String QUERY_SELECT_ITEM_BY_BARCODE = "SELECT * FROM items_list_table WHERE barcode_number = ?;";
     public static final String QUERY_SELECT_ALL = "SELECT s.stock_in_id, i.item_id, i.item_supplier, i.item_type, s.stock_in_date FROM `stock_in_items_table` s INNER JOIN `item_details_table` i  ON s.item_id = i.item_id ";
-    public static final String QUERY_DELETE_ALL_BY_BARCODE = "DELETE FROM items_list_table WHERE barcode_number LIKE CONCAT('%', ? ,'%');";
-
-    public static final String QUERY_SELECT_STOCK_ID_BY_BARCODE = "SELECT stock_in_id FROM items_list_table WHERE barcode_number LIKE CONCAT('%', ? ,'%');";
-
-    public static final String QUERY_UPDATE_QUANTITY = "UPDATE stock_in_items_table SET quantity = quantity - 1 WHERE stock_in_id = ?;";
     @Language("MySQL")
     public static final String QUERY_DELETE_STOCK_BY_STOCK_ID = "DELETE FROM stock_in_items_table WHERE stock_in_id = ?;";
 
-    public static final String QUERY_DELETE_ITEMS_BY_STOCK_ID = "DELETE FROM items_list_table WHERE stock_in_id = ?;";
-
-    public static final String QUERY_DELETE_BY_MODEL_NAME = "DELETE s FROM `stock_in_items_table` s INNER JOIN item_details_table i ON i.item_id = s.item_id WHERE i.item_model_name = ?;";
-
-    public static final String QUERY_SELECT_ITEM_ID_BY_MODEL_NAME = "SELECT item_id FROM item_details_table WHERE item_model_name = ?;";
-
-    public static final String QUERY_DELETE_STOCK_BY_ITEM_ID = "DELETE FROM stock_in_items_table WHERE item_id = ?;";
-
-    public static final String QUERY_DELETE_ITEMS_BY_ITEM_ID = "DELETE FROM items_list_table WHERE item_id = ?;";
-
-    public static final String QUERY_DELETE_BY_MANUFACTURER = "DELETE s FROM `stock_in_items_table` s INNER JOIN item_details_table i ON i.item_id = s.item_id WHERE i.item_manufacturer = ?;";
-
-    public static final String QUERY_SELECT_ITEM_ID_BY_MANUFACTURER = "SELECT item_id FROM item_details_table WHERE item_manufacturer = ?;";
-
-    public static final String QUERY_DELETE_BY_SUPPLIER = "DELETE s FROM `stock_in_items_table` s INNER JOIN item_supplier_table i ON s.item_id = i.item_id WHERE i.supplier_id = ?;";
-
-    public static final String QUERY_SELECT_ITEM_ID_BY_SUPPLIER = "SELECT i.item_id FROM item_details_table i INNER JOIN item_supplier_table s ON s.item_id = i.item_id WHERE s.supplier_id = ?;";
-
-    public static final String QUERY_DELETE_BY_ITEM_TYPE = "DELETE s FROM `stock_in_items_table` s INNER JOIN item_details_table i ON i.item_id = s.item_id WHERE i.item_type = ?;";
-
-    public static final String QUERY_SELECT_ITEM_ID_BY_ITEM_TYPE = "SELECT item_id FROM item_details_table WHERE item_type = ?;";
-
-    public static final String QUERY_DELETE_BY_DATE = "DELETE FROM stock_in_items_table WHERE stock_in_date = ?;";
-
-    public static final String QUERY_SELECT_STOCK_ID_BY_DATE = "SELECT stock_id FROM stock_in_items_table WHERE stock_in_date = ?;";
-
-    public static final String QUERY_GET_QUANTITY = "SELECT quantity FROM stock_in_items_table WHERE stock_in_id = ?;";
 
     public static final String QUERY_GET_ALL_STOCK_OUT = "SELECT s.stock_out_id, i.item_id, i.item_type, s.stock_out_date, s.selling_price, s.quantity, s.customer_order_id FROM `stock_out_items_table` s INNER JOIN `item_details_table` i ON i.item_id = s.item_id;";
 
-    public static final String QUERY_GET_ALL_CUST_ORDER = "SELECT * FROM `customer_order_table`;";
 
     public static final String QUERY_INSERT_STOCK_OUT = "INSERT INTO `stock_out_items_table` VALUES (NULL, NULL, ?, ?, ?, ?, ?, ?);";
 
     public static final String QUERY_UPDATE_STOCK_OUT_ID = "UPDATE `items_list_table` SET stock_out_id = ? WHERE item_id = ? AND stock_out_id IS NULL AND barcode_number = ? AND item_status LIKE '%Working%';";
-
-    public static final String QUERY_GET_ITEM_QUANTITY = "SELECT COUNT(barcode_number) FROM items_list_table WHERE stock_in_id = ? AND stock_out_id IS NULL;";
 
     public static final String QUERY_SELECT_BARCODES_BY_ITEM_ID = "SELECT barcode_number FROM `items_list_table` WHERE item_id = ?;";
 
     public static final String QUERY_VALIDATE_CUSTOMER_ORDER_ID = "SELECT customer_Order_Id FROM `customer_order_table` WHERE customer_Order_Id = ?;";
 
     public static final String QUERY_SELECT_ALL_CUSTOMER_ORDERS = "SELECT co.customer_Order_Id, c.customer_Name, co.order_Date, co.required_Date, co.order_Status, co.order_Type FROM `customer_order_table` co, `customer_table` c WHERE c.customer_Id = co.customer_Id;";
-
-    public static final String QUERY_VALIDATE_ITEM_MODEL = "SELECT * FROM `item_model_table` WHERE item_model_name = ?;";
 
     public static final String QUERY_SELECT_STOCK_OUT_BY_ID = "SELECT s.stock_out_id, s.item_id, i.item_type, s.stock_out_date, s.quantity, s.customer_order_id FROM `stock_out_items_table` s INNER JOIN `item_details_table` i ON i.item_id = s.item_id WHERE s.stock_out_id = ?;";
 
@@ -136,17 +90,9 @@ public class MySQLQueries {
 
     public static final String QUERY_DELETE_STOCK_OUT_BY_ORDER = "DELETE FROM `stock_out_items_table` WHERE customer_Order_Id = ?;";
 
-    public static final String QUERY_GET_ALL_SUPPLIERS = "SELECT supplier_name FROM `supplier_table`";
-
-    public static final String QUERY_SET_NEW_QUANTITY = "UPDATE `stock_in_items_table` SET quantity = ? WHERE stock_in_id = ?;";
-
-    public static final String QUERY_DELETE_SINGLE_ITEM = "DELETE FROM `items_list_table` WHERE item_id = ? AND barcode_number = ?;";
 
     public static final String QUERY_SELECT_ALL_ITEM_INFO = "SELECT d.item_model_name, d.item_manufacturer, d.item_type, s.supplier_id, d.item_id FROM item_details_table d INNER JOIN item_supplier_table s ON s.item_id = d.item_id;";
 
-    public static final String QUERY_UPDATE_NEW_ITEM_QUANTITY = "UPDATE `item_details_table` SET quantity = quantity + ? WHERE item_id = ?;";
-
-    public static final String QUERY_DELETE_STOCK_BY_BARCODE = "DELETE s FROM `stock_in_items_table` s INNER JOIN `items_list_table` i ON i.stock_in_id = s.stock_in_id WHERE i.barcode_number = ?";
 
     public static final String QUERY_SELECT_ITEM_BY_ITEM_MODEL = "SELECT d.item_model_name, d.item_manufacturer, d.item_type, s.supplier_id, d.item_id FROM item_details_table d INNER JOIN item_supplier_table s ON s.item_id = d.item_id WHERE d.item_model_name = ?;";
 
@@ -164,7 +110,6 @@ public class MySQLQueries {
 
     public static final String QUERY_GET_ITEM_BY_ITEM_MODEL = "SELECT item_model_name, item_manufacturer, item_type, item_id FROM item_details_table WHERE item_model_name =?;";
 
-    public static final String QUERY_GET_WORKING_ITEMS = "SELECT COUNT(barcode_number) FROM items_list_table WHERE item_id = ? AND stock_out_id IS NULL AND item_status LIKE '%Working%';";
 
     public static final String QUERY_GET_FAULTY_ITEMS = "SELECT COUNT(barcode_number) FROM items_list_table WHERE item_id = ? AND stock_out_id IS NULL AND item_status LIKE '%Faulty%';";
 
@@ -174,7 +119,12 @@ public class MySQLQueries {
 
     public static final String QUERY_GET_ALL_ITEM_DETAILS = "SELECT i.item_id, i.item_model_name, i.item_manufacturer, i.item_type, i.item_supplier, i.item_details FROM item_details_table i;";
     @Language("MySQL")
-    public static final String QUERY_GET_STOCK_TABLE = "SELECT s.stock_in_id, idt.item_id, s.stock_in_date, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id GROUP BY s.stock_in_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type;";
+    public static final String QUERY_GET_STOCK_TABLE = "SELECT s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id " +
+            "GROUP BY s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks;";
 
+    @Language("MySQL")
+    public static final String QUERY_GET_WORKING_STOCK_BY_STOCK_ID = "SELECT ilt.barcode_number, ilt.description FROM items_list_table ilt WHERE ilt.items_status LIKE '%Working%' AND ilt.stock_in_id = ?;";
+    @Language("MySQL")
+    public static final String QUERY_GET_FAULT_STOCK_BY_STOCK_ID = "SELECT  ilt.barcode_number, ilt.description FROM items_list_table ilt WHERE ilt.items_status LIKE '%Faulty%' AND ilt.stock_in_id = ?;";
 
 }

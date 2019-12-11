@@ -375,7 +375,7 @@ window.onclick = function (event) {
 
 //to search main table
 function searchfunction() {
-    var input, filter, table, tr, td, i, txtValue, catval, colno;
+    let input, filter, table, tr, td, i, txtValue, catval, colno;
 
 
     input = document.getElementById("txtSearch");
@@ -390,19 +390,19 @@ function searchfunction() {
             colno = 0;
             break;
         case "iname":
-            colno = 1;
-            break;
-        case "manu":
             colno = 2;
             break;
-        case "sup":
+        case "manu":
             colno = 3;
             break;
-        case "itype":
+        case "sup":
             colno = 4;
             break;
-        case "stockindate":
+        case "itype":
             colno = 5;
+            break;
+        case "stockindate":
+            colno = 6;
             break;
         default:
             return false;
