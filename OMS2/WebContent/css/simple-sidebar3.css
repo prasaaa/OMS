@@ -108,6 +108,24 @@ td, th {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+
+i#caret {
+	border: none;
+	background: none;
+	position: absolute;
+	top: 17px;
+	right: 13px;
+}
+
+i#caretSearch {
+	border: none;
+	background: none;
+	position: absolute;
+	top: 17px;
+	right: 13px;
+}
+
+
 /*! 
 first column 
 inside table

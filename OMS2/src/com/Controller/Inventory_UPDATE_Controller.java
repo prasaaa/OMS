@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "Inventory_UPDATE_Controller")
+@WebServlet("/Inventory_UPDATE_Controller")
 public class Inventory_UPDATE_Controller extends HttpServlet {
 
 

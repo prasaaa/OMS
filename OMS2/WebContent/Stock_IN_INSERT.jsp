@@ -47,32 +47,14 @@
     <!-- Custom styles for this template -->
     <link href="css/simple-sidebar3.css" rel="stylesheet">
 
-    <style>
-        i#caret {
-            border: none;
-            background: none;
-            position: absolute;
-            top: 17px;
-            right: 13px;
-        }
 
-        i#caretSearch {
-            border: none;
-            background: none;
-            position: absolute;
-            top: 17px;
-            right: 13px;
-        }
-
-
-    </style>
 
 
 </head>
 
 
 <body>
-<%
+<%--
     if (session.getAttribute("REFRESH") != null) {
         if (session.getAttribute("REFRESH").toString().equalsIgnoreCase("TRUE"))
             session.setAttribute("REFRESH", "FALSE");
@@ -105,7 +87,7 @@
         if (session.getAttribute("itype") != null)
             session.removeAttribute("itype");
     }
-%>
+--%>
 <%-- System.out.println("this is user " + CurrentUser.getUsername());
     if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
         response.sendRedirect("login.jsp");

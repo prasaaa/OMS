@@ -2,9 +2,12 @@
 
 <%@page import="com.DBConnection.ConnectionManager" %>
 <%@page import="com.DatabaseHandle.Inventory_SELECT" %>
+<%@page import="com.DatabaseHandle.Main_SELECT" %>
 <%@page import="com.Utilities.MySQLQueries" %>
-<%@page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.SQLException" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.Date" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1" %>
 
@@ -45,7 +48,7 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
@@ -272,6 +275,17 @@
                                         try {
 
                                             while (results.next()) {
+
+                                                Inventory_SELECT itemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_WORKING_STOCK_BY_STOCK_ID);
+                                                Inventory_SELECT faultItemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_FAULT_STOCK_BY_STOCK_ID);
+
+                                                ResultSet workingResult = itemSelect.retreiveQueryData(results.getString("stock_in_id"));
+                                                ResultSet faultResult = faultItemSelect.retreiveQueryData(results.getString("stock_in_id"));
+
+                                                ResultSet resultset_for_items;
+                                                Main_SELECT si4 = new Main_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_ITEM_DETAILS);
+                                                resultset_for_items = si4.get_table();
+
                                 %>
                                 <tr>
                                     <td><%=results.getString("stock_in_id")%>
@@ -293,19 +307,12 @@
                                     <td><%=results.getInt("faultCount")%>
                                     </td>
                                     <td>
-                                        <%
-                                            Inventory_SELECT itemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_WORKING_STOCK_BY_STOCK_ID);
-                                            Inventory_SELECT faultItemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_FAULT_STOCK_BY_STOCK_ID);
 
-                                            ResultSet workingResult = itemSelect.retreiveQueryData(results.getString("stock_in_id"));
-                                            ResultSet faultResult = faultItemSelect.retreiveQueryData(results.getString("stock_in_id"));
-
-                                        %>
 
                                         <!-- Button trigger modal -->
-                                        <input type="button" class="btn btn-outline-secondary" data-toggle="modal"
-                                               data-target="#v<%out.print(results.getString("stock_in_id"));%>"
-                                               value="View">
+                                        <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                                                data-target="#v<%out.print(results.getString("stock_in_id"));%>"
+                                        ><i class="material-icons">info</i></button>
 
 
                                         <!-- Modal -->
@@ -407,6 +414,11 @@
                                                                                     <td><%=results.getString("item_type")%>
                                                                                     </td>
                                                                                 </tr>
+                                                                                <tr>
+                                                                                    <th>Item's&nbsp;Description</th>
+                                                                                    <td><%=results.getString("item_details")%>
+                                                                                    </td>
+                                                                                </tr>
                                                                             </table>
 
                                                                         </td>
@@ -486,16 +498,17 @@
 
                                     </td>
                                     <td>
-                                        <form action="Inventory_UPDATE_Controller" method="post">
+                                        <form action="Inventory_UPDATE_Controller" method="post"
+                                              id="mainForm<%=results.getString("stock_in_id") %>">
                                             <input type="hidden" name="stock_in_id"
                                                    value="<%=results.getString("stock_in_id") %>">
                                             <!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 
                                             <!-- Button trigger modal -->
-                                            <input type="button" class="btn btn-outline-info" data-toggle="modal"
-                                                   data-target="#u<%out.print(results.getString("stock_in_id"));%>"
-                                                   value="Update">
+                                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                                    data-target="#u<%out.print(results.getString("stock_in_id"));%>"
+                                            ><i class="material-icons">update</i></button>
 
 
                                             <!-- Modal -->
@@ -504,7 +517,7 @@
                                                  tabindex="-1" role="dialog"
                                                  aria-labelledby="u<%=results.getString("stock_in_id") %>"
                                                  aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-dialog modal-xl modal-lg modal-lg" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="exampleModalLabel">Update&nbsp;Stock</h5>
@@ -514,12 +527,217 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
+                                                            <div class="container-fluid">
+                                                                <div class="row">
+                                                                    <table style="width: 100%">
+                                                                        <col style="width: 50%">
+                                                                        <col style="width: 50%">
+                                                                        <tr>
+                                                                            <td><label for="itemdetailsdropitem"
+                                                                                       id="stockItem">Stock&nbsp;Item</label><br>
+                                                                                <div class="dropdown">
+                                                                                    <div class="popup"
+                                                                                         style="width:100%;">
+                                                                                        <input type="text"
+                                                                                               id="itemdetailsdropitem"
+                                                                                               name="itemID"
+                                                                                               style="cursor: default;"
+                                                                                               placeholder="Click Here to Select an Item"
+                                                                                               value="" required
+                                                                                               autocomplete="off"
+                                                                                               readonly
+                                                                                               class="form-control"><i
+                                                                                            class="fa fa-caret-down"
+                                                                                            id="caret"></i><span
+                                                                                            class="popuptext"
+                                                                                            id="myPopup3"></span>
+                                                                                    </div>
+                                                                                    <div id="itemdetailsitemdisplay"
+                                                                                         class="dropdown-content"
+                                                                                         style="margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
+                                                                                        <div style="position: sticky;top:-6px;margin-top:-6px;padding:0">
+                                                                                            <input tabindex="0"
+                                                                                                   type="text"
+                                                                                                   id="itemdetailsmyInput"
+                                                                                                   onkeyup="itemdetailsitemdisplayfilterFunctionV()"
+                                                                                                   autocomplete="off"
+                                                                                                   placeholder="Search here.."><i
+                                                                                                class="fa fa-search"
+                                                                                                id="caretSearch"></i>
+                                                                                        </div>
 
+                                                                                        <div style="overflow-x:hidden;">
+
+
+                                                                                            <%
+                                                                                                try {
+                                                                                                    while (resultset_for_items.next()) {%>
+                                                                                            <a style="cursor: pointer;"
+                                                                                               id='<%=resultset_for_items.getString("item_id") %>'
+                                                                                               tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
+                                                                                            </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultset_for_items.getString("item_type")%>
+                                                                                                <br>Manufacturer&nbsp;:&nbsp;<%=resultset_for_items.getString("item_manufacturer")%>
+                                                                                                <br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("item_supplier")%>
+                                                                                                <br>Description&nbsp;:&nbsp;<%=resultset_for_items.getString("item_details")%>
+                                                                                            </a>
+                                                                                            <script>
+
+                                                                                                let all = document.getElementsByClassName("modal fade");
+
+                                                                                                let visibleElement = undefined;
+
+                                                                                                for (let i = 0, max = all.length; i < max; i++) {
+                                                                                                    if (!isHidden(all[i]))
+                                                                                                        visibleElement = all[i];
+
+                                                                                                }
+
+                                                                                                visibleElement.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener('click', function () {
+                                                                                                    visibleElement.getElementById('itemdetailsdropitem').value = '<%=resultset_for_items.getString("item_id")%>';
+                                                                                                    visibleElement.getElementById('iteminformation').innerHTML = '<p>' + visibleElement.getElementById('<%=resultset_for_items.getString("item_id") %>').innerHTML + '</p>';
+                                                                                                    visibleElement.getElementById('itemdetailsmyInput').value = "";
+                                                                                                });
+
+                                                                                                visibleElement.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener("keyup", function (e) {
+                                                                                                    if (e.keyCode === 13) {
+                                                                                                        e.preventDefault();
+                                                                                                        visibleElement.getElementById('<%=resultset_for_items.getString("item_id") %>').click();
+                                                                                                    }
+                                                                                                });
+
+                                                                                            </script>
+                                                                                            <% }
+                                                                                            } catch (Exception e) {
+                                                                                                e.printStackTrace();
+                                                                                            }%>
+
+                                                                                        </div>
+
+
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <div id="iteminformation"
+                                                                                     style="width:100%; background-color: lightgrey; padding:0; height:auto; overflow-x:hidden;">
+                                                                                    <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
+                                                                                </div>
+                                                                                <br>
+
+                                                                                <label for="datePicker">Stock&nbsp;IN&nbsp;Date</label>
+                                                                                <input type="date" name="stockindate"
+                                                                                       id="datePicker" required
+                                                                                       value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br>
+                                                                                <label for="txtAreaRemarks">Any&nbsp;other&nbsp;Information's</label>
+
+                                                                                <textarea id="txtAreaRemarks"
+                                                                                          name="remarks" rows="4"
+                                                                                          cols="4"
+                                                                                          placeholder="Enter Stock Information Here..."></textarea>
+                                                                                <br>
+
+
+                                                                                <label id="itemsList">Item&nbsp;List&nbsp;Details</label>
+                                                                                <div class="popup" style="width:100%;">
+                                                                                    <input style="width:100%;"
+                                                                                           type="text" id="txtBarcode"
+                                                                                           name="barcodeNmber"
+                                                                                           placeholder="Enter Barcode Here...">
+                                                                                    <span class="popuptext"
+                                                                                          id="myPopup1"></span>
+
+                                                                                </div>
+
+                                                                                <div class="popup" style="width:100%;">
+                                                                                    <select style="width:100%;"
+                                                                                            id="itemStatus">
+                                                                                        <option selected disabled
+                                                                                                value="">Select&nbsp;Item&nbsp;Type
+                                                                                        </option>
+                                                                                        <option value="working">
+                                                                                            Working
+                                                                                        </option>
+                                                                                        <option value="faulty">Faulty
+                                                                                        </option>
+                                                                                    </select>
+                                                                                    <span class="popuptext"
+                                                                                          id="myPopup4"></span>
+                                                                                </div>
+                                                                                <div class="popup"
+                                                                                     style="width:100%;"><textarea
+                                                                                        id="description"
+                                                                                        placeholder="Enter Fault Description Here..."
+                                                                                        cols="4"
+                                                                                        rows="4"></textarea><span
+                                                                                        class="popuptext"
+                                                                                        id="myPopup2"></span>
+                                                                                </div>
+                                                                                <div style="width: 100%; display: flex; flex-direction: row;">
+                                                                                    <button style="width:100%; margin-right:2.5px;"
+                                                                                            class="btn btn-info"
+                                                                                            type="button"
+                                                                                            onclick="myFirstFunctionV();">
+                                                                                        Add&nbsp;Item
+                                                                                    </button>
+                                                                                    <br>
+
+                                                                                </div>
+                                                                            </td>
+                                                                            <td><label for="txtBarcode"
+                                                                                       id="workingItems">Working&nbsp;Item&nbsp;List</label><br>
+                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;"
+                                                                                     id="workingList">
+                                                                                    <table style="width:100%; padding:0; border-spacing:0;"
+                                                                                           id="workingItemsTable"
+                                                                                           border=1>
+
+
+                                                                                    </table>
+
+
+                                                                                </div>
+                                                                                <br>
+                                                                                <button style="width:100%"
+                                                                                        class="btn btn-warning"
+                                                                                        type="button"
+                                                                                        onclick="deleteAllWorkingItemsRowsV();">
+                                                                                    Clear&nbsp;All
+                                                                                </button>
+                                                                                <br>
+                                                                                <br>
+                                                                                <label for="txtBarcode">Fault Item&nbsp;List</label><br>
+                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;">
+                                                                                    <table style="width:100%; padding:0; border-spacing:0;"
+                                                                                           id="faultTable"
+                                                                                           border=1>
+
+
+                                                                                    </table>
+
+
+                                                                                </div>
+                                                                                <br>
+                                                                                <button style="width:100%"
+                                                                                        class="btn btn-warning"
+                                                                                        type="button"
+                                                                                        onclick="deleteAllFaultItemsRowsV();">
+                                                                                    Clear&nbsp;All
+                                                                                </button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
                                                         </div>
+                                                        <script>
+
+                                                        </script>
                                                         <div class="modal-footer">
                                                             <input type="button" class="btn btn-outline-secondary"
                                                                    data-dismiss="modal" value="Close">
-                                                            <input type="submit" class="btn btn-outline-success"
+                                                            <input type="reset" class="btn btn-outline-danger"
+                                                                   data-dismiss="modal" value="Reset">
+                                                            <input type="button" class="btn btn-outline-success"
+                                                                   onclick="validateFormX()"
                                                                    value="Update">
                                                         </div>
                                                     </div>
@@ -537,9 +755,9 @@
 
 
                                             <!-- Button trigger modal -->
-                                            <input type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                                   data-target="#d<%out.print(results.getString("stock_in_id"));%>"
-                                                   value="Delete">
+                                            <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                                                    data-target="#d<%out.print(results.getString("stock_in_id"));%>"
+                                            ><i class="material-icons">delete_forever</i></button>
 
                                             <!-- Modal -->
                                             <div class="modal fade"
@@ -560,10 +778,10 @@
                                                             Are you Sure you want to delete this record?
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <input type="button" class="btn btn-outline-secondary"
-                                                                   data-dismiss="modal" value="Close">
+                                                            <input type="button" class="btn btn-outline-success"
+                                                                   data-dismiss="modal" value="No, Close">
                                                             <input type="submit" class="btn btn-outline-danger"
-                                                                   value="Delete">
+                                                                   value="Yes, Delete">
                                                         </div>
                                                     </div>
                                                 </div>
