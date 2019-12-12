@@ -225,8 +225,9 @@
 
                                         <form id="mainForm" action="Inventory_INSERT_Controller" method="post">
 
-                                            <input type="button" class="btn btn-success btn-block" data-toggle="modal"
-                                                   data-target="#exampleModal" value="Create&nbsp;Stock">
+                                            <button type="button" class="btn btn-success btn-block" data-toggle="modal"
+                                                    data-target="#exampleModal"><i class="fa fa-plus"></i>&nbsp;Create&nbsp;Stock
+                                            </button>
 
 
                                             <!-- Modal -->
