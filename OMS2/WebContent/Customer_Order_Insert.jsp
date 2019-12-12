@@ -1,23 +1,20 @@
-<%@page import="com.DatabaseHandle.Main_SELECT"%>
-<%@page import="com.DBConnection.ConnectionManager"%>
-<%@page import="com.model.Supplier_Order"%>
-<%@page import="com.model.CurrentUser"%>
+<%@page import="com.DBConnection.ConnectionManager" %>
+<%@page import="com.DatabaseHandle.Main_SELECT" %>
+<%@page import="java.sql.Connection" %>
+<%@page import="java.sql.ResultSet" %>
 
-<%@page import="java.sql.Connection"%>
-<%@page import="com.DatabaseHandle.Supplier_SELECT"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.sql.ResultSet"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"   pageEncoding="ISO-8859-1"%>
+<%@page import="java.util.HashMap" %>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <!DOCTYPE html>
 <html>
 <head>
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-<meta charset="ISO-8859-1">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet"/>
+	<meta charset="ISO-8859-1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
 <meta name="author" content="">
 
 <title>Automated Barcode Solution</title>
@@ -51,26 +48,26 @@ a:hover {background-color: #ddd;}
 		
 			<div class="sidebar-heading">Automated Barcode<br>Solution</div>
 			<div class="list-group list-group-flush">
-			
-				<a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a> 
-			<a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+
+				<a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
+				<a
+						class="list-group-item list-group-item-action bg-light dropdown-toggle"
+						data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+						aria-controls="collapseExample">Inventory&nbsp;Management</a>
 				<div class="collapse" id="collapseExample">
 
-			
-			
-					<a href="Stock_IN_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
+
+					<a href="Stock_IN_MANAGE.jsp"
+					   class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
 					<a href="Stock_OUT_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+					   class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
 
 
 				</div>
-		
-				<a href="Payment_UPDATE.jsp" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
-				
-				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
+
+				<a href="Payment_UPDATE.jsp" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+
+				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
 				<a href="Customer_Order_Insert.jsp"
 					class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
 					<a href="Repair_INSERT.jsp"
@@ -342,28 +339,26 @@ a:hover {background-color: #ddd;}
 															return false;
 														}
 											    //check whether the date is emplty	
-												  if( document.forms["myForm"]["date"].value == "") 
-												  		{												  
-												    		alert("Date Must Be Filled Out");
-												    		return false;
-												 		}												  
-												  
-												  //check whether the selected date is less than the current date
-											        var dateString = x;
-											        var myDate = new Date(dateString);
-											        var today = new Date();
-											        if ( myDate < today ) { 
-											            alert("Estimated Date Should Be Greater than Or Equal To Current Date !")
-											            return false;
-											        }
-											        //checking whether the supplier name is correct ,that is whether it is selected is a item in drop down
-											        var optcounter = 0;
-											        var suppliername =  document.getElementById('customerselect').value;
-											        var supoptions = document.getElementById('customer');
-											        for (i = 0; i < supoptions.options.length; i++) {
-											           if(supoptions .options[i].value == suppliername )
-											        	{
-											        	   optcounter =  1;
+												  if( document.forms["myForm"]["date"].value == "") {
+													  alert("Date Must Be Filled Out");
+													  return false;
+												  }
+
+													//check whether the selected date is less than the current date
+													var dateString = x;
+													var myDate = new Date(dateString);
+													var today = new Date();
+													if (myDate < today) {
+														alert("Estimated Date Should Be Greater than Or Equal To Current Date !");
+														return false;
+													}
+													//checking whether the supplier name is correct ,that is whether it is selected is a item in drop down
+													var optcounter = 0;
+													var suppliername = document.getElementById('customerselect').value;
+													var supoptions = document.getElementById('customer');
+													for (i = 0; i < supoptions.options.length; i++) {
+														if (supoptions.options[i].value == suppliername) {
+															optcounter = 1;
 											        	   break;
 											        	}
 											        }

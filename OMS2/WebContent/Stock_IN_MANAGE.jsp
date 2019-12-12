@@ -107,24 +107,24 @@
                         if (CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant")
                                 || CurrentUser.getUsername().equals("manager")) {
                     --%>
-                    <a
-                            class="list-group-item list-group-item-action bg-light dropdown-toggle"
-                            data-toggle="collapse" href="#collapseExample" role="button"
-                            aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
-                    <div class="collapse" id="collapseExample">
+                        <a
+                                class="list-group-item list-group-item-action bg-light dropdown-toggle"
+                                data-toggle="collapse" href="#collapseExample" role="button"
+                                aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+                        <div class="collapse" id="collapseExample">
 
 
-                        <a href="Stock_IN_INSERT.jsp"
-                           class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
-                        <a href="Stock_OUT_INSERT.jsp"
-                           class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+                            <a href="Stock_IN_MANAGE.jsp"
+                               class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
+                            <a href="Stock_OUT_INSERT.jsp"
+                               class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
 
 
-                    </div>
+                        </div>
 
-                    <a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+                        <a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
 
-                    <a href="Customer_Details_Insert.jsp"
+                        <a href="Customer_Details_Insert.jsp"
                        class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
                     <a href="Customer_Order_Insert.jsp"
                        class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
@@ -185,7 +185,7 @@
                    style="width: 100%; height: 80%;">
                 <tr>
                     <td style="padding: 0px 0px 0px 0px;">
-                        <form action="Inventory_SELECT_Controller?jspPage=delete"
+                        <form action="Inventory_SELECT_Controller"
                               method="POST" id="searchForm" name="searchForm">
                             <table style="width: 100%;">
                                 <tr>
@@ -235,8 +235,7 @@
                                                 <div class="modal-dialog modal-xl modal-lg modal-lg" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Modal
-                                                                title</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Create&nbsp;Stock</h5>
                                                             <button type="button" class="close" data-dismiss="modal"
                                                                     aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
@@ -397,7 +396,7 @@
 
                                                                                 <label for="txtBarcode"
                                                                                        id="workingItems">Working&nbsp;Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;"
+                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;"
                                                                                      id="workingList">
                                                                                     <table style="width:100%; padding:0; border-spacing:0;"
                                                                                            id="workingItemsTable"
@@ -419,7 +418,7 @@
                                                                                 <br>
                                                                                 <label for="txtBarcode">Fault
                                                                                     Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;">
+                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
                                                                                     <table style="width:100%; padding:0; border-spacing:0;"
                                                                                            id="faultTable"
                                                                                            border=1>
@@ -476,7 +475,7 @@
                     <td colspan="2">
                         <!--inside the first column -->
                         <div class="table-wrapper-scroll-y my-custom-scrollbar"
-                             style="height: 545px; position: relative; top: 0">
+                             style="height: 600px; position: relative; top: 0">
 
 
                             <!-- -----------CHANGE STARTS HERE FIRST TABLE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
@@ -521,11 +520,10 @@
 
                                         try {
 
-                                            int i = 0;
+                                            int i = 1;
 
                                             while (results.next()) {
 
-                                                i++;
 
                                                 Inventory_SELECT itemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_WORKING_STOCK_BY_STOCK_ID);
                                                 Inventory_SELECT faultItemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_FAULT_STOCK_BY_STOCK_ID);
@@ -781,7 +779,14 @@
                                                                         <col style="width: 50%">
                                                                         <col style="width: 50%">
                                                                         <tr>
-                                                                            <td><label for="itemdetailsdropitem<%=i%>"
+                                                                            <td>
+                                                                                <label for="stockID">Stock&nbsp;IN&nbsp;ID</label>
+                                                                                <input id="stockID" type="text"
+                                                                                       name="stockINId"
+                                                                                       style="width:100%;display: block"
+                                                                                       value="<%=results.getString("stock_in_id")%>"
+                                                                                       readonly>
+                                                                                <label for="itemdetailsdropitem<%=i%>"
                                                                                        id="stockItem<%=i%>">Stock&nbsp;Item</label><br>
                                                                                 <div class="dropdown">
                                                                                     <div class="popup"
@@ -791,7 +796,8 @@
                                                                                                name="itemID"
                                                                                                style="cursor: default;"
                                                                                                placeholder="Click Here to Select an Item"
-                                                                                               value="" required
+                                                                                               value="<%= results.getString("item_id")%>"
+                                                                                               required
                                                                                                autocomplete="off"
                                                                                                readonly
                                                                                                class="form-control"><i
@@ -866,20 +872,26 @@
                                                                                 </div>
                                                                                 <div id="iteminformation<%=i%>"
                                                                                      style="width:100%; background-color: lightgrey; padding:0; height:auto; overflow-x:hidden;">
-                                                                                    <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
+                                                                                    <p>Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=results.getString("item_model_name")%>
+                                                                                    </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=results.getString("item_type")%>
+                                                                                        <br>Manufacturer&nbsp;:&nbsp;<%=results.getString("item_manufacturer")%>
+                                                                                        <br>Supplier&nbsp;:&nbsp;<%=results.getString("item_supplier")%>
+                                                                                        <br>Description&nbsp;:&nbsp;<%=results.getString("item_details")%>
+                                                                                    </p>
                                                                                 </div>
+
                                                                                 <br>
 
                                                                                 <label for="datePicker<%=i%>">Stock&nbsp;IN&nbsp;Date</label>
                                                                                 <input type="date" name="stockindate"
                                                                                        id="datePicker<%=i%>" required
-                                                                                       value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br>
+                                                                                       value="<%= results.getString("stock_in_date") %>"><br>
                                                                                 <label for="txtAreaRemarks<%=i%>">Any&nbsp;other&nbsp;Information's</label>
 
                                                                                 <textarea id="txtAreaRemarks<%=i%>"
                                                                                           name="remarks" rows="4"
                                                                                           cols="4"
-                                                                                          placeholder="Enter Stock Information Here..."></textarea>
+                                                                                          placeholder="Enter Stock Information Here..."><%= results.getString("remarks")%></textarea>
                                                                                 <br>
 
 
@@ -932,13 +944,39 @@
                                                                             </td>
                                                                             <td><label for="txtBarcode<%=i%>"
                                                                                        id="workingItems<%=i%>">Working&nbsp;Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;"
+                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;"
                                                                                      id="workingList<%=i%>">
                                                                                     <table style="width:100%; padding:0; border-spacing:0;"
                                                                                            id="workingItemsTable<%=i%>"
                                                                                            border=1>
 
+                                                                                        <% workingResult.beforeFirst();
+                                                                                            while (workingResult.next()) { %>
 
+                                                                                        <tr style="padding:0;">
+                                                                                            <td style="padding:0;">
+                                                                                                <input type="text"
+                                                                                                       readonly
+                                                                                                       style="margin:0;border:0;"
+                                                                                                       value="<%= workingResult.getString("barcode_number") %>"
+                                                                                                       name="barcode">
+                                                                                            </td>
+                                                                                            <td style="padding:0;">
+                                                                                                <input type="text"
+                                                                                                       style="margin:0;border:0;"
+                                                                                                       name="workingDescription"
+                                                                                                       value="<%=workingResult.getString("description")%>">
+                                                                                            </td>
+                                                                                            <td style="padding:0;">
+                                                                                                <button style="margin:0;"
+                                                                                                        type="button"
+                                                                                                        class="btn btn-danger"
+                                                                                                        onclick="removeWorkingItemRow<%=i%>(this)">
+                                                                                                    <i class="fa fa-trash"></i>
+                                                                                                </button>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
                                                                                     </table>
 
 
@@ -953,10 +991,37 @@
                                                                                 <br>
                                                                                 <br>
                                                                                 <label for="txtBarcode<%=i%>">Fault Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;">
+                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
                                                                                     <table style="width:100%; padding:0; border-spacing:0;"
                                                                                            id="faultTable<%=i%>"
                                                                                            border=1>
+                                                                                        <% faultResult.beforeFirst();
+                                                                                            while (faultResult.next()) { %>
+
+                                                                                        <tr style="padding:0;">
+                                                                                            <td style="padding:0;">
+                                                                                                <input type="text"
+                                                                                                       readonly
+                                                                                                       style="margin:0;border:0;"
+                                                                                                       value="<%= faultResult.getString("barcode_number") %>"
+                                                                                                       name="barcode">
+                                                                                            </td>
+                                                                                            <td style="padding:0;">
+                                                                                                <input type="text"
+                                                                                                       style="margin:0;border:0;"
+                                                                                                       name="workingDescription"
+                                                                                                       value="<%=faultResult.getString("description")%>">
+                                                                                            </td>
+                                                                                            <td style="padding:0;">
+                                                                                                <button style="margin:0;"
+                                                                                                        type="button"
+                                                                                                        class="btn btn-danger"
+                                                                                                        onclick="removeFaultItemRow<%=i%>(this)">
+                                                                                                    <i class="fa fa-trash"></i>
+                                                                                                </button>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <% } %>
 
 
                                                                                     </table>
@@ -976,7 +1041,53 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <script>
+                                                        <script defer>
+
+                                                            window.addEventListener('load', function () {
+                                                                let workingItems = [];
+                                                                let faultyItems = [];
+
+
+                                                                if (sessionStorage.getItem("workingBarcodeItems<%=i%>")) {
+                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
+                                                                } else {
+
+                                                                    sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
+                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
+
+                                                                }
+
+                                                                if (sessionStorage.getItem("faultBarcodeItems<%=i%>")) {
+                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
+                                                                } else {
+
+                                                                    sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
+                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
+
+                                                                }
+
+                                                                <%
+                                                                    workingResult.beforeFirst();
+                                                                    while (workingResult.next()) {
+                                                                %>
+                                                                workingItems.push(<%=workingResult.getString("barcode_number")%>);
+                                                                sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
+                                                                <%
+                                                                }
+
+                                                                    faultResult.beforeFirst();
+
+                                                                    while (faultResult.next()) {
+                                                                %>
+
+                                                                faultyItems.push(<%=faultResult.getString("barcode_number")%>);
+                                                                sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
+                                                                <%
+                                                                    }
+
+                                                                 %>
+
+                                                            });
 
                                                             function myFirstFunction<%=i%>() {
 
@@ -1215,12 +1326,71 @@
                                                                 }
                                                             }
 
+                                                            let workingTable<%=i%> = "";
+                                                            let faultyTable<%=i%> = "";
+                                                            let itemInfo<%=i%> = "";
+                                                            let itemID<%=i%> = "";
+
+                                                            window.addEventListener('load', function () {
+
+
+                                                                workingTable<%=i%> = document.getElementById("workingItemsTable<%=i%>").innerHTML;
+                                                                faultyTable<%=i%> = document.getElementById("faultTable<%=i%>").innerHTML;
+                                                                itemInfo<%=i%> = document.getElementById('iteminformation<%=i%>').innerHTML;
+                                                                itemID<%=i%> = document.getElementById('itemdetailsdropitem<%=i%>').value;
+
+                                                            });
+
 
                                                             function clearAllFields<%=i%>() {
+                                                                document.getElementById('itemdetailsdropitem<%=i%>').value = itemID<%=i%>;
+                                                                document.getElementById('iteminformation<%=i%>').innerHTML = itemInfo<%=i%>;
+                                                                document.getElementById("workingItemsTable<%=i%>").innerHTML = workingTable<%=i%>;
+                                                                document.getElementById("faultTable<%=i%>").innerHTML = faultyTable<%=i%>;
+                                                                sessionStorage.clear();
 
-                                                                document.getElementById('iteminformation<%=i%>').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
-                                                                document.getElementById("workingItemsTable<%=i%>").innerHTML = "";
-                                                                document.getElementById("faultTable<%=i%>").innerHTML = "";
+                                                                let workingItems = [];
+                                                                let faultyItems = [];
+
+
+                                                                if (sessionStorage.getItem("workingBarcodeItems<%=i%>")) {
+                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
+                                                                } else {
+
+                                                                    sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
+                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
+
+                                                                }
+
+                                                                if (sessionStorage.getItem("faultBarcodeItems<%=i%>")) {
+                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
+                                                                } else {
+
+                                                                    sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
+                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
+
+                                                                }
+
+                                                                <%
+                                                                    workingResult.beforeFirst();
+                                                                    while (workingResult.next()) {
+                                                                %>
+                                                                workingItems.push(<%=workingResult.getString("barcode_number")%>);
+                                                                sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
+                                                                <%
+                                                                }
+
+                                                                    faultResult.beforeFirst();
+
+                                                                    while (faultResult.next()) {
+                                                                %>
+
+                                                                faultyItems.push(<%=faultResult.getString("barcode_number")%>);
+                                                                sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
+                                                                <%
+                                                                    }
+
+                                                                 %>
 
                                                             }
 
@@ -1289,14 +1459,15 @@
 
                                                         </script>
                                                         <div class="modal-footer">
-                                                            <input type="button" class="btn btn-outline-secondary"
-                                                                   data-dismiss="modal" value="Close">
-                                                            <input type="reset" class="btn btn-outline-danger"
-                                                                   data-dismiss="modal" value="Reset"
-                                                                   onclick="clearAllFields<%=i%>()">
-                                                            <input type="button" class="btn btn-outline-success"
-                                                                   onclick="validateForm<%=i%>()"
-                                                                   value="Update">
+                                                            <div class="btn-group btn-block" role="group"
+                                                                 aria-label="Basic example">
+                                                                <button type="reset" class="btn btn-outline-danger"
+                                                                        onclick="clearAllFields<%=i%>()">Reset&nbsp;Fields
+                                                                </button>
+                                                                <button type="button" class="btn btn-outline-success"
+                                                                        onclick="validateForm<%=i%>()">Update&nbsp;Stock
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1352,6 +1523,9 @@
                                 </tr>
 
                                 <%
+
+                                                ++i;
+
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -1368,19 +1542,7 @@
 
                 <!-- second column inside table end here -->
             </table>
-            <table style="width: 100%;">
-                <tr>
 
-                    <td><a href="Stock_IN_INSERT.jsp"
-                           class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
-
-                    <td><a href="Stock_IN_MANAGE.jsp"
-                           class=" btn btn-dark btn-lg btn-block">Manage&nbsp;Stocks</a></td>
-
-
-                </tr>
-
-            </table>
 
         </div>
 

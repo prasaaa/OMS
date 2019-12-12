@@ -45,25 +45,26 @@
 				<a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a> 
 			<%//} %>
 			<%//if(CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant") || CurrentUser.getUsername().equals("manager")) {%>
-				<a
+			<a
 					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
-				<div class="collapse" id="collapseExample">
-
-			
-			
-					<a href="Stock_IN_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
-					<a href="Stock_OUT_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+					data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+					aria-controls="collapseExample">Inventory&nbsp;Management</a>
+			<div class="collapse" id="collapseExample">
 
 
-				</div>
-		
-				<a href="Payment_UPDATE.jsp" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
-				
-				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
-				<a href="Customer_Order_Insert.jsp"
+				<a href="Stock_IN_MANAGE.jsp"
+				   class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
+				<a href="Stock_OUT_INSERT.jsp"
+				   class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+
+
+			</div>
+
+			<a href="Payment_UPDATE.jsp"
+			   class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+
+			<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
+			<a href="Customer_Order_Insert.jsp"
 					class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
 					<a href="Repair_INSERT.jsp"
 				class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>

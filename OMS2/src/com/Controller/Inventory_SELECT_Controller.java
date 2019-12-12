@@ -36,7 +36,7 @@ public class Inventory_SELECT_Controller extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**
@@ -71,13 +71,10 @@ public class Inventory_SELECT_Controller extends HttpServlet {
         ResultSet results = null;
 
         if (queryType.isEmpty() && queryValue.isEmpty()) {
-            if (request.getParameter("jspPage").equals("insert")) {
-                response.sendRedirect("Inventory_Servlet?status=insertReset");
-                return;
-            } else if (request.getParameter("jspPage").equals("delete")) {
-                response.sendRedirect("Inventory_Servlet?status=deleteReset");
-                return;
-            }
+
+            response.sendRedirect("Inventory_Servlet?status=deleteReset");
+            return;
+
         } else if (queryType.equalsIgnoreCase("bar")) {
             results = selectBarcode.retreiveQueryData(queryValue);
         }
@@ -88,23 +85,18 @@ public class Inventory_SELECT_Controller extends HttpServlet {
                 if (results.first()) {
 
                     session.setAttribute("results", results);
-                    if (request.getParameter("jspPage").equals("insert")) {
-                        response.sendRedirect("Inventory_Servlet?status=insertResultsFound");
-                        return;
-                    } else if (request.getParameter("jspPage").equals("delete")) {
-                        response.sendRedirect("Inventory_Servlet?status=deleteResultsFound");
-                        return;
-                    }
+
+
+                    response.sendRedirect("Inventory_Servlet?status=deleteResultsFound");
+                    return;
+
 
                 } else {
 
-                    if (request.getParameter("jspPage").equals("insert")) {
-                        response.sendRedirect("Inventory_Servlet?status=noInsertResults");
-                        return;
-                    } else if (request.getParameter("jspPage").equals("delete")) {
-                        response.sendRedirect("Inventory_Servlet?status=noDeleteResults");
-                        return;
-                    }
+
+                    response.sendRedirect("Inventory_Servlet?status=noDeleteResults");
+                    return;
+
                 }
             }
         } catch (SQLException e) {

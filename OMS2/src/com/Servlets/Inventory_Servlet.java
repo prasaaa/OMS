@@ -49,29 +49,8 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("color", color);
                 response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
-            case "insertResultsFound":
-                message = "Results Found!!";
-                color = "green";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_INSERT.jsp");
-                return;
-            case "noItems":
-                message = "Please Enter at Least One Item!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.sendRedirect("Stock_IN_INSERT.jsp");
-                return;
-            case "noInsertResults":
-                message = "No Results!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_INSERT.jsp");
-                return;
+
+
             case "noDeleteResults":
                 message = "No Results!!";
                 color = "red";
@@ -86,7 +65,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_INSERT.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "insertNotSuccess":
                 message = "Stocks Insert Not Completed!!";
@@ -94,7 +73,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_INSERT.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "deleteSuccess":
                 message = "Stocks Deleted SuccessFully!!";
@@ -110,7 +89,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_INSERT.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "insertError":
                 message = "An Item Already Exist in Stock!!";
@@ -118,7 +97,7 @@ public class Inventory_Servlet extends HttpServlet {
                 session.setAttribute("message", message);
                 session.setAttribute("color", color);
                 response.reset();
-                response.sendRedirect("Stock_IN_INSERT.jsp");
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
             case "deleteFail":
                 message = "Failed to Delete Stocks!!";

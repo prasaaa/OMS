@@ -117,7 +117,7 @@
             <div class="collapse" id="collapseExample">
 
 
-                <a href="Stock_IN_INSERT.jsp"
+                <a href="Stock_IN_MANAGE.jsp"
                    class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
                 <a href="Stock_OUT_INSERT.jsp"
                    class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
@@ -521,7 +521,7 @@
             <table style="width: 100%;">
                 <tr>
 
-                    <td><a href="Stock_IN_INSERT.jsp"
+                    <td><a href="Stock_IN_MANAGE.jsp"
                            class=" btn btn-dark btn-lg btn-block">Create&nbsp;Stocks</a></td>
 
                     <td><a href="Stock_IN_MANAGE.jsp"

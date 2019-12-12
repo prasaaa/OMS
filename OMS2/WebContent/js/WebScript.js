@@ -316,6 +316,7 @@ function clearAllFields() {
     document.getElementById('iteminformation').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
     document.getElementById("workingItemsTable").innerHTML = "";
     document.getElementById("faultTable").innerHTML = "";
+    sessionStorage.clear();
 
 }
 
@@ -339,11 +340,11 @@ $(document).ready(function () {
 
 });
 
-window.onload = function () {
+window.addEventListener('load', function () {
     oldTable = document.getElementById("mainTable").innerHTML;
     sessionStorage.clear();
 
-};
+});
 
 
 document.getElementById('itemdetailsdropitem').addEventListener('keyup', function (event) {
