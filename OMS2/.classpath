@@ -18,5 +18,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/popper"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/font-awesome"/>
 	<classpathentry kind="var" path="MAVEN_REPOSITORY/org/jetbrains/annotations/17.0.0/annotations-17.0.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/taglibs-standard-impl-1.2.5"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
