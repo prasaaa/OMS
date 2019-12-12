@@ -125,16 +125,16 @@
                         <a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
 
                         <a href="Customer_Details_Insert.jsp"
-                       class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
-                    <a href="Customer_Order_Insert.jsp"
-                       class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
-                    <a href="Repair_INSERT.jsp"
-                       class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
-                    <a href="Admin_Customer_Order_Conformation.jsp"
-                       class="list-group-item list-group-item-action bg-light">Customer
-                        Order &nbsp;Confirm</a> <a href="Emp_Management.jsp"
-                                                   class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
-                    <a href="Emp_REPORT.jsp"
+                           class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
+                        <a href="Customer_Order_Insert.jsp"
+                           class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
+                        <a href="Repair_INSERT.jsp"
+                           class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
+                        <a href="Admin_Customer_Order_Conformation.jsp"
+                           class="list-group-item list-group-item-action bg-light">Customer
+                            Order &nbsp;Confirm</a> <a href="Emp_Management.jsp"
+                                                       class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
+                        <a href="Emp_REPORT.jsp"
                        class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
                     <a href="IT_Manager_Assign_Emp.jsp"
                        class="list-group-item list-group-item-action bg-light">Employee
@@ -221,251 +221,256 @@
                                                 name="search" type="reset" class="btn btn-danger btn-block"
                                                 value="Reset" id="resetBtn" onclick="clearTable()"
                                             <%}%>></td>
-                                    <td style="padding-top: 8px;">
-
-                                        <form id="mainForm" action="Inventory_INSERT_Controller" method="post">
-
-                                            <button type="button" class="btn btn-success btn-block" data-toggle="modal"
-                                                    data-target="#exampleModal"><i class="fa fa-plus"></i>&nbsp;Create&nbsp;Stock
-                                            </button>
-
-
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl modal-lg modal-lg" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Create&nbsp;Stock</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="container-fluid">
-                                                                <div class="row">
-                                                                    <table style="width: 100%">
-                                                                        <col style="width: 50%">
-                                                                        <col style="width: 50%">
-                                                                        <tr>
-                                                                            <td>
-                                                                                <label for="itemdetailsdropitem"
-                                                                                       id="stockItem">Stock&nbsp;Item</label><br>
-                                                                                <div class="dropdown">
-                                                                                    <div class="popup"
-                                                                                         style="width:100%;">
-                                                                                        <input type="text"
-                                                                                               id="itemdetailsdropitem"
-                                                                                               name="itemID"
-                                                                                               style="cursor: default;"
-                                                                                               placeholder="Click Here to Select an Item"
-                                                                                               value="" required
-                                                                                               autocomplete="off"
-                                                                                               readonly
-                                                                                               class="form-control"><i
-                                                                                            class="fa fa-caret-down"
-                                                                                            id="caret"></i><span
-                                                                                            class="popuptext"
-                                                                                            id="myPopup3"></span>
-                                                                                    </div>
-                                                                                    <div id="itemdetailsitemdisplay"
-                                                                                         class="dropdown-content"
-                                                                                         style="margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
-                                                                                        <div style="position: sticky;top:-6px;margin-top:-6px;padding:0">
-                                                                                            <input tabindex="0"
-                                                                                                   type="text"
-                                                                                                   id="itemdetailsmyInput"
-                                                                                                   onkeyup="itemdetailsitemdisplayfilterFunction()"
-                                                                                                   autocomplete="off"
-                                                                                                   placeholder="Search here.."><i
-                                                                                                class="fa fa-search"
-                                                                                                id="caretSearch"></i>
-                                                                                        </div>
-
-                                                                                        <div style="overflow-x:hidden;">
-
-
-                                                                                            <%
-                                                                                                try {
-                                                                                                    while (resultset_for_items.next()) {%>
-                                                                                            <a style="cursor: pointer;"
-                                                                                               id='<%=resultset_for_items.getString("item_id") %>'
-                                                                                               tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
-                                                                                            </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultset_for_items.getString("item_type")%>
-                                                                                                <br>Manufacturer&nbsp;:&nbsp;<%=resultset_for_items.getString("item_manufacturer")%>
-                                                                                                <br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("item_supplier")%>
-                                                                                                <br>Description&nbsp;:&nbsp;<%=resultset_for_items.getString("item_details")%>
-                                                                                            </a>
-                                                                                            <script>
-                                                                                                document.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener('click', function () {
-                                                                                                    document.getElementById('itemdetailsdropitem').value = '<%=resultset_for_items.getString("item_id")%>';
-                                                                                                    document.getElementById('iteminformation').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>').innerHTML + '</p>';
-                                                                                                    document.getElementById('itemdetailsmyInput').value = "";
-                                                                                                });
-
-                                                                                                document.getElementById('<%=resultset_for_items.getString("item_id") %>').addEventListener("keyup", function (e) {
-                                                                                                    if (e.keyCode === 13) {
-                                                                                                        e.preventDefault();
-                                                                                                        document.getElementById('<%=resultset_for_items.getString("item_id") %>').click();
-                                                                                                    }
-                                                                                                });
-
-                                                                                            </script>
-                                                                                            <% }
-
-                                                                                            } catch (Exception e) {
-                                                                                                e.printStackTrace();
-                                                                                            }%>
-
-                                                                                        </div>
-
-
-                                                                                    </div>
-
-                                                                                </div>
-                                                                                <div id="iteminformation"
-                                                                                     style="width:100%; background-color: lightgrey; padding:0; height:auto; overflow-x:hidden;">
-                                                                                    <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
-                                                                                </div>
-                                                                                <br>
-
-                                                                                <label for="datePicker">Stock&nbsp;IN&nbsp;Date</label>
-                                                                                <input type="date" name="stockindate"
-                                                                                       id="datePicker" required
-                                                                                       value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br>
-                                                                                <label for="txtAreaRemarks">Any&nbsp;other&nbsp;Information's</label>
-
-                                                                                <textarea id="txtAreaRemarks"
-                                                                                          name="remarks"
-                                                                                          rows="4"
-                                                                                          cols="4"
-                                                                                          placeholder="Enter Stock Information Here..."></textarea>
-                                                                                <br>
-
-
-                                                                                <label id="itemsList">Item&nbsp;List&nbsp;Details</label>
-                                                                                <div class="popup" style="width:100%;">
-                                                                                    <input style="width:100%;"
-                                                                                           type="text"
-                                                                                           id="txtBarcode"
-                                                                                           name="barcodeNmber"
-                                                                                           placeholder="Enter Barcode Here...">
-                                                                                    <span class="popuptext"
-                                                                                          id="myPopup1"></span>
-
-                                                                                </div>
-
-                                                                                <div class="popup" style="width:100%;">
-                                                                                    <select style="width:100%;"
-                                                                                            id="itemStatus">
-                                                                                        <option selected disabled
-                                                                                                value="">
-                                                                                            Select&nbsp;Item&nbsp;Type
-                                                                                        </option>
-                                                                                        <option value="working">
-                                                                                            Working
-                                                                                        </option>
-                                                                                        <option value="faulty">Faulty
-                                                                                        </option>
-                                                                                    </select>
-                                                                                    <span class="popuptext"
-                                                                                          id="myPopup4"></span>
-                                                                                </div>
-                                                                                <div class="popup"
-                                                                                     style="width:100%;"><textarea
-                                                                                        id="description"
-                                                                                        placeholder="Enter Fault Description Here..."
-                                                                                        cols="4"
-                                                                                        rows="4"></textarea><span
-                                                                                        class="popuptext"
-                                                                                        id="myPopup2"></span>
-                                                                                </div>
-                                                                                <div style="width: 100%; display: flex; flex-direction: row;">
-                                                                                    <button style="width:100%; margin-right:2.5px;"
-                                                                                            class="btn btn-info"
-                                                                                            type="button"
-                                                                                            onclick="myFirstFunction();">
-                                                                                        Add&nbsp;Item
-                                                                                    </button>
-                                                                                    <br>
-
-                                                                                </div>
-
-                                                                            </td>
-                                                                            <td>
-
-                                                                                <label for="txtBarcode"
-                                                                                       id="workingItems">Working&nbsp;Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;"
-                                                                                     id="workingList">
-                                                                                    <table style="width:100%; padding:0; border-spacing:0;"
-                                                                                           id="workingItemsTable"
-                                                                                           border=1>
-
-
-                                                                                    </table>
-
-
-                                                                                </div>
-                                                                                <br>
-                                                                                <button style="width:100%"
-                                                                                        class="btn btn-warning"
-                                                                                        type="button"
-                                                                                        onclick="deleteAllWorkingItemsRows();">
-                                                                                    Clear&nbsp;All
-                                                                                </button>
-                                                                                <br>
-                                                                                <br>
-                                                                                <label for="txtBarcode">Fault
-                                                                                    Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
-                                                                                    <table style="width:100%; padding:0; border-spacing:0;"
-                                                                                           id="faultTable"
-                                                                                           border=1>
-
-
-                                                                                    </table>
-
-
-                                                                                </div>
-                                                                                <br>
-                                                                                <button style="width:100%"
-                                                                                        class="btn btn-warning"
-                                                                                        type="button"
-                                                                                        onclick="deleteAllFaultItemsRows();">
-                                                                                    Clear&nbsp;All
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <div class="btn-group btn-block" role="group"
-                                                                 aria-label="Basic example">
-                                                                <button type="reset"
-                                                                        class="btn btn-outline-danger btn-lg"
-                                                                        onclick="clearAllFields();">
-                                                                    Reset&nbsp;Fields
-                                                                </button>
-                                                                <button type="button"
-                                                                        class="btn btn-outline-success btn-lg"
-                                                                        onclick="validateFormX()">Insert&nbsp;Stock
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </td>
                                 </tr>
                             </table>
                         </form>
                     </td>
+                    <td style="padding-top: 8px;">
 
+                        <form id="mainForm" action="Inventory_INSERT_Controller" method="post">
+
+                            <button type="button" class="btn btn-success btn-block" data-toggle="modal"
+                                    data-target="#exampleModal" onclick="clearAllFieldsV()"><i class="fa fa-plus"></i>&nbsp;Create&nbsp;Stock
+                            </button>
+
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl modal-lg modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Create&nbsp;Stock</h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <table style="width: 100%">
+                                                        <col style="width: 50%">
+                                                        <col style="width: 50%">
+                                                        <tr>
+                                                            <td>
+                                                                <label for="itemdetailsdropitemv"
+                                                                       id="stockItemv">Stock&nbsp;Item</label><br>
+                                                                <div class="dropdown">
+                                                                    <div class="popup"
+                                                                         style="width:100%;">
+                                                                        <input type="text"
+                                                                               id="itemdetailsdropitemv"
+                                                                               name="itemID"
+                                                                               style="cursor: default;"
+                                                                               placeholder="Click Here to Select an Item"
+                                                                               value="" required
+                                                                               autocomplete="off"
+                                                                               readonly
+                                                                               class="form-control"><i
+                                                                            class="fa fa-caret-down"
+                                                                            id="caretv"></i><span
+                                                                            class="popuptext"
+                                                                            id="myPopup3v"></span>
+                                                                    </div>
+                                                                    <div id="itemdetailsitemdisplayv"
+                                                                         class="dropdown-content"
+                                                                         style="margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
+                                                                        <div style="position: sticky;top:-6px;margin-top:-6px;padding:0">
+                                                                            <input tabindex="0"
+                                                                                   type="text"
+                                                                                   id="itemdetailsmyInputv"
+                                                                                   onkeyup="itemdetailsitemdisplayfilterFunctionV()"
+                                                                                   autocomplete="off"
+                                                                                   placeholder="Search here.."><i
+                                                                                class="fa fa-search"
+                                                                                id="caretSearchv"></i>
+                                                                        </div>
+
+                                                                        <div style="overflow-x:hidden;">
+
+
+                                                                            <%
+                                                                                try {
+                                                                                    while (resultset_for_items.next()) {%>
+                                                                            <a style="cursor: pointer;"
+                                                                               id='<%=resultset_for_items.getString("item_id") %>v'
+                                                                               tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
+                                                                            </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultset_for_items.getString("item_type")%>
+                                                                                <br>Manufacturer&nbsp;:&nbsp;<%=resultset_for_items.getString("item_manufacturer")%>
+                                                                                <br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("item_supplier")%>
+                                                                                <br>Description&nbsp;:&nbsp;<%=resultset_for_items.getString("item_details")%>
+                                                                            </a>
+                                                                            <script>
+                                                                                document.getElementById('<%=resultset_for_items.getString("item_id") %>v').addEventListener('click', function () {
+                                                                                    document.getElementById('itemdetailsdropitemv').value = '<%=resultset_for_items.getString("item_id")%>';
+                                                                                    document.getElementById('iteminformationv').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>v').innerHTML + '</p>';
+                                                                                    document.getElementById('itemdetailsmyInputv').value = "";
+                                                                                });
+
+                                                                                document.getElementById('<%=resultset_for_items.getString("item_id") %>v').addEventListener("keyup", function (e) {
+                                                                                    if (e.keyCode === 13) {
+                                                                                        e.preventDefault();
+                                                                                        document.getElementById('<%=resultset_for_items.getString("item_id") %>v').click();
+                                                                                    }
+                                                                                });
+
+                                                                            </script>
+                                                                            <% }
+
+                                                                            } catch (Exception e) {
+                                                                                e.printStackTrace();
+                                                                            }%>
+
+                                                                        </div>
+
+
+                                                                    </div>
+
+                                                                </div>
+                                                                <div id="iteminformationv"
+                                                                     style="width:100%; background-color: lightgrey; padding:0; height:auto; overflow-x:hidden;">
+                                                                    <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
+                                                                </div>
+                                                                <br>
+
+                                                                <label for="datePickerv">Stock&nbsp;IN&nbsp;Date</label>
+                                                                <input type="date" name="stockindate"
+                                                                       id="datePickerv" required
+                                                                       value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br>
+                                                                <label for="txtAreaRemarksv">Any&nbsp;other&nbsp;Information's</label>
+
+                                                                <textarea id="txtAreaRemarksv"
+                                                                          name="remarks"
+                                                                          rows="4"
+                                                                          cols="4"
+                                                                          placeholder="Enter Stock Information Here..."></textarea>
+                                                                <br>
+
+
+                                                                <label id="itemsListv">Item&nbsp;List&nbsp;Details</label>
+                                                                <div class="popup" style="width:100%;">
+                                                                    <input style="width:100%;"
+                                                                           type="text"
+                                                                           id="txtBarcodev"
+                                                                           name="barcodeNmber"
+                                                                           placeholder="Enter Barcode Here...">
+                                                                    <span class="popuptext"
+                                                                          id="myPopup1v"></span>
+
+                                                                </div>
+
+                                                                <div class="popup" style="width:100%;">
+                                                                    <select style="width:100%;"
+                                                                            id="itemStatusv">
+                                                                        <option selected disabled
+                                                                                value="">
+                                                                            Select&nbsp;Item&nbsp;Type
+                                                                        </option>
+                                                                        <option value="working">
+                                                                            Working
+                                                                        </option>
+                                                                        <option value="faulty">Faulty
+                                                                        </option>
+                                                                    </select>
+                                                                    <span class="popuptext"
+                                                                          id="myPopup4v"></span>
+                                                                </div>
+                                                                <div class="popup"
+                                                                     style="width:100%;"><textarea
+                                                                        id="descriptionv"
+                                                                        placeholder="Enter Fault Description Here..."
+                                                                        cols="4"
+                                                                        rows="4"></textarea><span
+                                                                        class="popuptext"
+                                                                        id="myPopup2v"></span>
+                                                                </div>
+                                                                <div style="width: 100%; display: flex; flex-direction: row;">
+                                                                    <button style="width:50%; margin-right:2.5px;"
+                                                                            class="btn btn-info"
+                                                                            type="button"
+                                                                            onclick="myFirstFunctionV();">
+                                                                        Add&nbsp;Item
+                                                                    </button>
+                                                                    <button style="width:50%; margin-right:2.5px;"
+                                                                            class="btn btn-warning"
+                                                                            type="button"
+                                                                            onclick="resetItemDetailsV();">
+                                                                        Reset
+                                                                    </button>
+                                                                    <br>
+
+                                                                </div>
+
+                                                            </td>
+                                                            <td>
+
+                                                                <label for="txtBarcodev"
+                                                                       id="workingItemsv">Working&nbsp;Item&nbsp;List</label><br>
+                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;"
+                                                                     id="workingListv">
+                                                                    <table style="width:100%; padding:0; border-spacing:0;"
+                                                                           id="workingItemsTablev"
+                                                                           border=1>
+
+
+                                                                    </table>
+
+
+                                                                </div>
+                                                                <br>
+                                                                <button style="width:100%"
+                                                                        class="btn btn-warning"
+                                                                        type="button"
+                                                                        onclick="deleteAllWorkingItemsRowsV();">
+                                                                    Clear&nbsp;All
+                                                                </button>
+                                                                <br>
+                                                                <br>
+                                                                <label for="txtBarcodev">Fault
+                                                                    Item&nbsp;List</label><br>
+                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
+                                                                    <table style="width:100%; padding:0; border-spacing:0;"
+                                                                           id="faultTablev"
+                                                                           border=1>
+
+
+                                                                    </table>
+
+
+                                                                </div>
+                                                                <br>
+                                                                <button style="width:100%"
+                                                                        class="btn btn-warning"
+                                                                        type="button"
+                                                                        onclick="deleteAllFaultItemsRowsV();">
+                                                                    Clear&nbsp;All
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <div class="btn-group btn-block" role="group"
+                                                 aria-label="Basic example">
+                                                <button type="reset"
+                                                        class="btn btn-outline-danger btn-lg"
+                                                        onclick="clearAllFieldsV();">
+                                                    Reset&nbsp;Fields
+                                                </button>
+                                                <button type="button"
+                                                        class="btn btn-outline-success btn-lg"
+                                                        onclick="validateFormX()">Insert&nbsp;Stock
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </td>
                 </tr>
 
 
@@ -534,6 +539,7 @@
 
 
                                 %>
+
                                 <tr>
                                     <td><%=results.getString("stock_in_id")%>
                                     </td>
@@ -589,7 +595,8 @@
                                                                                 <col style="width:20%">
                                                                                 <col style="width:80%">
                                                                                 <tr>
-                                                                                    <th colspan="2"><i>Stock&nbsp;Details</i>
+                                                                                    <th colspan="2">
+                                                                                        <i>Stock&nbsp;Details</i>
                                                                                     </th>
                                                                                 </tr>
                                                                                 <tr>
@@ -637,7 +644,8 @@
                                                                                 <% if (results.getString("item_manufacturer").trim().compareToIgnoreCase(results.getString("item_supplier").trim()) >= 0) { %>
 
                                                                                 <tr>
-                                                                                    <th>Item's&nbsp;Manufacturer/Supplier</th>
+                                                                                    <th>Item's&nbsp;Manufacturer/Supplier
+                                                                                    </th>
                                                                                     <td><%=results.getString("item_supplier")%>
                                                                                     </td>
                                                                                 </tr>
@@ -753,7 +761,8 @@
 
 
                                             <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-outline-dark" data-toggle="modal"
+                                            <button type="button" onclick="clearAllFields<%=i%>()"
+                                                    class="btn btn-outline-dark" data-toggle="modal"
                                                     data-target="#u<%out.print(results.getString("stock_in_id"));%>"
                                             ><i class="material-icons">update</i></button>
 
@@ -767,7 +776,8 @@
                                                 <div class="modal-dialog modal-xl modal-lg modal-lg" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Update&nbsp;Stock</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">
+                                                                Update&nbsp;Stock</h5>
                                                             <button type="button" class="close" data-dismiss="modal"
                                                                     aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
@@ -781,8 +791,8 @@
                                                                         <col style="width: 50%">
                                                                         <tr>
                                                                             <td>
-                                                                                <label for="stockID">Stock&nbsp;IN&nbsp;ID</label>
-                                                                                <input id="stockID" type="text"
+                                                                                <label for="stockID<%=i%>">Stock&nbsp;IN&nbsp;ID</label>
+                                                                                <input id="stockID<%=i%>" type="text"
                                                                                        name="stockINId"
                                                                                        style="width:100%;display: block"
                                                                                        value="<%=results.getString("stock_in_id")%>"
@@ -933,17 +943,25 @@
                                                                                         id="myPopup2<%=i%>"></span>
                                                                                 </div>
                                                                                 <div style="width: 100%; display: flex; flex-direction: row;">
-                                                                                    <button style="width:100%; margin-right:2.5px;"
+                                                                                    <button style="width:50%; margin-right:2.5px;"
                                                                                             class="btn btn-info"
                                                                                             type="button"
                                                                                             onclick="myFirstFunction<%=i%>();">
                                                                                         Add&nbsp;Item
                                                                                     </button>
+                                                                                    <button style="width:50%; margin-right:2.5px;"
+                                                                                            class="btn btn-warning"
+                                                                                            type="button"
+                                                                                            onclick="resetItemDetails<%=i%>();">
+                                                                                        Reset
+                                                                                    </button>
                                                                                     <br>
 
                                                                                 </div>
                                                                             </td>
-                                                                            <td><label for="txtBarcode<%=i%>"
+                                                                            <td>
+
+                                                                                <label for="txtBarcode<%=i%>"
                                                                                        id="workingItems<%=i%>">Working&nbsp;Item&nbsp;List</label><br>
                                                                                 <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;"
                                                                                      id="workingList<%=i%>">
@@ -953,6 +971,7 @@
 
                                                                                         <% workingResult.beforeFirst();
                                                                                             while (workingResult.next()) { %>
+
 
                                                                                         <tr style="padding:0;">
                                                                                             <td style="padding:0;">
@@ -978,6 +997,7 @@
                                                                                             </td>
                                                                                         </tr>
                                                                                         <% } %>
+
                                                                                     </table>
 
 
@@ -996,6 +1016,7 @@
                                                                                     <table style="width:100%; padding:0; border-spacing:0;"
                                                                                            id="faultTable<%=i%>"
                                                                                            border=1>
+
                                                                                         <% faultResult.beforeFirst();
                                                                                             while (faultResult.next()) { %>
 
@@ -1042,53 +1063,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <script defer>
+                                                        <script>
 
-                                                            window.addEventListener('load', function () {
-                                                                let workingItems = [];
-                                                                let faultyItems = [];
-
-
-                                                                if (sessionStorage.getItem("workingBarcodeItems<%=i%>")) {
-                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
-                                                                } else {
-
-                                                                    sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
-                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
-
-                                                                }
-
-                                                                if (sessionStorage.getItem("faultBarcodeItems<%=i%>")) {
-                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
-                                                                } else {
-
-                                                                    sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
-                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
-
-                                                                }
-
-                                                                <%
-                                                                    workingResult.beforeFirst();
-                                                                    while (workingResult.next()) {
-                                                                %>
-                                                                workingItems.push(<%=workingResult.getString("barcode_number")%>);
-                                                                sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
-                                                                <%
-                                                                }
-
-                                                                    faultResult.beforeFirst();
-
-                                                                    while (faultResult.next()) {
-                                                                %>
-
-                                                                faultyItems.push(<%=faultResult.getString("barcode_number")%>);
-                                                                sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
-                                                                <%
-                                                                    }
-
-                                                                 %>
-
-                                                            });
 
                                                             function myFirstFunction<%=i%>() {
 
@@ -1099,56 +1075,40 @@
                                                                 if (barcodeText.value.trim() !== "" && itemStatus.value.trim() !== "") {
 
 
-                                                                    var workingBarcodeItems = [];
-                                                                    var faultBarcodeItems = [];
-                                                                    var i = 0;
-                                                                    var bool = true;
+                                                                    let i = 0;
+                                                                    let bool = true;
                                                                     var popup;
-                                                                    var boolFault = true;
+                                                                    let boolFault = true;
 
 
                                                                     var workingItemsTable = document.getElementById("workingItemsTable<%=i%>");
                                                                     var faultTable = document.getElementById("faultTable<%=i%>");
 
+                                                                    let rows = workingItemsTable.getElementsByTagName('tr');
 
-                                                                    if (sessionStorage.getItem("workingBarcodeItems<%=i%>")) {
-                                                                        workingBarcodeItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
-                                                                    } else {
-
-                                                                        sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingBarcodeItems));
-                                                                        workingBarcodeItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
-
-                                                                    }
-
-                                                                    if (sessionStorage.getItem("faultBarcodeItems<%=i%>")) {
-                                                                        faultBarcodeItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
-                                                                    } else {
-
-                                                                        sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultBarcodeItems));
-                                                                        faultBarcodeItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
-
-                                                                    }
-
-                                                                    for (i = 0; i < workingBarcodeItems.length; i++) {
-                                                                        if (workingBarcodeItems[i] === barcodeText.value) {
+                                                                    for (let i = 0; rows[i] !== undefined; i++) {
+                                                                        if (rows[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].value.trim() === barcodeText.value.trim()) {
                                                                             bool = false;
                                                                             break;
                                                                         }
                                                                     }
 
-                                                                    for (i = 0; i < faultBarcodeItems.length; i++) {
-                                                                        if (faultBarcodeItems[i] === barcodeText.value) {
+                                                                    let rowsFault = faultTable.getElementsByTagName('tr');
+
+                                                                    for (let i = 0; rowsFault[i] !== undefined; i++) {
+                                                                        if (rowsFault[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].value.trim() === barcodeText.value.trim()) {
                                                                             boolFault = false;
                                                                             break;
                                                                         }
                                                                     }
 
+
                                                                     if (bool === true && boolFault === true) {
 
 
                                                                         if (itemStatus.value.trim() === "working") {
-                                                                            workingBarcodeItems.push(barcodeText.value);
-                                                                            sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingBarcodeItems));
+
+
                                                                             if (itemDescription.value.trim() === "")
                                                                                 workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="------" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
                                                                             else
@@ -1157,8 +1117,8 @@
                                                                             autoFocus<%=i%>();
 
                                                                         } else if (itemStatus.value.trim() === "faulty" && itemDescription.value.trim() !== "") {
-                                                                            faultBarcodeItems.push(barcodeText.value);
-                                                                            sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultBarcodeItems));
+
+
                                                                             faultTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "faultBarcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="faultDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
                                                                             resetItemDetails<%=i%>();
                                                                             barcodeText.focus();
@@ -1246,7 +1206,6 @@
 
                                                             function deleteAllWorkingItemsRows<%=i%>() {
                                                                 document.getElementById("workingItemsTable<%=i%>").innerHTML = "";
-                                                                sessionStorage.removeItem("workingBarcodeItems<%=i%>");
                                                                 document.getElementById("txtBarcode<%=i%>").focus();
                                                                 document.getElementById("workingItems<%=i%>").scrollIntoView();
                                                             }
@@ -1254,11 +1213,8 @@
                                                             function removeWorkingItemRow<%=i%>(input) {
 
 
-                                                                var barcodeArray = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
                                                                 var i = input.parentNode.parentNode.rowIndex;
                                                                 document.getElementById("workingItemsTable<%=i%>").deleteRow(i);
-                                                                barcodeArray.splice(i, 1);
-                                                                sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(barcodeArray));
                                                                 document.getElementById("txtBarcode<%=i%>").focus();
                                                                 document.getElementById("workingItems<%=i%>").scrollIntoView();
                                                             }
@@ -1266,35 +1222,23 @@
 
                                                             function deleteAllFaultItemsRows<%=i%>() {
                                                                 document.getElementById("faultTable<%=i%>").innerHTML = "";
-                                                                sessionStorage.removeItem("faultBarcodeItems<%=i%>");
                                                                 document.getElementById("txtBarcode<%=i%>").focus();
                                                                 document.getElementById("faultTable<%=i%>").scrollIntoView();
                                                             }
 
 
                                                             function removeFaultItemRow<%=i%>(input) {
-                                                                var barcodeArray = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
                                                                 var i = input.parentNode.parentNode.rowIndex;
                                                                 document.getElementById("faultTable<%=i%>").deleteRow(i);
-                                                                barcodeArray.splice(i, 1);
-                                                                sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(barcodeArray));
                                                                 document.getElementById("txtBarcode<%=i%>").focus();
                                                                 document.getElementById("faultTable<%=i%>").scrollIntoView();
                                                             }
 
 
-                                                            function validateFormX<%=i%>() {
+                                                            function validateFormXV<%=i%>() {
 
                                                                 var popup;
 
-                                                                var array = [];
-                                                                var arrayFault = [];
-
-                                                                if (JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>")) != null)
-                                                                    array = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
-
-                                                                if (JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>")) != null)
-                                                                    arrayFault = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
 
                                                                 if (document.getElementById('itemdetailsdropitem<%=i%>').value.trim() === "") {
                                                                     popup = document.getElementById("myPopup3<%=i%>");
@@ -1309,7 +1253,7 @@
                                                                             popup.classList.remove("show");
                                                                         }, 3000);
                                                                     }
-                                                                } else if (array.length === 0 && arrayFault.length === 0) {
+                                                                } else if (document.getElementById("faultTable<%=i%>").innerHTML.trim() === "" && document.getElementById("workingItemsTable<%=i%>").innerHTML.trim() === "") {
                                                                     popup = document.getElementById("myPopup1<%=i%>");
                                                                     popup.innerHTML = "Please Enter at least one Item!!!";
                                                                     document.getElementById("txtBarcode<%=i%>").focus();
@@ -1332,6 +1276,7 @@
                                                             let itemInfo<%=i%> = "";
                                                             let itemID<%=i%> = "";
 
+
                                                             window.addEventListener('load', function () {
 
 
@@ -1339,6 +1284,7 @@
                                                                 faultyTable<%=i%> = document.getElementById("faultTable<%=i%>").innerHTML;
                                                                 itemInfo<%=i%> = document.getElementById('iteminformation<%=i%>').innerHTML;
                                                                 itemID<%=i%> = document.getElementById('itemdetailsdropitem<%=i%>').value;
+
 
                                                             });
 
@@ -1348,50 +1294,6 @@
                                                                 document.getElementById('iteminformation<%=i%>').innerHTML = itemInfo<%=i%>;
                                                                 document.getElementById("workingItemsTable<%=i%>").innerHTML = workingTable<%=i%>;
                                                                 document.getElementById("faultTable<%=i%>").innerHTML = faultyTable<%=i%>;
-                                                                sessionStorage.clear();
-
-                                                                let workingItems = [];
-                                                                let faultyItems = [];
-
-
-                                                                if (sessionStorage.getItem("workingBarcodeItems<%=i%>")) {
-                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
-                                                                } else {
-
-                                                                    sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
-                                                                    workingItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems<%=i%>"));
-
-                                                                }
-
-                                                                if (sessionStorage.getItem("faultBarcodeItems<%=i%>")) {
-                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
-                                                                } else {
-
-                                                                    sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
-                                                                    faultyItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems<%=i%>"));
-
-                                                                }
-
-                                                                <%
-                                                                    workingResult.beforeFirst();
-                                                                    while (workingResult.next()) {
-                                                                %>
-                                                                workingItems.push(<%=workingResult.getString("barcode_number")%>);
-                                                                sessionStorage.setItem("workingBarcodeItems<%=i%>", JSON.stringify(workingItems));
-                                                                <%
-                                                                }
-
-                                                                    faultResult.beforeFirst();
-
-                                                                    while (faultResult.next()) {
-                                                                %>
-
-                                                                faultyItems.push(<%=faultResult.getString("barcode_number")%>);
-                                                                sessionStorage.setItem("faultBarcodeItems<%=i%>", JSON.stringify(faultyItems));
-                                                                <%
-                                                                    }
-
-                                                                 %>
 
                                                             }
 
@@ -1466,7 +1368,7 @@
                                                                         onclick="clearAllFields<%=i%>()">Reset&nbsp;Fields
                                                                 </button>
                                                                 <button type="button" class="btn btn-outline-success"
-                                                                        onclick="validateForm<%=i%>()">Update&nbsp;Stock
+                                                                        onclick="validateFormXV<%=i%>()">Update&nbsp;Stock
                                                                 </button>
                                                             </div>
                                                         </div>

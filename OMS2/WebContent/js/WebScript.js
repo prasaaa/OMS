@@ -60,82 +60,66 @@ let select = document.getElementById("searchType");
 select.addEventListener('change', logValue, false);
 
 
-function myFirstFunction() {
+function myFirstFunctionV() {
 
-    let barcodeText = document.getElementById("txtBarcode");
-    let itemStatus = document.getElementById("itemStatus");
-    let itemDescription = document.getElementById("description");
+    let barcodeText = document.getElementById("txtBarcodev");
+    let itemStatus = document.getElementById("itemStatusv");
+    let itemDescription = document.getElementById("descriptionv");
 
     if (barcodeText.value.trim() !== "" && itemStatus.value.trim() !== "") {
 
 
-        var workingBarcodeItems = [];
-        var faultBarcodeItems = [];
         var i = 0;
         var bool = true;
         var popup;
         var boolFault = true;
 
 
-        var workingItemsTable = document.getElementById("workingItemsTable");
-        var faultTable = document.getElementById("faultTable");
+        var workingItemsTable = document.getElementById("workingItemsTablev");
+        var faultTable = document.getElementById("faultTablev");
 
 
-        if (sessionStorage.getItem("workingBarcodeItems")) {
-            workingBarcodeItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems"));
-        } else {
+        let rows = workingItemsTable.getElementsByTagName('tr');
 
-            sessionStorage.setItem("workingBarcodeItems", JSON.stringify(workingBarcodeItems));
-            workingBarcodeItems = JSON.parse(sessionStorage.getItem("workingBarcodeItems"));
-
-        }
-
-        if (sessionStorage.getItem("faultBarcodeItems")) {
-            faultBarcodeItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems"));
-        } else {
-
-            sessionStorage.setItem("faultBarcodeItems", JSON.stringify(faultBarcodeItems));
-            faultBarcodeItems = JSON.parse(sessionStorage.getItem("faultBarcodeItems"));
-
-        }
-
-        for (i = 0; i < workingBarcodeItems.length; i++) {
-            if (workingBarcodeItems[i] === barcodeText.value) {
+        for (let i = 0; rows[i] !== undefined; i++) {
+            if (rows[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].value.trim() === barcodeText.value.trim()) {
                 bool = false;
                 break;
             }
         }
 
-        for (i = 0; i < faultBarcodeItems.length; i++) {
-            if (faultBarcodeItems[i] === barcodeText.value) {
+        let rowsFault = faultTable.getElementsByTagName('tr');
+
+        for (let i = 0; rowsFault[i] !== undefined; i++) {
+            if (rowsFault[i].getElementsByTagName('td')[0].getElementsByTagName('input')[0].value.trim() === barcodeText.value.trim()) {
                 boolFault = false;
                 break;
             }
         }
 
+
         if (bool === true && boolFault === true) {
 
 
             if (itemStatus.value.trim() === "working") {
-                workingBarcodeItems.push(barcodeText.value);
-                sessionStorage.setItem("workingBarcodeItems", JSON.stringify(workingBarcodeItems));
+
                 if (itemDescription.value.trim() === "")
-                    workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="------" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                    workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="------" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRowV(this)"><i class="fa fa-trash"></i></button></td></tr>';
                 else
-                    workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow(this)"><i class="fa fa-trash"></i></button></td></tr>';
-                resetItemDetails();
-                autoFocus();
+                    workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRowV(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                resetItemDetailsV();
+                autoFocusV();
 
             } else if (itemStatus.value.trim() === "faulty" && itemDescription.value.trim() !== "") {
                 faultBarcodeItems.push(barcodeText.value);
-                sessionStorage.setItem("faultBarcodeItems", JSON.stringify(faultBarcodeItems));
-                faultTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "faultBarcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="faultDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow(this)"><i class="fa fa-trash"></i></button></td></tr>';
-                resetItemDetails();
+
+                faultTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "faultBarcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="faultDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRowV(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                resetItemDetailsV();
                 barcodeText.focus();
-                document.getElementById("faultTable").scrollIntoView();
+                document.getElementById("faultTablev").scrollIntoView();
 
             } else {
-                popup = document.getElementById("myPopup2");
+                popup = document.getElementById("myPopup2v");
                 popup.innerHTML = "This is a Required Field!!";
                 if (!popup.classList.contains("show")) {
                     popup.classList.add("show");
@@ -146,13 +130,13 @@ function myFirstFunction() {
                 }
 
                 itemDescription.focus();
-                document.getElementById("itemsList").scrollIntoView();
+                document.getElementById("itemsListv").scrollIntoView();
 
             }
 
 
         } else {
-            popup = document.getElementById("myPopup1");
+            popup = document.getElementById("myPopup1v");
             popup.innerHTML = "Duplicate Barcode Number!!";
             if (!popup.classList.contains("show")) {
                 popup.classList.add("show");
@@ -162,13 +146,13 @@ function myFirstFunction() {
                 }, 3000);
             }
             barcodeText.value = "";
-            autoFocus();
+            autoFocusV();
         }
 
 
     } else if (itemStatus.value.trim() === "" && barcodeText.value.trim() !== "") {
 
-        popup = document.getElementById("myPopup4");
+        popup = document.getElementById("myPopup4v");
         popup.innerHTML = "Please Select the Item Status!!";
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -178,10 +162,10 @@ function myFirstFunction() {
             }, 3000);
         }
         itemStatus.focus();
-        document.getElementById("itemsList").scrollIntoView();
+        document.getElementById("itemsListv").scrollIntoView();
 
     } else {
-        popup = document.getElementById("myPopup1");
+        popup = document.getElementById("myPopup1v");
         popup.innerHTML = "Please Enter a Barcode Number!!";
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -190,20 +174,17 @@ function myFirstFunction() {
                 popup.classList.remove("show");
             }, 3000);
         }
-        autoFocus();
+        autoFocusV();
     }
 
 }
 
 
+function resetItemDetailsV() {
 
-
-
-function resetItemDetails() {
-
-    let barcodeText = document.getElementById("txtBarcode");
-    let itemStatus = document.getElementById("itemStatus");
-    let itemDescription = document.getElementById("description");
+    let barcodeText = document.getElementById("txtBarcodev");
+    let itemStatus = document.getElementById("itemStatusv");
+    let itemDescription = document.getElementById("descriptionv");
 
     barcodeText.value = "";
     itemStatus.getElementsByTagName("option").item(0).selected = true;
@@ -211,54 +192,39 @@ function resetItemDetails() {
 }
 
 
-
-
-function autoFocus() {
-    document.getElementById("txtBarcode").focus();
-    document.getElementById("itemsList").scrollIntoView();
+function autoFocusV() {
+    document.getElementById("txtBarcodev").focus();
+    document.getElementById("itemsListv").scrollIntoView();
 }
 
 
-
-
-function deleteAllWorkingItemsRows() {
-    document.getElementById("workingItemsTable").innerHTML = "";
-    sessionStorage.removeItem("workingBarcodeItems");
-    document.getElementById("txtBarcode").focus();
-    document.getElementById("workingItems").scrollIntoView();
+function deleteAllWorkingItemsRowsV() {
+    document.getElementById("workingItemsTablev").innerHTML = "";
+    document.getElementById("txtBarcodev").focus();
+    document.getElementById("workingItemsv").scrollIntoView();
 }
 
-function removeWorkingItemRow(input) {
+function removeWorkingItemRowV(input) {
 
-
-    var barcodeArray = JSON.parse(sessionStorage.getItem("workingBarcodeItems"));
     var i = input.parentNode.parentNode.rowIndex;
-    document.getElementById("workingItemsTable").deleteRow(i);
-    barcodeArray.splice(i, 1);
-    sessionStorage.setItem("workingBarcodeItems", JSON.stringify(barcodeArray));
-    document.getElementById("txtBarcode").focus();
-    document.getElementById("workingItems").scrollIntoView();
+    document.getElementById("workingItemsTablev").deleteRow(i);
+    document.getElementById("txtBarcodev").focus();
+    document.getElementById("workingItemsv").scrollIntoView();
 }
 
 
-
-function deleteAllFaultItemsRows() {
-    document.getElementById("faultTable").innerHTML = "";
-    sessionStorage.removeItem("faultBarcodeItems");
-    document.getElementById("txtBarcode").focus();
-    document.getElementById("faultTable").scrollIntoView();
+function deleteAllFaultItemsRowsV() {
+    document.getElementById("faultTablev").innerHTML = "";
+    document.getElementById("txtBarcodev").focus();
+    document.getElementById("faultTablev").scrollIntoView();
 }
 
 
-
-function removeFaultItemRow(input) {
-    var barcodeArray = JSON.parse(sessionStorage.getItem("faultBarcodeItems"));
+function removeFaultItemRowV(input) {
     var i = input.parentNode.parentNode.rowIndex;
-    document.getElementById("faultTable").deleteRow(i);
-    barcodeArray.splice(i, 1);
-    sessionStorage.setItem("faultBarcodeItems", JSON.stringify(barcodeArray));
-    document.getElementById("txtBarcode").focus();
-    document.getElementById("faultTable").scrollIntoView();
+    document.getElementById("faultTablev").deleteRow(i);
+    document.getElementById("txtBarcodev").focus();
+    document.getElementById("faultTablev").scrollIntoView();
 }
 
 
@@ -268,20 +234,12 @@ function validateFormX() {
 
     var popup;
 
-    var array = [];
-    var arrayFault = [];
 
-    if (JSON.parse(sessionStorage.getItem("workingBarcodeItems")) != null)
-        array = JSON.parse(sessionStorage.getItem("workingBarcodeItems"));
-
-    if (JSON.parse(sessionStorage.getItem("faultBarcodeItems")) != null)
-        arrayFault = JSON.parse(sessionStorage.getItem("faultBarcodeItems"));
-
-    if (document.getElementById('itemdetailsdropitem').value.trim() === "") {
-        popup = document.getElementById("myPopup3");
+    if (document.getElementById('itemdetailsdropitemv').value.trim() === "") {
+        popup = document.getElementById("myPopup3v");
         popup.innerHTML = "This is a Required Field!!";
-        document.getElementById("itemdetailsdropitem").focus();
-        document.getElementById("stockItem").scrollIntoView();
+        document.getElementById("itemdetailsdropitemv").focus();
+        document.getElementById("stockItemv").scrollIntoView();
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -290,11 +248,11 @@ function validateFormX() {
                 popup.classList.remove("show");
             }, 3000);
         }
-    } else if (array.length === 0 && arrayFault.length === 0) {
-        popup = document.getElementById("myPopup1");
+    } else if (document.getElementById("workingItemsTablev").innerHTML.trim() === "" && document.getElementById("faultTablev").innerHTML.trim() === "") {
+        popup = document.getElementById("myPopup1v");
         popup.innerHTML = "Please Enter at least one Item!!!";
-        document.getElementById("txtBarcode").focus();
-        document.getElementById('itemsList').scrollIntoView();
+        document.getElementById("txtBarcodev").focus();
+        document.getElementById('itemsListv').scrollIntoView();
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -309,14 +267,11 @@ function validateFormX() {
 }
 
 
-
-
-function clearAllFields() {
-
-    document.getElementById('iteminformation').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
-    document.getElementById("workingItemsTable").innerHTML = "";
-    document.getElementById("faultTable").innerHTML = "";
-    sessionStorage.clear();
+function clearAllFieldsV() {
+    document.getElementById("itemdetailsdropitemv").value = "";
+    document.getElementById('iteminformationv').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
+    document.getElementById("workingItemsTablev").innerHTML = "";
+    document.getElementById("faultTablev").innerHTML = "";
 
 }
 
@@ -326,7 +281,7 @@ function clearAllFields() {
 let oldTable = "";
 
 $(document).ready(function () {
-    document.getElementById("txtBarcode").addEventListener(
+    document.getElementById("txtBarcodev").addEventListener(
         'keydown',
         function (event) {
             if ((event.ctrlKey && event.key === "j")
@@ -342,20 +297,19 @@ $(document).ready(function () {
 
 window.addEventListener('load', function () {
     oldTable = document.getElementById("mainTable").innerHTML;
-    sessionStorage.clear();
 
 });
 
 
-document.getElementById('itemdetailsdropitem').addEventListener('keyup', function (event) {
+document.getElementById('itemdetailsdropitemv').addEventListener('keyup', function (event) {
     if (event.keyCode === 13) {
-        document.getElementById('itemdetailsitemdisplay').classList.toggle('show');
+        document.getElementById('itemdetailsitemdisplayv').classList.toggle('show');
     }
 });
 
 
 //filter fucntion for the Item Detail
-function itemdetailsitemdisplayfilterFunction() {
+function itemdetailsitemdisplayfilterFunctionV() {
     var input, filter, ul, li, a, i, div;
     input = document.getElementById("itemdetailsmyInput");
     filter = input.value.toUpperCase();
@@ -376,13 +330,13 @@ function itemdetailsitemdisplayfilterFunction() {
 window.addEventListener('click', function (event) {
 
 
-    var itemx = document.getElementById("itemdetailsitemdisplay");
+    var itemx = document.getElementById("itemdetailsitemdisplayv");
 
 
-    if (event.target.id === "itemdetailsdropitem" || event.target.id === "caret") {
+    if (event.target.id === "itemdetailsdropitemv" || event.target.id === "caretv") {
         itemx.classList.toggle("show");
 
-    } else if (event.target.id === "itemdetailsmyInput") {
+    } else if (event.target.id === "itemdetailsmyInputv") {
 
     } else {
 
