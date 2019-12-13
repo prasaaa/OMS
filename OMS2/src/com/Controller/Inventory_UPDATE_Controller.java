@@ -15,24 +15,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/Inventory_UPDATE_Controller")
 public class Inventory_UPDATE_Controller extends HttpServlet {
 
 
-    private String itemID = "", stockINDate = "", remarks = "";
-    private String[] workingBarcodeList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
-    private String stockInId = "";
+
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        String itemID = "", stockINDate = "", remarks = "";
+        String[] workingBarcodeList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
+        String stockInId = "";
+        String index = "0";
 
         try {
 
             stockInId = request.getParameter("stockINId");
             itemID = request.getParameter("itemID");
             stockINDate = request.getParameter("stockindate");
+            index = request.getParameter("indexNumber");
 
             if (request.getParameter("remarks") != null)
                 remarks = request.getParameter("remarks");
@@ -50,6 +55,8 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
 
 
             InventoryStock stock = new InventoryStock();
+
+            List<String> duplicateList = new ArrayList<>();
 
             stock.setDate(stockINDate.trim());
             stock.setRemarks(remarks.trim());
@@ -118,13 +125,15 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
             for (Items i : stock.getItemList().getItems()) {
                 boolItemsList = checkDuplicate.checkAvailability(i.getBarcode(), stock.getStockID());
 
-                if (!boolItemsList)
-                    break;
+                if (!boolItemsList) {
+                    duplicateList.add(i.getBarcode());
 
+                }
 
             }
 
-            if (boolItemsList) {
+
+            if (duplicateList.isEmpty()) {
 
 
                 long updateRowCount = inventory_update.updateStock(stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID(), stock.getStockID());
@@ -166,11 +175,15 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                 }
             } else {
 
-                if (request.getSession(false) != null)
+                if (request.getSession(false) != null) {
                     request.getSession(false).setAttribute("stockIN", stock);
-                else
+                    request.getSession(false).setAttribute("duplicates", duplicateList);
+                    request.getSession(false).setAttribute("index", index);
+                } else {
                     request.getSession(true).setAttribute("stockIN", stock);
-
+                    request.getSession(true).setAttribute("duplicates", duplicateList);
+                    request.getSession(true).setAttribute("index", index);
+                }
                 response.sendRedirect("Inventory_Servlet?status=updateError");
             }
         } catch (Exception e) {

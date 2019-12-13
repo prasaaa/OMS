@@ -105,8 +105,6 @@ function myFirstFunctionV() {
                 autoFocusV();
 
             } else if (itemStatus.value.trim() === "faulty" && itemDescription.value.trim() !== "") {
-                faultBarcodeItems.push(barcodeText.value);
-
                 faultTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "faultBarcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="faultDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRowV(this)"><i class="fa fa-trash"></i></button></td></tr>';
                 resetItemDetailsV();
                 barcodeText.focus();

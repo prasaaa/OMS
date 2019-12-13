@@ -1,14 +1,18 @@
+<%--suppress ALL --%>
 <%--suppress XmlDuplicatedId --%>
 <%@page import="com.DBConnection.ConnectionManager" %>
 <%@page import="com.DatabaseHandle.Inventory_SELECT" %>
 <%@page import="com.DatabaseHandle.Main_SELECT" %>
 <%@page import="com.Utilities.MySQLQueries" %>
+<%@ page import="com.model.CurrentUser" %>
 <%@ page import="com.model.InventoryStock" %>
 <%@ page import="com.model.Items" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
          pageEncoding="ISO-8859-1" %>
 
@@ -65,14 +69,13 @@
 
 </head>
 <body>
-<%--
+<%
     System.out.println("this is user " + CurrentUser.getUsername());
     if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
         response.sendRedirect("login.jsp");
     }
 
-
-    --%>
+%>
 
 
 <%
@@ -97,54 +100,54 @@
                     Automated Barcode<br>Solution
                 </div>
                 <div class="list-group list-group-flush">
-                    <%--
+                    <%
                         if (CurrentUser.getUsername().equals("admin")) {
-                    --%>
+                    %>
                     <a href="Supplier_Order_Insert.jsp"
                        class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
-                    <%--
+                    <%
                         }
-                    --%>
-                    <%--
+                    %>
+                    <%
                         if (CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant")
                                 || CurrentUser.getUsername().equals("manager")) {
-                    --%>
-                        <a
-                                class="list-group-item list-group-item-action bg-light dropdown-toggle"
-                                data-toggle="collapse" href="#collapseExample" role="button"
-                                aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
-                        <div class="collapse" id="collapseExample">
+                    %>
+                    <a
+                            class="list-group-item list-group-item-action bg-light dropdown-toggle"
+                            data-toggle="collapse" href="#collapseExample" role="button"
+                            aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+                    <div class="collapse" id="collapseExample">
 
 
-                            <a href="Stock_IN_MANAGE.jsp"
-                               class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
-                            <a href="Stock_OUT_INSERT.jsp"
-                               class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+                        <a href="Stock_IN_MANAGE.jsp"
+                           class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
+                        <a href="Stock_OUT_INSERT.jsp"
+                           class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
 
 
-                        </div>
+                    </div>
 
-                        <a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+                    <a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
 
-                        <a href="Customer_Details_Insert.jsp"
-                           class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
-                        <a href="Customer_Order_Insert.jsp"
-                           class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
-                        <a href="Repair_INSERT.jsp"
-                           class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
-                        <a href="Admin_Customer_Order_Conformation.jsp"
-                           class="list-group-item list-group-item-action bg-light">Customer
-                            Order &nbsp;Confirm</a> <a href="Emp_Management.jsp"
-                                                       class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
-                        <a href="Emp_REPORT.jsp"
-                           class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
-                        <a href="IT_Manager_Assign_Emp.jsp"
-                           class="list-group-item list-group-item-action bg-light">Employee
-                            Assign &nbsp;Management</a>
+                    <a href="Customer_Details_Insert.jsp"
+                       class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
+                    <a href="Customer_Order_Insert.jsp"
+                       class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
+                    <a href="Repair_INSERT.jsp"
+                       class="list-group-item list-group-item-action bg-light">Repair&nbsp;Management</a>
+                    <a href="Admin_Customer_Order_Conformation.jsp"
+                       class="list-group-item list-group-item-action bg-light">Customer
+                        Order &nbsp;Confirm</a> <a href="Emp_Management.jsp"
+                                                   class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
+                    <a href="Emp_REPORT.jsp"
+                       class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
+                    <a href="IT_Manager_Assign_Emp.jsp"
+                       class="list-group-item list-group-item-action bg-light">Employee
+                        Assign &nbsp;Management</a>
                 </div>
-                <%--
+                <%
                     }
-                --%>
+                %>
             </div>
         </div>
     </div>
@@ -243,6 +246,24 @@
 
                                     stock = (InventoryStock) session.getAttribute("stock");
                                 }
+
+                                InventoryStock inventoryStock = null;
+
+                                if (session.getAttribute("stockIN") != null) {
+                                    inventoryStock = (InventoryStock) session.getAttribute("stockIN");
+                                }
+
+
+                                List<String> duplicateList = null;
+                                if (session.getAttribute("duplicateList") != null) {
+                                    duplicateList = (ArrayList<String>) session.getAttribute("duplicateList");
+                                }
+
+                                List<String> duplicates = null;
+                                if (session.getAttribute("duplicates") != null) {
+                                    duplicates = (ArrayList<String>) session.getAttribute("duplicates");
+                                }
+
                             %>
 
 
@@ -459,6 +480,7 @@
                                                                 </div>
 
                                                             </td>
+
                                                             <td>
 
                                                                 <label for="txtBarcodev"
@@ -474,12 +496,24 @@
                                                                             if (stock != null) {
                                                                                 for (Items items : stock.getItemList().getItems()) {
 
+                                                                                    String color = "";
+                                                                                    if (items.getItemStatus().equalsIgnoreCase("Working")) {
+                                                                                        for (String list : duplicateList) {
+                                                                                            if (list.equalsIgnoreCase(items.getBarcode())) {
+                                                                                                color = "red";
+                                                                                                break;
+                                                                                            }
+                                                                                        }
 
-                                                                                    if (items.getItemStatus().equalsIgnoreCase("Working")) {%>
+                                                                        %>
                                                                         <tr style="padding:0;">
                                                                             <td style="padding:0;"><input type="text"
                                                                                                           readonly
-                                                                                                          style="margin:0;border:0;"
+                                                                                <% if (color.equalsIgnoreCase("red")) {%>
+                                                                                                          style="margin:0;border:0;color: red"
+                                                                                <%} else {%>
+                                                                                                          style="margin:0;border:0;color: black"
+                                                                                <%}%>
                                                                                                           value="<%= items.getBarcode() %>"
                                                                                                           name="barcode">
                                                                             </td>
@@ -495,10 +529,11 @@
                                                                                     <i class="fa fa-trash"></i></button>
                                                                             </td>
                                                                         </tr>
-                                                                        <% }
-                                                                        }
+                                                                        <%
+                                                                                    }
+                                                                                }
 
-                                                                        } %>
+                                                                            } %>
 
                                                                     </table>
 
@@ -525,11 +560,25 @@
                                                                                 for (Items items : stock.getItemList().getItems()) {
 
 
-                                                                                    if (items.getItemStatus().equalsIgnoreCase("Faulty")) {%>
+                                                                                    if (items.getItemStatus().equalsIgnoreCase("Faulty")) {
+
+                                                                                        String color = "";
+                                                                                        for (String list : duplicateList) {
+                                                                                            if (list.equalsIgnoreCase(items.getBarcode())) {
+                                                                                                color = "red";
+                                                                                                break;
+                                                                                            }
+                                                                                        }
+                                                                        %>
                                                                         <tr style="padding:0;">
                                                                             <td style="padding:0;"><input type="text"
                                                                                                           readonly
-                                                                                                          style="margin:0;border:0;"
+
+                                                                                <% if (color.equalsIgnoreCase("red")) {%>
+                                                                                                          style="margin:0;border:0;color: red"
+                                                                                <%} else {%>
+                                                                                                          style="margin:0;border:0;color: black"
+                                                                                <%}%>
                                                                                                           value="<%= items.getBarcode() %>"
                                                                                                           name="faultBarcode">
                                                                             </td>
@@ -871,7 +920,14 @@
                                         <form action="Inventory_UPDATE_Controller" method="post"
                                               id="mainForm<%=i%>">
                                             <input type="hidden" name="stock_in_id"
+
+
                                                    value="<%=results.getString("stock_in_id") %>">
+
+                                            <input type="hidden" name="indexNumber"
+
+
+                                                   value="<%=i%>">
                                             <!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 
@@ -1004,10 +1060,15 @@
                                                                                                 });
 
                                                                                             </script>
-                                                                                            <% }
-                                                                                            } catch (Exception e) {
-                                                                                                e.printStackTrace();
-                                                                                            }%>
+
+
+                                                                                            <%
+
+
+                                                                                                    }
+                                                                                                } catch (Exception e) {
+                                                                                                    e.printStackTrace();
+                                                                                                }%>
 
                                                                                         </div>
 
@@ -1030,6 +1091,8 @@
                                                                                 <label for="datePicker<%=i%>">Stock&nbsp;IN&nbsp;Date</label>
                                                                                 <input type="date" name="stockindate"
                                                                                        id="datePicker<%=i%>" required
+
+
                                                                                        value="<%= results.getString("stock_in_date") %>"><br>
                                                                                 <label for="txtAreaRemarks<%=i%>">Any&nbsp;other&nbsp;Information's</label>
 
@@ -1607,17 +1670,85 @@
     });
 </script>
 
-<%
-    InventoryStock inventoryStock;
-    if (session.getAttribute("stockIN") != null) {
+<% if (session.getAttribute("stockIN") != null) {%>
+<script>
 
-        inventoryStock = (InventoryStock) session.getAttribute("stockIN");
+    $('#u<%=inventoryStock.getStockID()%>').modal('show');
+</script>
+
+<% } %>
+
+<%
+
+    if (session.getAttribute("stockIN") != null && session.getAttribute("index") != null && session.getAttribute("duplicates") != null) {
+        String index = session.getAttribute("index").toString();
 %>
 <script>
-    $('#u<%=inventoryStock.getStockID()%>').modal('show');
+    document.getElementById('itemdetailsdropitem<%=index%>').value = '<%=inventoryStock.getItemList().getItemID()%>';
+    document.getElementById('iteminformation<%=index%>').innerHTML = '<p>' + document.getElementById('<%=inventoryStock.getItemList().getItemID()%><%=index%>').innerHTML + '</p>';
+    document.getElementById('itemdetailsmyInput<%=index%>').value = "";
+
+    document.getElementById('datePicker<%=index%>').value = '<%=inventoryStock.getDate()%>';
+    document.getElementById('description<%=index%>').value = '<%=inventoryStock.getRemarks()%>';
+
 
 </script>
-<% }%>
+
+<% for (Items items : inventoryStock.getItemList().getItems()) {
+
+
+    if (items.getItemStatus().equalsIgnoreCase("working")) {
+        boolean bool = true;
+
+        for (String workingItems : duplicates) {
+            if (workingItems.equalsIgnoreCase(items.getBarcode())) {
+                bool = false;
+%>
+<script>
+    document.getElementById('workingItemsTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+</script>
+<%
+            break;
+        }
+
+    }
+
+    if (bool) {
+
+%>
+<script>
+    document.getElementById('workingItemsTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+
+</script>
+<%
+    }
+} else {
+    boolean bool = true;
+    for (String faultyItems : duplicates) {
+        if (faultyItems.equalsIgnoreCase(items.getBarcode())) {
+            bool = false;
+
+
+%>
+<script>
+    document.getElementById('faultTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+</script>
+<%
+            break;
+        }
+    }
+
+    if (bool) {%>
+
+<script>
+    document.getElementById('faultTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+</script>
+<%
+                }
+            }
+        }
+    }
+%>
 
 <script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
 <%
@@ -1648,6 +1779,18 @@
 
     if (session.getAttribute("stockIN") != null) {
         session.removeAttribute("stockIN");
+    }
+
+    if (session.getAttribute("index") != null) {
+        session.removeAttribute("index");
+    }
+
+    if (session.getAttribute("duplicateList") != null) {
+        session.removeAttribute("duplicateList");
+    }
+
+    if (session.getAttribute("duplicates") != null) {
+        session.removeAttribute("duplicates");
     }
 
 %>
