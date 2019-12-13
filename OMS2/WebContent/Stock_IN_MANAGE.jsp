@@ -1084,6 +1084,7 @@
                                                                                         <br>Supplier&nbsp;:&nbsp;<%=results.getString("item_supplier")%>
                                                                                         <br>Description&nbsp;:&nbsp;<%=results.getString("item_details")%>
                                                                                     </p>
+
                                                                                 </div>
 
                                                                                 <br>
@@ -1489,9 +1490,22 @@
                                                             function clearAllFields<%=i%>() {
                                                                 document.getElementById('itemdetailsdropitem<%=i%>').value = itemID<%=i%>;
                                                                 document.getElementById('iteminformation<%=i%>').innerHTML = itemInfo<%=i%>;
-                                                                document.getElementById("workingItemsTable<%=i%>").innerHTML = workingTable<%=i%>;
-                                                                document.getElementById("faultTable<%=i%>").innerHTML = faultyTable<%=i%>;
+
                                                                 document.getElementById("ErrorMessage<%=i%>").hidden = true;
+                                                                document.getElementById('faultTable<%=i%>').innerHTML = "";
+                                                                document.getElementById('workingItemsTable<%=i%>').innerHTML = "";
+                                                                <%
+                                                                faultResult.beforeFirst();
+                                                                while (faultResult.next()) { %>
+                                                                document.getElementById('faultTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=faultResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=faultResult.getString("description")%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                                                                <%}%>
+
+                                                                <%
+                                                                workingResult.beforeFirst();
+                                                                while (workingResult.next()) { %>
+                                                                document.getElementById('workingItemsTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=workingResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=workingResult.getString("description")%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                                                                <%}%>
+
                                                             }
 
 
@@ -1690,6 +1704,8 @@
 
     document.getElementById('datePicker<%=index%>').value = '<%=inventoryStock.getDate()%>';
     document.getElementById('description<%=index%>').value = '<%=inventoryStock.getRemarks()%>';
+    document.getElementById('workingItemsTable<%=index%>').innerHTML = "";
+    document.getElementById('faultTable<%=index%>').innerHTML = "";
 
 
 </script>
@@ -1705,10 +1721,10 @@
                 bool = false;
 %>
 <script>
-    document.getElementById('workingItemsTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+    document.getElementById('workingItemsTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
 </script>
 <%
-            break;
+
         }
 
     }
@@ -1717,12 +1733,12 @@
 
 %>
 <script>
-    document.getElementById('workingItemsTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+    document.getElementById('workingItemsTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
 
 </script>
 <%
     }
-} else {
+} else if (items.getItemStatus().equalsIgnoreCase("faulty")) {
     boolean bool = true;
     for (String faultyItems : duplicates) {
         if (faultyItems.equalsIgnoreCase(items.getBarcode())) {
@@ -1731,17 +1747,17 @@
 
 %>
 <script>
-    document.getElementById('faultTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+    document.getElementById('faultTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
 </script>
 <%
-            break;
+
         }
     }
 
     if (bool) {%>
 
 <script>
-    document.getElementById('faultTable<%=index%>').innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+    document.getElementById('faultTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
 </script>
 <%
                 }
