@@ -46,6 +46,33 @@ public class Inventory_INSERT {
         return true;
     }
 
+    public boolean checkAvailability(String barcodeNumber, String stockINID) {
+        try {
+            ps = c.prepareStatement(query);
+            ps.setString(1, barcodeNumber);
+            ps.setString(2, stockINID);
+
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                rs.close();
+                return false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ps.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return true;
+    }
+
     public boolean Insert_Item(String itemID, String modelName, String manufacturer, String itemType, double sppitem) {
         try {
 

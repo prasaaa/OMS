@@ -6,8 +6,8 @@ public class MySQLQueries {
 
 
     public static final String QUERY_INSERT_STOCK = "INSERT INTO `stock_in_items_table`(stock_in_id ,stock_in_date, remarks, item_id) VALUES (? , ?, ?, ?);";
-
-    public static final String QUERY_INSERT_ITEM_LIST = "INSERT INTO `items_list_table` VALUES (?, ?, ?, NULL, ?, ?, NULL);";
+    @Language("MySQL")
+    public static final String QUERY_INSERT_ITEM_LIST = "INSERT INTO `items_list_table`(item_id, barcode_number, items_status, description, stock_in_id) VALUES (?, ?, ?, ?, ?);";
 
     public static final String QUERY_SELECT_BY_STOCK_ID = "SELECT s.stock_in_id, i.item_id, u.supplier_id, i.item_type, s.stock_in_date, s.buying_price, s.quantity FROM `item_details_table` i INNER JOIN `stock_in_items_table` s ON s.item_id = i.item_id INNER JOIN item_supplier_table u ON u.item_id = i.item_id WHERE s.stock_in_id = ?;";
 
@@ -127,4 +127,13 @@ public class MySQLQueries {
     @Language("MySQL")
     public static final String QUERY_GET_FAULT_STOCK_BY_STOCK_ID = "SELECT  ilt.barcode_number, ilt.description FROM items_list_table ilt WHERE ilt.items_status LIKE '%Faulty%' AND ilt.stock_in_id = ?;";
 
+
+    @Language("MySQL")
+    public static final String QUERY_UPDATE_STOCK_IN_TABLE = "UPDATE stock_in_items_table SET stock_in_date = ?, remarks = ?, item_id = ? WHERE stock_in_id = ?";
+
+    @Language("MySQL")
+    public static final String QUERY_DELETE_ITEMS_BY_STOCK_ID = "DELETE FROM items_list_table WHERE stock_in_id = ?";
+
+    @Language("MySQL")
+    public static final String QUERY_GET_ALL_OTHER_ITEMS = "SELECT * FROM items_list_table WHERE barcode_number = ? AND stock_in_id != ?;";
 }

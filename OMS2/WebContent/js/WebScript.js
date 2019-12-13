@@ -1,6 +1,3 @@
-
-
-
 function myFunction() {
     let x = document.getElementById("snackbar");
     x.className = "show";
@@ -28,10 +25,7 @@ function setInputFilter(textbox, inputFilter) {
     });
 }
 
-document.getElementById("txtSearch").addEventListener('keydown', function (event) {
-    if ((event.ctrlKey && event.key === "j") || event.keyCode === 13 || (event.ctrlKey && event.key === "b") || (event.ctrlKey && event.key === "i"))
-        event.preventDefault();
-});
+
 
 function logValue() {
     switch (this.value) {
@@ -228,8 +222,6 @@ function removeFaultItemRowV(input) {
 }
 
 
-
-
 function validateFormX() {
 
     var popup;
@@ -272,28 +264,25 @@ function clearAllFieldsV() {
     document.getElementById('iteminformationv').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
     document.getElementById("workingItemsTablev").innerHTML = "";
     document.getElementById("faultTablev").innerHTML = "";
+    document.getElementById("ErrorMessage").hidden = true;
 
 }
 
 
-
-
 let oldTable = "";
 
-$(document).ready(function () {
-    document.getElementById("txtBarcodev").addEventListener(
-        'keydown',
-        function (event) {
-            if ((event.ctrlKey && event.key === "j")
-                || (event.ctrlKey && event.key === "b")
-                || (event.ctrlKey && event.key === "i")
-                || (event.keyCode === 13))
-                event.preventDefault();
 
-        });
-
+document.getElementById("txtBarcodev").addEventListener('keydown', function (event) {
+    if ((event.ctrlKey && event.key === "j") || (event.ctrlKey && event.key === "b") || (event.ctrlKey && event.key === "i") || (event.keyCode === 13))
+        event.preventDefault();
 
 });
+
+document.getElementById("txtSearch").addEventListener('keydown', function (event) {
+    if ((event.ctrlKey && event.key === "j") || event.keyCode === 13 || (event.ctrlKey && event.key === "b") || (event.ctrlKey && event.key === "i"))
+        event.preventDefault();
+});
+
 
 window.addEventListener('load', function () {
     oldTable = document.getElementById("mainTable").innerHTML;

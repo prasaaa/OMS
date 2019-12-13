@@ -3,6 +3,8 @@
 <%@page import="com.DatabaseHandle.Inventory_SELECT" %>
 <%@page import="com.DatabaseHandle.Main_SELECT" %>
 <%@page import="com.Utilities.MySQLQueries" %>
+<%@ page import="com.model.InventoryStock" %>
+<%@ page import="com.model.Items" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -135,10 +137,10 @@
                             Order &nbsp;Confirm</a> <a href="Emp_Management.jsp"
                                                        class="list-group-item list-group-item-action bg-light">Employee&nbsp;Management</a>
                         <a href="Emp_REPORT.jsp"
-                       class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
-                    <a href="IT_Manager_Assign_Emp.jsp"
-                       class="list-group-item list-group-item-action bg-light">Employee
-                        Assign &nbsp;Management</a>
+                           class="list-group-item list-group-item-action bg-light">Employee&nbsp;Reports</a>
+                        <a href="IT_Manager_Assign_Emp.jsp"
+                           class="list-group-item list-group-item-action bg-light">Employee
+                            Assign &nbsp;Management</a>
                 </div>
                 <%--
                     }
@@ -233,6 +235,16 @@
                                     data-target="#exampleModal" onclick="clearAllFieldsV()"><i class="fa fa-plus"></i>&nbsp;Create&nbsp;Stock
                             </button>
 
+                            <%
+
+                                InventoryStock stock = null;
+
+                                if (session.getAttribute("stock") != null) {
+
+                                    stock = (InventoryStock) session.getAttribute("stock");
+                                }
+                            %>
+
 
                             <!-- Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -252,7 +264,25 @@
                                                     <table style="width: 100%">
                                                         <col style="width: 50%">
                                                         <col style="width: 50%">
-                                                        <tr>
+
+                                                        <% if (session.getAttribute("stock") != null) { %>
+                                                        <tr id="ErrorMessage" style="background-color: #cacaca;">
+                                                            <td colspan="2">
+                                                                <div>
+                                                                    <p style="color:<%if (session.getAttribute("color") != null) {%><%=session.getAttribute("color")%><%}%>">
+                                                                        <%
+                                                                            if (session.getAttribute("message") != null) {
+                                                                        %>
+                                                                        <%=session.getAttribute("message")%>
+                                                                        <%
+                                                                            }
+                                                                        %>
+                                                                    </p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <% } %>
+                                                        <tr style="background-color: #e9e9e9;">
                                                             <td>
                                                                 <label for="itemdetailsdropitemv"
                                                                        id="stockItemv">Stock&nbsp;Item</label><br>
@@ -316,7 +346,27 @@
                                                                                 });
 
                                                                             </script>
+
+                                                                            <%
+                                                                                if (stock != null) {
+                                                                                    if (resultset_for_items.getString("item_id").equalsIgnoreCase(stock.getItemList().getItemID())) {
+
+
+                                                                            %>
+
+                                                                            <script>
+                                                                                window.addEventListener('load', function () {
+                                                                                    document.getElementById('itemdetailsdropitemv').value = '<%=resultset_for_items.getString("item_id")%>';
+                                                                                    document.getElementById('iteminformationv').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>v').innerHTML + '</p>';
+                                                                                    document.getElementById('itemdetailsmyInputv').value = "";
+                                                                                });
+
+
+                                                                            </script>
+
                                                                             <% }
+                                                                            }
+                                                                            }
 
                                                                             } catch (Exception e) {
                                                                                 e.printStackTrace();
@@ -337,14 +387,20 @@
                                                                 <label for="datePickerv">Stock&nbsp;IN&nbsp;Date</label>
                                                                 <input type="date" name="stockindate"
                                                                        id="datePickerv" required
-                                                                       value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>"><br>
+
+                                                                    <% if (stock != null) { %>
+                                                                       value="<%= stock.getDate() %>"
+                                                                    <% } else {%>
+                                                                       value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>">
+                                                                <% } %>
+                                                                <br>
                                                                 <label for="txtAreaRemarksv">Any&nbsp;other&nbsp;Information's</label>
 
                                                                 <textarea id="txtAreaRemarksv"
                                                                           name="remarks"
                                                                           rows="4"
                                                                           cols="4"
-                                                                          placeholder="Enter Stock Information Here..."></textarea>
+                                                                          placeholder="Enter Stock Information Here..."><% if (stock != null) { %><%= stock.getRemarks() %><%}%></textarea>
                                                                 <br>
 
 
@@ -413,6 +469,36 @@
                                                                            id="workingItemsTablev"
                                                                            border=1>
 
+                                                                        <%
+
+                                                                            if (stock != null) {
+                                                                                for (Items items : stock.getItemList().getItems()) {
+
+
+                                                                                    if (items.getItemStatus().equalsIgnoreCase("Working")) {%>
+                                                                        <tr style="padding:0;">
+                                                                            <td style="padding:0;"><input type="text"
+                                                                                                          readonly
+                                                                                                          style="margin:0;border:0;"
+                                                                                                          value="<%= items.getBarcode() %>"
+                                                                                                          name="barcode">
+                                                                            </td>
+                                                                            <td style="padding:0;"><input type="text"
+                                                                                                          style="margin:0;border:0;"
+                                                                                                          name="workingDescription"
+                                                                                                          value="<%= items.getDescription() %>">
+                                                                            </td>
+                                                                            <td style="padding:0;">
+                                                                                <button style="margin:0;" type="button"
+                                                                                        class="btn btn-danger"
+                                                                                        onclick="removeWorkingItemRowV(this)">
+                                                                                    <i class="fa fa-trash"></i></button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <% }
+                                                                        }
+
+                                                                        } %>
 
                                                                     </table>
 
@@ -433,7 +519,36 @@
                                                                     <table style="width:100%; padding:0; border-spacing:0;"
                                                                            id="faultTablev"
                                                                            border=1>
+                                                                        <%
 
+                                                                            if (stock != null) {
+                                                                                for (Items items : stock.getItemList().getItems()) {
+
+
+                                                                                    if (items.getItemStatus().equalsIgnoreCase("Faulty")) {%>
+                                                                        <tr style="padding:0;">
+                                                                            <td style="padding:0;"><input type="text"
+                                                                                                          readonly
+                                                                                                          style="margin:0;border:0;"
+                                                                                                          value="<%= items.getBarcode() %>"
+                                                                                                          name="faultBarcode">
+                                                                            </td>
+                                                                            <td style="padding:0;"><input type="text"
+                                                                                                          style="margin:0;border:0;"
+                                                                                                          name="faultDescription"
+                                                                                                          value="<%= items.getDescription() %>">
+                                                                            </td>
+                                                                            <td style="padding:0;">
+                                                                                <button style="margin:0;" type="button"
+                                                                                        class="btn btn-danger"
+                                                                                        onclick="removeFaultItemRowV(this)">
+                                                                                    <i class="fa fa-trash"></i></button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <% }
+                                                                        }
+
+                                                                        } %>
 
                                                                     </table>
 
@@ -789,7 +904,26 @@
                                                                     <table style="width: 100%">
                                                                         <col style="width: 50%">
                                                                         <col style="width: 50%">
-                                                                        <tr>
+
+                                                                        <% if (session.getAttribute("stockIN") != null) { %>
+                                                                        <tr id="ErrorMessage<%=i%>"
+                                                                            style="background-color: #cacaca;">
+                                                                            <td colspan="2">
+                                                                                <div>
+                                                                                    <p style="color:<%if (session.getAttribute("color") != null) {%><%=session.getAttribute("color")%><%}%>">
+                                                                                        <%
+                                                                                            if (session.getAttribute("message") != null) {
+                                                                                        %>
+                                                                                        <%=session.getAttribute("message")%>
+                                                                                        <%
+                                                                                            }
+                                                                                        %>
+                                                                                    </p>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <% } %>
+                                                                        <tr style="background-color: #e9e9e9;">
                                                                             <td>
                                                                                 <label for="stockID<%=i%>">Stock&nbsp;IN&nbsp;ID</label>
                                                                                 <input id="stockID<%=i%>" type="text"
@@ -1294,7 +1428,7 @@
                                                                 document.getElementById('iteminformation<%=i%>').innerHTML = itemInfo<%=i%>;
                                                                 document.getElementById("workingItemsTable<%=i%>").innerHTML = workingTable<%=i%>;
                                                                 document.getElementById("faultTable<%=i%>").innerHTML = faultyTable<%=i%>;
-
+                                                                document.getElementById("ErrorMessage<%=i%>").hidden = true;
                                                             }
 
 
@@ -1344,20 +1478,16 @@
                                                             });
 
 
-                                                            $(document).ready(function () {
-                                                                document.getElementById("txtBarcode<%=i%>").addEventListener(
-                                                                    'keydown',
-                                                                    function (event) {
-                                                                        if ((event.ctrlKey && event.key === "j")
-                                                                            || (event.ctrlKey && event.key === "b")
-                                                                            || (event.ctrlKey && event.key === "i")
-                                                                            || (event.keyCode === 13))
-                                                                            event.preventDefault();
+                                                            document.getElementById("txtBarcode<%=i%>").addEventListener(
+                                                                'keydown',
+                                                                function (event) {
+                                                                    if ((event.ctrlKey && event.key === "j")
+                                                                        || (event.ctrlKey && event.key === "b")
+                                                                        || (event.ctrlKey && event.key === "i")
+                                                                        || (event.keyCode === 13))
+                                                                        event.preventDefault();
 
-                                                                    });
-
-
-                                                            });
+                                                                });
 
 
                                                         </script>
@@ -1477,17 +1607,49 @@
     });
 </script>
 
+<%
+    InventoryStock inventoryStock;
+    if (session.getAttribute("stockIN") != null) {
+
+        inventoryStock = (InventoryStock) session.getAttribute("stockIN");
+%>
+<script>
+    $('#u<%=inventoryStock.getStockID()%>').modal('show');
+
+</script>
+<% }%>
+
 <script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
 <%
     if (session.getAttribute("color") != null && session.getAttribute("message") != null) {
+
+        if (session.getAttribute("stock") != null) {
 %>
+<script>
+
+    $('#exampleModal').modal('show');
+
+</script>
+<% } else { %>
 <script>
     myFunction();
 </script>
-<%
-    session.removeAttribute("results");
+<% }
+    if (session.getAttribute("results") != null) {
+        session.removeAttribute("results");
+    }
+
     session.removeAttribute("color");
     session.removeAttribute("message");
+
+    if (session.getAttribute("stock") != null) {
+        session.removeAttribute("stock");
+    }
+
+    if (session.getAttribute("stockIN") != null) {
+        session.removeAttribute("stockIN");
+    }
+
 %>
 <%
     }

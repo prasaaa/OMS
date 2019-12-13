@@ -91,7 +91,16 @@ public class Inventory_Servlet extends HttpServlet {
                 response.reset();
                 response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
+            case "updateFail":
+                message = "Failed to Update Stock!!";
+                color = "red";
+                session.setAttribute("message", message);
+                session.setAttribute("color", color);
+                response.reset();
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
+                return;
             case "insertError":
+            case "updateError":
                 message = "An Item Already Exist in Stock!!";
                 color = "red";
                 session.setAttribute("message", message);
@@ -115,6 +124,23 @@ public class Inventory_Servlet extends HttpServlet {
                 response.reset();
                 response.sendRedirect("Stock_IN_MANAGE.jsp");
                 return;
+            case "updateSuccess":
+                message = "Item Updated SuccessFully!!";
+                color = "green";
+                session.setAttribute("message", message);
+                session.setAttribute("color", color);
+                response.reset();
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
+                return;
+            case "updateNotSuccess":
+                message = "Stocks Update Not Completed!!";
+                color = "red";
+                session.setAttribute("message", message);
+                session.setAttribute("color", color);
+                response.reset();
+                response.sendRedirect("Stock_IN_MANAGE.jsp");
+                return;
+
             default:
                 break;
         }
