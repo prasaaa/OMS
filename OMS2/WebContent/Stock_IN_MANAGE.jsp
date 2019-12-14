@@ -66,6 +66,30 @@
     <!-- Custom styles for this template -->
     <link href="css/simple-sidebar3.css" rel="stylesheet">
 
+    <noscript class="noscript">
+        <div id="div100">
+            Please enable javascript in your browser ....
+        </div>
+    </noscript>
+
+    <style>
+        body {
+            position: relative;
+        }
+
+        .noscript {
+            width: 100%;
+            height: 100%; /* will cover the text displayed when javascript is enabled*/
+            z-index: 100000; /* higher than other z-index */
+            position: absolute;
+        }
+
+        .noscript #div100 {
+            display: block;
+            height: 100%;
+            background-color: white;
+        }
+    </style>
 
 </head>
 <body>
@@ -423,8 +447,8 @@
                                                                           cols="4"
                                                                           placeholder="Enter Stock Information Here..."><% if (stock != null) { %><%= stock.getRemarks() %><%}%></textarea>
                                                                 <br>
-
-
+                                                            </td>
+                                                            <td>
                                                                 <label id="itemsListv">Item&nbsp;List&nbsp;Details</label>
                                                                 <div class="popup" style="width:100%;">
                                                                     <input style="width:100%;"
@@ -480,6 +504,8 @@
                                                                 </div>
 
                                                             </td>
+                                                        </tr>
+                                                        <tr style="background-color: #cacaca;">
 
                                                             <td>
 
@@ -546,8 +572,9 @@
                                                                         onclick="deleteAllWorkingItemsRowsV();">
                                                                     Clear&nbsp;All
                                                                 </button>
-                                                                <br>
-                                                                <br>
+
+                                                            </td>
+                                                            <td>
                                                                 <label for="txtBarcodev">Fault
                                                                     Item&nbsp;List</label><br>
                                                                 <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
@@ -655,11 +682,15 @@
 
 
                                 <tr>
-                                    <th>Stock&nbsp;ID</th>
-                                    <th>Item&nbsp;ID</th>
+                                    <th>Stock&nbsp;IN&nbsp;ID</th>
+                                    <th hidden>Item&nbsp;ID</th>
+                                    <th>Model</th>
+                                    <th>Manufacturer</th>
+                                    <th>Supplier</th>
+                                    <th>Type</th>
                                     <th>Received&nbsp;Date</th>
-                                    <th>Number&nbsp;of<br>Working&nbsp;Items</th>
-                                    <th>Number&nbsp;of<br>Fault&nbsp;Items</th>
+                                    <th>Workings</th>
+                                    <th>Faults</th>
                                     <th>View</th>
                                     <th>Update</th>
                                     <th>Delete</th>
@@ -707,15 +738,15 @@
                                 <tr>
                                     <td><%=results.getString("stock_in_id")%>
                                     </td>
-                                    <td><%=results.getString("item_id")%>
+                                    <td hidden><%=results.getString("item_id")%>
                                     </td>
-                                    <td hidden><%=results.getString("item_model_name")%>
+                                    <td><%=results.getString("item_model_name")%>
                                     </td>
-                                    <td hidden><%=results.getString("item_manufacturer")%>
+                                    <td><%=results.getString("item_manufacturer")%>
                                     </td>
-                                    <td hidden><%=results.getString("item_supplier")%>
+                                    <td><%=results.getString("item_supplier")%>
                                     </td>
-                                    <td hidden><%=results.getString("item_type")%>
+                                    <td><%=results.getString("item_type")%>
                                     </td>
                                     <td><%=results.getString("stock_in_date")%>
                                     </td>
@@ -752,6 +783,8 @@
                                                             <div class="row">
 
                                                                 <table style="width:100%">
+                                                                    <col style="width:50%">
+                                                                    <col style="width:50%">
                                                                     <tr style="background-color: #f7f7f7;">
                                                                         <td>
 
@@ -1101,8 +1134,8 @@
                                                                                           name="remarks" rows="4"
                                                                                           cols="4"
                                                                                           placeholder="Enter Stock Information Here..."><%= results.getString("remarks")%></textarea>
-                                                                                <br>
-
+                                                                            </td>
+                                                                            <td>
 
                                                                                 <label id="itemsList<%=i%>">Item&nbsp;List&nbsp;Details</label>
                                                                                 <div class="popup" style="width:100%;">
@@ -1157,6 +1190,8 @@
 
                                                                                 </div>
                                                                             </td>
+                                                                        </tr>
+                                                                        <tr>
                                                                             <td>
 
                                                                                 <label for="txtBarcode<%=i%>"
@@ -1207,8 +1242,8 @@
                                                                                         onclick="deleteAllWorkingItemsRows<%=i%>();">
                                                                                     Clear&nbsp;All
                                                                                 </button>
-                                                                                <br>
-                                                                                <br>
+                                                                            </td>
+                                                                            <td>
                                                                                 <label for="txtBarcode<%=i%>">Fault Item&nbsp;List</label><br>
                                                                                 <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
                                                                                     <table style="width:100%; padding:0; border-spacing:0;"
@@ -1319,8 +1354,7 @@
 
                                                                             faultTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "faultBarcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="faultDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
                                                                             resetItemDetails<%=i%>();
-                                                                            barcodeText.focus();
-                                                                            document.getElementById("faultTable<%=i%>").scrollIntoView();
+                                                                            autoFocus<%=i%>();
 
                                                                         } else {
                                                                             popup = document.getElementById("myPopup2<%=i%>");
@@ -1334,7 +1368,7 @@
                                                                             }
 
                                                                             itemDescription.focus();
-                                                                            document.getElementById("itemsList<%=i%>").scrollIntoView();
+                                                                            window.scrollTop;
 
                                                                         }
 
@@ -1366,7 +1400,7 @@
                                                                         }, 3000);
                                                                     }
                                                                     itemStatus.focus();
-                                                                    document.getElementById("itemsList<%=i%>").scrollIntoView();
+                                                                    window.scrollTop;
 
                                                                 } else {
                                                                     popup = document.getElementById("myPopup1<%=i%>");
@@ -1393,43 +1427,65 @@
                                                                 barcodeText.value = "";
                                                                 itemStatus.getElementsByTagName("option").item(0).selected = true;
                                                                 itemDescription.value = "";
+                                                                autoFocus<%=i%>();
                                                             }
 
 
                                                             function autoFocus<%=i%>() {
                                                                 document.getElementById("txtBarcode<%=i%>").focus();
-                                                                document.getElementById("itemsList<%=i%>").scrollIntoView();
+                                                                window.scrollTop;
                                                             }
 
 
                                                             function deleteAllWorkingItemsRows<%=i%>() {
                                                                 document.getElementById("workingItemsTable<%=i%>").innerHTML = "";
-                                                                document.getElementById("txtBarcode<%=i%>").focus();
-                                                                document.getElementById("workingItems<%=i%>").scrollIntoView();
+                                                                document.getElementById("txtBarcode<%=i%>").focus({
+                                                                    preventScroll: true
+                                                                });
+
                                                             }
 
                                                             function removeWorkingItemRow<%=i%>(input) {
 
 
                                                                 var i = input.parentNode.parentNode.rowIndex;
-                                                                document.getElementById("workingItemsTable<%=i%>").deleteRow(i);
-                                                                document.getElementById("txtBarcode<%=i%>").focus();
-                                                                document.getElementById("workingItems<%=i%>").scrollIntoView();
+                                                                let workingTable = document.getElementById("workingItemsTable<%=i%>");
+
+                                                                workingTable.deleteRow(i);
+
+                                                                let rows = workingTable.getElementsByTagName('tr');
+
+                                                                if (rows.length === 0)
+                                                                    workingTable.innerHTML = "";
+
+
+                                                                document.getElementById("txtBarcode<%=i%>").focus({
+                                                                    preventScroll: true
+                                                                });
                                                             }
 
 
                                                             function deleteAllFaultItemsRows<%=i%>() {
                                                                 document.getElementById("faultTable<%=i%>").innerHTML = "";
-                                                                document.getElementById("txtBarcode<%=i%>").focus();
-                                                                document.getElementById("faultTable<%=i%>").scrollIntoView();
+                                                                document.getElementById("txtBarcode<%=i%>").focus({
+                                                                    preventScroll: true
+                                                                });
                                                             }
 
 
                                                             function removeFaultItemRow<%=i%>(input) {
                                                                 var i = input.parentNode.parentNode.rowIndex;
-                                                                document.getElementById("faultTable<%=i%>").deleteRow(i);
-                                                                document.getElementById("txtBarcode<%=i%>").focus();
-                                                                document.getElementById("faultTable<%=i%>").scrollIntoView();
+                                                                let faultTable = document.getElementById("faultTable<%=i%>");
+                                                                faultTable.deleteRow(i);
+
+                                                                let rowsFault = faultTable.getElementsByTagName('tr');
+
+                                                                if (rowsFault.length === 0)
+                                                                    faultTable.innerHTML = "";
+
+                                                                document.getElementById("txtBarcode<%=i%>").focus({
+                                                                    preventScroll: true
+                                                                });
                                                             }
 
 
@@ -1438,24 +1494,11 @@
                                                                 var popup;
 
 
-                                                                if (document.getElementById('itemdetailsdropitem<%=i%>').value.trim() === "") {
-                                                                    popup = document.getElementById("myPopup3<%=i%>");
-                                                                    popup.innerHTML = "This is a Required Field!!";
-                                                                    document.getElementById("itemdetailsdropitem<%=i%>").focus();
-                                                                    document.getElementById("stockItem<%=i%>").scrollIntoView();
-
-                                                                    if (!popup.classList.contains("show")) {
-                                                                        popup.classList.add("show");
-
-                                                                        setTimeout(function () {
-                                                                            popup.classList.remove("show");
-                                                                        }, 3000);
-                                                                    }
-                                                                } else if (document.getElementById("faultTable<%=i%>").innerHTML.trim() === "" && document.getElementById("workingItemsTable<%=i%>").innerHTML.trim() === "") {
+                                                                if (document.getElementById("faultTable<%=i%>").innerHTML.trim().replace(/^\s+|\s+$/, '') === "" && document.getElementById("workingItemsTable<%=i%>").innerHTML.trim().replace(/^\s+|\s+$/, '') === "") {
                                                                     popup = document.getElementById("myPopup1<%=i%>");
                                                                     popup.innerHTML = "Please Enter at least one Item!!!";
                                                                     document.getElementById("txtBarcode<%=i%>").focus();
-                                                                    document.getElementById('itemsList<%=i%>').scrollIntoView();
+                                                                    window.scrollTop;
 
                                                                     if (!popup.classList.contains("show")) {
                                                                         popup.classList.add("show");
@@ -1491,7 +1534,8 @@
                                                                 document.getElementById('itemdetailsdropitem<%=i%>').value = itemID<%=i%>;
                                                                 document.getElementById('iteminformation<%=i%>').innerHTML = itemInfo<%=i%>;
 
-                                                                document.getElementById("ErrorMessage<%=i%>").hidden = true;
+                                                                if (document.getElementById("ErrorMessage<%=i%>") !== null)
+                                                                    document.getElementById("ErrorMessage<%=i%>").hidden = true;
                                                                 document.getElementById('faultTable<%=i%>').innerHTML = "";
                                                                 document.getElementById('workingItemsTable<%=i%>').innerHTML = "";
                                                                 <%
@@ -1503,8 +1547,10 @@
                                                                 <%
                                                                 workingResult.beforeFirst();
                                                                 while (workingResult.next()) { %>
-                                                                document.getElementById('workingItemsTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=workingResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=workingResult.getString("description")%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                                                                document.getElementById('workingItemsTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=workingResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=workingResult.getString("description")%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
                                                                 <%}%>
+
+                                                                window.scrollTop;
 
                                                             }
 
@@ -1582,7 +1628,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
 
                                         </form>
                                     </td>

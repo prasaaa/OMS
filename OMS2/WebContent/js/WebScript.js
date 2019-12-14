@@ -107,8 +107,7 @@ function myFirstFunctionV() {
             } else if (itemStatus.value.trim() === "faulty" && itemDescription.value.trim() !== "") {
                 faultTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "faultBarcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="faultDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRowV(this)"><i class="fa fa-trash"></i></button></td></tr>';
                 resetItemDetailsV();
-                barcodeText.focus();
-                document.getElementById("faultTablev").scrollIntoView();
+                autoFocusV();
 
             } else {
                 popup = document.getElementById("myPopup2v");
@@ -122,7 +121,8 @@ function myFirstFunctionV() {
                 }
 
                 itemDescription.focus();
-                document.getElementById("itemsListv").scrollIntoView();
+                window.scrollTop;
+
 
             }
 
@@ -154,7 +154,7 @@ function myFirstFunctionV() {
             }, 3000);
         }
         itemStatus.focus();
-        document.getElementById("itemsListv").scrollIntoView();
+        window.scrollTop;
 
     } else {
         popup = document.getElementById("myPopup1v");
@@ -186,37 +186,55 @@ function resetItemDetailsV() {
 
 function autoFocusV() {
     document.getElementById("txtBarcodev").focus();
-    document.getElementById("itemsListv").scrollIntoView();
+    window.scrollTop;
 }
 
 
 function deleteAllWorkingItemsRowsV() {
     document.getElementById("workingItemsTablev").innerHTML = "";
-    document.getElementById("txtBarcodev").focus();
-    document.getElementById("workingItemsv").scrollIntoView();
+    document.getElementById("txtBarcodev").focus({
+        preventScroll: true
+    });
 }
 
 function removeWorkingItemRowV(input) {
 
     var i = input.parentNode.parentNode.rowIndex;
-    document.getElementById("workingItemsTablev").deleteRow(i);
-    document.getElementById("txtBarcodev").focus();
-    document.getElementById("workingItemsv").scrollIntoView();
+    let workingTable = document.getElementById("workingItemsTablev");
+
+    workingTable.deleteRow(i);
+
+    let rows = workingTable.getElementsByTagName('tr');
+
+    if (rows.length === 0)
+        workingTable.innerHTML = "";
+
+    document.getElementById("txtBarcodev").focus({
+        preventScroll: true
+    });
 }
 
 
 function deleteAllFaultItemsRowsV() {
     document.getElementById("faultTablev").innerHTML = "";
-    document.getElementById("txtBarcodev").focus();
-    document.getElementById("faultTablev").scrollIntoView();
+    document.getElementById("txtBarcodev").focus({
+        preventScroll: true
+    });
 }
 
 
 function removeFaultItemRowV(input) {
     var i = input.parentNode.parentNode.rowIndex;
-    document.getElementById("faultTablev").deleteRow(i);
-    document.getElementById("txtBarcodev").focus();
-    document.getElementById("faultTablev").scrollIntoView();
+    let faultTable = document.getElementById("faultTable<%=i%>");
+    faultTable.deleteRow(i);
+
+    let rowsFault = faultTable.getElementsByTagName('tr');
+
+    if (rowsFault.length === 0)
+        faultTable.innerHTML = "";
+    document.getElementById("txtBarcodev").focus({
+        preventScroll: true
+    });
 }
 
 
@@ -225,11 +243,11 @@ function validateFormX() {
     var popup;
 
 
-    if (document.getElementById('itemdetailsdropitemv').value.trim() === "") {
+    if (document.getElementById('itemdetailsdropitemv').value.trim().replace(/^\s+|\s+$/, '') === "") {
         popup = document.getElementById("myPopup3v");
         popup.innerHTML = "This is a Required Field!!";
         document.getElementById("itemdetailsdropitemv").focus();
-        document.getElementById("stockItemv").scrollIntoView();
+        window.scrollTop;
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -238,11 +256,11 @@ function validateFormX() {
                 popup.classList.remove("show");
             }, 3000);
         }
-    } else if (document.getElementById("workingItemsTablev").innerHTML.trim() === "" && document.getElementById("faultTablev").innerHTML.trim() === "") {
+    } else if (document.getElementById("workingItemsTablev").innerText.trim().replace(/^\s+|\s+$/, '') === "" && document.getElementById("faultTablev").innerText.trim().replace(/^\s+|\s+$/, '') === "") {
         popup = document.getElementById("myPopup1v");
         popup.innerHTML = "Please Enter at least one Item!!!";
         document.getElementById("txtBarcodev").focus();
-        document.getElementById('itemsListv').scrollIntoView();
+        window.scrollTop;
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -262,7 +280,11 @@ function clearAllFieldsV() {
     document.getElementById('iteminformationv').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
     document.getElementById("workingItemsTablev").innerHTML = "";
     document.getElementById("faultTablev").innerHTML = "";
-    document.getElementById("ErrorMessage").hidden = true;
+
+    if (document.getElementById("ErrorMessage") !== null)
+        document.getElementById("ErrorMessage").hidden = true;
+
+    window.scrollTop;
 
 }
 

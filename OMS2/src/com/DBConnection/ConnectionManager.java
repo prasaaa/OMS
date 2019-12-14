@@ -5,18 +5,23 @@ import java.sql.DriverManager;
 
 public class ConnectionManager {
 
-    private static String url = "jdbc:mysql://localhost:3306/omsdb";
-    private static String drivername = "com.mysql.jdbc.Driver";
-    private static String username = "root";
-    private static String password = "root";
     private static Connection con;
 
+    private ConnectionManager() {
+    }
 
-    public static Connection getConnection() {
+
+    public static synchronized Connection getConnection() {
         //establishing the connection
         try {
 
+            String drivername = "com.mysql.jdbc.Driver";
             Class.forName(drivername);
+            String url = "jdbc:mysql://localhost:3306/omsdb";
+            String password = "root";
+            String username = "root";
+
+
             con = DriverManager.getConnection(url, username, password);
 
         } catch (Exception e) {
