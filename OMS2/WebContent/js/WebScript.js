@@ -27,6 +27,7 @@ function setInputFilter(textbox, inputFilter) {
 
 
 
+
 function logValue() {
     switch (this.value) {
         case "bar":
@@ -63,14 +64,14 @@ function myFirstFunctionV() {
     if (barcodeText.value.trim() !== "" && itemStatus.value.trim() !== "") {
 
 
-        var i = 0;
-        var bool = true;
-        var popup;
-        var boolFault = true;
+        let i = 0;
+        let bool = true;
+        let popup;
+        let boolFault = true;
 
 
-        var workingItemsTable = document.getElementById("workingItemsTablev");
-        var faultTable = document.getElementById("faultTablev");
+        let workingItemsTable = document.getElementById("workingItemsTablev");
+        let faultTable = document.getElementById("faultTablev");
 
 
         let rows = workingItemsTable.getElementsByTagName('tr');
@@ -256,7 +257,7 @@ function validateFormX() {
                 popup.classList.remove("show");
             }, 3000);
         }
-    } else if (document.getElementById("workingItemsTablev").innerText.trim().replace(/^\s+|\s+$/, '') === "" && document.getElementById("faultTablev").innerText.trim().replace(/^\s+|\s+$/, '') === "") {
+    } else if (document.getElementById("workingItemsTablev").innerHTML.trim().replace(/^\s+|\s+$/, '') === "" && document.getElementById("faultTablev").innerHTML.trim().replace(/^\s+|\s+$/, '') === "") {
         popup = document.getElementById("myPopup1v");
         popup.innerHTML = "Please Enter at least one Item!!!";
         document.getElementById("txtBarcodev").focus();
@@ -317,14 +318,15 @@ document.getElementById('itemdetailsdropitemv').addEventListener('keyup', functi
 });
 
 
-//filter fucntion for the Item Detail
+//filter function for the Item Detail
 function itemdetailsitemdisplayfilterFunctionV() {
-    var input, filter, ul, li, a, i, div;
+    let input, filter, ul, li, a, i, div;
     input = document.getElementById("itemdetailsmyInput");
     filter = input.value.toUpperCase();
     div = document.getElementById("itemdetailsitemdisplay");
     a = div.getElementsByTagName("a");
 
+    let txtValue;
     for (i = 0; i < a.length; i++) {
         txtValue = a[i].textContent || a[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -338,34 +340,27 @@ function itemdetailsitemdisplayfilterFunctionV() {
 
 window.addEventListener('click', function (event) {
 
-
-    var itemx = document.getElementById("itemdetailsitemdisplayv");
-
+    let itemx = document.getElementById("itemdetailsitemdisplayv");
 
     if (event.target.id === "itemdetailsdropitemv" || event.target.id === "caretv") {
         itemx.classList.toggle("show");
 
     } else if (event.target.id === "itemdetailsmyInputv") {
-
     } else {
-
-
         itemx.classList.remove("show");
-
     }
 });
 
 
 //to search main table
 function searchfunction() {
-    let input, filter, table, tr, td, i, txtValue, catval, colno;
 
+    let input, filter, table, tr, td, i, txtValue, catval, colno;
 
     input = document.getElementById("txtSearch");
     catval = document.getElementById("searchType").value;
     filter = input.value.toUpperCase();
     table = document.getElementById("mainTable");
-
 
     tr = table.getElementsByTagName("tr");
     switch (catval) {

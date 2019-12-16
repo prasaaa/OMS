@@ -156,7 +156,6 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                             if (!boolItems)
                                 break;
 
-
                         }
                     }
                 }

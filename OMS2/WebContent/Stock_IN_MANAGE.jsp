@@ -245,7 +245,7 @@
                                             <%if (session.getAttribute("results") != null) {%>
                                                 name="search" type="reset" class="btn btn-danger btn-block"
                                                 value="Reset" id="resetBtn1"
-                                                onclick="window.location.replace(location.href);"
+                                                onclick="window.location.replace(location.origin + location.pathname);"
                                             <%} else {%>
                                                 name="search" type="reset" class="btn btn-danger btn-block"
                                                 value="Reset" id="resetBtn" onclick="clearTable()"
@@ -1133,7 +1133,7 @@
                                                                                 <textarea id="txtAreaRemarks<%=i%>"
                                                                                           name="remarks" rows="4"
                                                                                           cols="4"
-                                                                                          placeholder="Enter Stock Information Here..."><%= results.getString("remarks")%></textarea>
+                                                                                          placeholder="Enter Stock Information Here..."><% if (results.getString("remarks") != null) {%><%=results.getString("remarks")%><%}%></textarea>
                                                                             </td>
                                                                             <td>
 
