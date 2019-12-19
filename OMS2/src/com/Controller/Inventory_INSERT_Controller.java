@@ -59,7 +59,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
             stockINDate = request.getParameter("stockindate");
 
             if (request.getParameter("remarks") != null)
-                remarks = request.getParameter("remarks");
+                remarks = request.getParameter("remarks").trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", "");
 
 
             if (request.getParameterValues("barcode") != null && request.getParameterValues("workingDescription") != null) {
@@ -102,28 +102,28 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
                     if (i < workingBarcodeList.length) {
                         items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
-                        items[i].setBarcode(workingBarcodeList[i].trim());
-                        items[i].setDescription(workingListDescriptions[i].trim());
+                        items[i].setBarcode(workingBarcodeList[i].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
+                        items[i].setDescription(workingListDescriptions[i].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
                         items[i].setItemStatus("Working");
                     } else {
                         items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
-                        items[i].setBarcode(faultBarcodeList[i - workingBarcodeList.length].trim());
-                        items[i].setDescription(faultListDescriptions[i - workingBarcodeList.length].trim());
-                        items[i].setItemStatus("faulty");
+                        items[i].setBarcode(faultBarcodeList[i - workingBarcodeList.length].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
+                        items[i].setDescription(faultListDescriptions[i - workingBarcodeList.length].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
+                        items[i].setItemStatus("Faulty");
 
                     }
 
                 } else if (workingBarcodeList.length == 0 && faultBarcodeList.length != 0) {
                     items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
-                    items[i].setBarcode(faultBarcodeList[i].trim());
-                    items[i].setDescription(faultListDescriptions[i].trim());
-                    items[i].setItemStatus("faulty");
+                    items[i].setBarcode(faultBarcodeList[i].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
+                    items[i].setDescription(faultListDescriptions[i].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
+                    items[i].setItemStatus("Faulty");
 
 
                 } else if (workingBarcodeList.length != 0) {
                     items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
-                    items[i].setBarcode(workingBarcodeList[i].trim());
-                    items[i].setDescription(workingListDescriptions[i].trim());
+                    items[i].setBarcode(workingBarcodeList[i].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
+                    items[i].setDescription(workingListDescriptions[i].trim().replaceAll("['][\"][\\e][\\\\][\\s][;:<>(){}]", ""));
                     items[i].setItemStatus("Working");
                 }
 
@@ -140,13 +140,63 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
             Inventory_INSERT checkDuplicateForStockOut = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_SELECT_ITEM_BY_BARCODE_STOCK_OUT);
 
+            Inventory_INSERT checkDuplicateBeforeConfirm = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_SELECT_ITEM_BY_BARCODE_STOCK_OUT_NOT_BY_THE_SAME_ITEM);
+
+
+            boolean boolItemsList;
 
             if (request.getParameter("parameterStatus") != null) {
 
+                for (Items i : stock.getItems()) {
+                    boolItemsList = checkDuplicateBeforeConfirm.checkAvailability(i.getBarcode(), i.getItemID());
+
+                    if (!boolItemsList) {
+                        duplicateList.add(i.getBarcode());
+
+                    }
+
+                }
+
+
+                if (duplicateList.isEmpty()) {
+
+                    boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemID());
+
+                    boolean boolItems = true;
+                    for (Items i : stock.getItems()) {
+                        boolItems = item_insert.InsertItemList(i.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), i.getStockID());
+
+                        if (!boolItems)
+                            break;
+
+
+                    }
+
+                    if (boolStock && boolItems) {
+                        response.sendRedirect("Inventory_Servlet?status=insertSuccess");
+
+                    } else {
+
+                        if (request.getSession(false) != null)
+                            request.getSession(false).setAttribute("stock", stock);
+                        else
+                            request.getSession(true).setAttribute("stock", stock);
+                        response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
+                    }
+                } else {
+                    if (request.getSession(false) != null) {
+                        request.getSession(false).setAttribute("stock", stock);
+                        request.getSession(false).setAttribute("duplicateList", duplicateList);
+                    } else {
+                        request.getSession(true).setAttribute("stock", stock);
+                        request.getSession(true).setAttribute("duplicateList", duplicateList);
+                    }
+                    response.sendRedirect("Inventory_Servlet?status=duplicatesFound");
+
+                }
+
 
             } else {
-
-                boolean boolItemsList;
 
 
                 for (Items i : stock.getItems()) {

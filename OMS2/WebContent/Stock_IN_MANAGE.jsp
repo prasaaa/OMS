@@ -4,7 +4,7 @@
 <%@page import="com.DatabaseHandle.Inventory_SELECT" %>
 <%@page import="com.DatabaseHandle.Main_SELECT" %>
 <%@page import="com.Utilities.MySQLQueries" %>
-<%@ page import="com.model.CurrentUser" %>
+<%-- page import="com.model.CurrentUser" --%>
 <%@ page import="com.model.InventoryStock" %>
 <%@ page import="com.model.Items" %>
 <%@ page import="java.sql.ResultSet" %>
@@ -93,13 +93,13 @@
 
 </head>
 <body>
-<%
+<%--
     System.out.println("this is user " + CurrentUser.getUsername());
     if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
         response.sendRedirect("login.jsp");
     }
 
-%>
+--%>
 
 
 <%
@@ -124,18 +124,18 @@
                     Automated Barcode<br>Solution
                 </div>
                 <div class="list-group list-group-flush">
-                    <%
+                    <%--
                         if (CurrentUser.getUsername().equals("admin")) {
-                    %>
+                    --%>
                     <a href="Supplier_Order_Insert.jsp"
                        class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
-                    <%
+                    <%--
                         }
-                    %>
-                    <%
+                    --%>
+                    <%--
                         if (CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant")
                                 || CurrentUser.getUsername().equals("manager")) {
-                    %>
+                    --%>
                     <a
                             class="list-group-item list-group-item-action bg-light dropdown-toggle"
                             data-toggle="collapse" href="#collapseExample" role="button"
@@ -169,9 +169,9 @@
                        class="list-group-item list-group-item-action bg-light">Employee
                         Assign &nbsp;Management</a>
                 </div>
-                <%
+                <%--
                     }
-                %>
+                --%>
             </div>
         </div>
     </div>
@@ -839,12 +839,8 @@
 
                                             while (results.next()) {
 
-
-                                                Inventory_SELECT itemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_WORKING_STOCK_BY_STOCK_ID);
-                                                Inventory_SELECT faultItemSelect = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_FAULT_STOCK_BY_STOCK_ID);
-
-                                                ResultSet workingResult = itemSelect.retreiveQueryData(results.getString("stock_in_id"));
-                                                ResultSet faultResult = faultItemSelect.retreiveQueryData(results.getString("stock_in_id"));
+                                                ResultSet workingResult = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_WORKING_STOCK_BY_STOCK_ID).retreiveQueryData(results.getString("stock_in_id"));
+                                                ResultSet faultResult = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_FAULT_STOCK_BY_STOCK_ID).retreiveQueryData(results.getString("stock_in_id"));
 
 
                                 %>
@@ -1137,90 +1133,21 @@
                                                                                 <label for="itemdetailsdropitem<%=i%>"
                                                                                        id="stockItem<%=i%>">Stock&nbsp;Item</label><br>
                                                                                 <div class="dropdown">
-                                                                                    <div class="popup"
-                                                                                         style="width:100%;">
-                                                                                        <input type="text"
-                                                                                               id="itemdetailsdropitem<%=i%>"
-                                                                                               name="itemID"
-                                                                                               style="cursor: default;"
-                                                                                               placeholder="Click Here to Select an Item"
-                                                                                               value="<%= results.getString("item_id")%>"
-                                                                                               required
-                                                                                               autocomplete="off"
-                                                                                               readonly
-                                                                                               class="form-control"><i
-                                                                                            class="fa fa-caret-down"
-                                                                                            id="caret<%=i%>"
-                                                                                            style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i><span
-                                                                                            class="popuptext"
-                                                                                            id="myPopup3<%=i%>"></span>
-                                                                                    </div>
-                                                                                    <div id="itemdetailsitemdisplay<%=i%>"
-                                                                                         class="dropdown-content"
-                                                                                         style="margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
-                                                                                        <div style="position: sticky;top:-6px;margin-top:-6px;padding:0">
-                                                                                            <input tabindex="0"
-                                                                                                   type="text"
-                                                                                                   id="itemdetailsmyInput<%=i%>"
-                                                                                                   onkeyup="itemdetailsitemdisplayfilterFunction<%=i%>()"
-                                                                                                   autocomplete="off"
-                                                                                                   placeholder="Search here.."><i
-                                                                                                class="fa fa-search"
-                                                                                                id="caretSearch<%=i%>"
-                                                                                                style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i>
-                                                                                        </div>
 
-                                                                                        <div style="overflow-x:hidden;">
+                                                                                    <input type="text"
+                                                                                           id="itemdetailsdropitem<%=i%>"
+                                                                                           name="itemID"
+                                                                                           style="cursor: default;"
+                                                                                           placeholder="Click Here to Select an Item"
+                                                                                           value="<%= results.getString("item_id")%>"
+                                                                                           required
+                                                                                           autocomplete="off"
+                                                                                           readonly
+                                                                                           class="form-control"><i
+                                                                                        class="fa fa-caret-down"
+                                                                                        id="caret<%=i%>"
+                                                                                        style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i>
 
-
-                                                                                            <%
-                                                                                                try {
-
-
-                                                                                                    resultSet = si4.get_table();
-
-                                                                                                    while (resultSet.next()) {%>
-                                                                                            <a style="cursor: pointer;"
-                                                                                               id='<%=resultSet.getString("item_id") %><%=i%>'
-
-
-                                                                                               tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultSet.getString("item_model_name")%>
-                                                                                            </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultSet.getString("item_type")%>
-                                                                                                <br>Manufacturer&nbsp;:&nbsp;<%=resultSet.getString("item_manufacturer")%>
-                                                                                                <br>Supplier&nbsp;:&nbsp;<%=resultSet.getString("item_supplier")%>
-                                                                                                <br>Description&nbsp;:&nbsp;<%=resultSet.getString("item_details")%>
-                                                                                            </a>
-                                                                                            <script>
-
-
-                                                                                                document.getElementById('<%=resultSet.getString("item_id")%><%=i%>').addEventListener('click', function () {
-                                                                                                    document.getElementById('itemdetailsdropitem<%=i%>').value = '<%=resultSet.getString("item_id")%>';
-                                                                                                    document.getElementById('iteminformation<%=i%>').innerHTML = '<p>' + document.getElementById('<%=resultSet.getString("item_id")%><%=i%>').innerHTML + '</p>';
-                                                                                                    document.getElementById('itemdetailsmyInput<%=i%>').value = "";
-                                                                                                });
-
-                                                                                                document.getElementById('<%=resultSet.getString("item_id")%><%=i%>').addEventListener("keyup", function (e) {
-                                                                                                    if (e.keyCode === 13) {
-                                                                                                        e.preventDefault();
-                                                                                                        document.getElementById('<%=resultSet.getString("item_id")%><%=i%>').click();
-                                                                                                    }
-                                                                                                });
-
-                                                                                            </script>
-
-
-                                                                                            <%
-
-
-                                                                                                    }
-                                                                                                } catch (Exception e) {
-                                                                                                    e.printStackTrace();
-                                                                                                }%>
-
-                                                                                        </div>
-
-
-                                                                                    </div>
 
                                                                                 </div>
                                                                                 <div id="iteminformation<%=i%>"
@@ -1248,6 +1175,8 @@
                                                                                           name="remarks" rows="4"
                                                                                           cols="4"
                                                                                           placeholder="Enter Stock Information Here..."><% if (results.getString("remarks") != null) {%><%=results.getString("remarks")%><%}%></textarea>
+
+
                                                                             </td>
                                                                             <td>
 
@@ -1281,7 +1210,7 @@
                                                                                 <div class="popup"
                                                                                      style="width:100%;"><textarea
                                                                                         id="description<%=i%>"
-                                                                                        placeholder="Enter Fault Description Here..."
+                                                                                        placeholder="Enter Description Here..."
                                                                                         cols="4"
                                                                                         rows="4"></textarea><span
                                                                                         class="popuptext"
@@ -1303,6 +1232,12 @@
                                                                                     <br>
 
                                                                                 </div>
+                                                                                <br><br>
+                                                                                <div><p style="text-align: justify-all">
+                                                                                    ***Changing the Working Items that
+                                                                                    are Reserved for Stock OUT Disabled
+                                                                                    for Security Purpose....
+                                                                                </p></div>
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -1335,10 +1270,24 @@
                                                                                                        value="<%=workingResult.getString("description")%>">
                                                                                             </td>
                                                                                             <td style="padding:0;">
+                                                                                                <% if (workingResult.getString("stock_out_id") != null) { %>
+                                                                                                <input type="text"
+                                                                                                       name="stockOUT"
+                                                                                                       value="<%=workingResult.getString("stock_out_id")%>"
+                                                                                                       hidden>
+                                                                                                <% } else { %>
+                                                                                                <input type="text"
+                                                                                                       name="stockOUT"
+                                                                                                       value="NULL"
+                                                                                                       hidden>
+                                                                                                <% } %>
                                                                                                 <button style="margin:0;"
                                                                                                         type="button"
                                                                                                         class="btn btn-danger"
-                                                                                                        onclick="removeWorkingItemRow<%=i%>(this)">
+                                                                                                        onclick="removeWorkingItemRow<%=i%>(this)"
+                                                                                                        <% if (workingResult.getString("stock_out_id") != null) { %>
+                                                                                                        disabled
+                                                                                                        <% } %>>
                                                                                                     <i class="fa fa-trash"></i>
                                                                                                 </button>
                                                                                             </td>
@@ -1404,6 +1353,7 @@
                                                                                         onclick="deleteAllFaultItemsRows<%=i%>();">
                                                                                     Clear&nbsp;All
                                                                                 </button>
+
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -1457,9 +1407,9 @@
 
 
                                                                             if (itemDescription.value.trim() === "")
-                                                                                workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="------" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                                                                                workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="------" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="NULL" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
                                                                             else
-                                                                                workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                                                                                workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="NULL" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
                                                                             resetItemDetails<%=i%>();
                                                                             autoFocus<%=i%>();
 
@@ -1556,6 +1506,14 @@
                                                                 document.getElementById("txtBarcode<%=i%>").focus({
                                                                     preventScroll: true
                                                                 });
+
+                                                                <%
+                                                                workingResult.beforeFirst();
+                                                                while (workingResult.next()) {
+                                                                    if (workingResult.getString("stock_out_id") != null) {
+                                                                %>
+                                                                document.getElementById('workingItemsTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=workingResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=workingResult.getString("description")%>" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="<%=workingResult.getString("stock_out_id")%>" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)" disabled><i class="fa fa-trash"></i></button></td></tr>';
+                                                                <%}}%>
 
                                                             }
 
@@ -1654,65 +1612,23 @@
                                                                 document.getElementById('workingItemsTable<%=i%>').innerHTML = "";
                                                                 <%
                                                                 faultResult.beforeFirst();
-                                                                while (faultResult.next()) { %>
+                                                                while (faultResult.next()){%>
                                                                 document.getElementById('faultTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=faultResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=faultResult.getString("description")%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeFaultItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
-                                                                <%}%>
+                                                                <%} %>
 
                                                                 <%
                                                                 workingResult.beforeFirst();
-                                                                while (workingResult.next()) { %>
-                                                                document.getElementById('workingItemsTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=workingResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=workingResult.getString("description")%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
-                                                                <%}%>
+                                                                while (workingResult.next()) {
+
+                                                                    if (workingResult.getString("stock_out_id") != null) {%>
+                                                                document.getElementById('workingItemsTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=workingResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=workingResult.getString("description")%>" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="<%=workingResult.getString("stock_out_id")%>" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)" disabled><i class="fa fa-trash"></i></button></td></tr>';
+                                                                <% } else {%>
+                                                                document.getElementById('workingItemsTable<%=i%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=workingResult.getString("barcode_number")%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=workingResult.getString("description")%>" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="NULL" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=i%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+                                                                <%}}%>
 
                                                                 window.scrollTop;
 
                                                             }
-
-
-                                                            document.getElementById('itemdetailsdropitem<%=i%>').addEventListener('keyup', function (event) {
-                                                                if (event.keyCode === 13) {
-                                                                    document.getElementById('itemdetailsitemdisplay<%=i%>').classList.toggle('show');
-                                                                }
-                                                            });
-
-
-                                                            //filter fucntion for the Item Detail
-                                                            function itemdetailsitemdisplayfilterFunction<%=i%>() {
-                                                                var input, filter, ul, li, a, i, div;
-                                                                input = document.getElementById("itemdetailsmyInput<%=i%>");
-                                                                filter = input.value.toUpperCase();
-                                                                div = document.getElementById("itemdetailsitemdisplay<%=i%>");
-                                                                a = div.getElementsByTagName("a");
-
-                                                                for (i = 0; i < a.length; i++) {
-                                                                    txtValue = a[i].textContent || a[i].innerText;
-                                                                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                                                                        a[i].style.display = "";
-                                                                    } else {
-                                                                        a[i].style.display = "none";
-                                                                    }
-                                                                }
-                                                            }
-
-
-                                                            window.addEventListener('click', function (event) {
-
-
-                                                                var itemx = document.getElementById("itemdetailsitemdisplay<%=i%>");
-
-
-                                                                if (event.target.id === "itemdetailsdropitem<%=i%>" || event.target.id === "caret<%=i%>") {
-                                                                    itemx.classList.toggle("show");
-
-                                                                } else if (event.target.id === "itemdetailsmyInput<%=i%>") {
-
-                                                                } else {
-
-
-                                                                    itemx.classList.remove("show");
-
-                                                                }
-                                                            });
 
 
                                                             document.getElementById("txtBarcode<%=i%>").addEventListener(
@@ -1773,6 +1689,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
+                                                            <p></p>
                                                             Are you Sure you want to delete this record?
                                                         </div>
                                                         <div class="modal-footer">
@@ -1880,7 +1797,7 @@
                 bool = false;
 %>
 <script>
-    document.getElementById('workingItemsTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+    document.getElementById('workingItemsTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: red" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="NULL" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
 </script>
 <%
 
@@ -1890,12 +1807,22 @@
 
     if (bool) {
 
+        if (items.getStockOUTID().equalsIgnoreCase("NULL")) {
+
 %>
 <script>
-    document.getElementById('workingItemsTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+    document.getElementById('workingItemsTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="<%=items.getStockOUTID()%>" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
 
 </script>
 <%
+} else {
+%>
+<script>
+    document.getElementById('workingItemsTable<%=index%>').insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;color: black" value ="<%=items.getBarcode()%>" name = "barcode"></td><td style="padding:0;"><input type="text" style = "margin:0;border:0;" name="workingDescription" value="<%=items.getDescription()%>" ></td><td style="padding:0;"><input type="text" name="stockOUT" value="<%=items.getStockOUTID()%>" hidden><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRow<%=index%>(this)"><i class="fa fa-trash"></i></button></td></tr>';
+
+</script>
+<%
+        }
     }
 } else if (items.getItemStatus().equalsIgnoreCase("faulty")) {
     boolean bool = true;

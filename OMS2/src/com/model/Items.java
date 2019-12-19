@@ -5,9 +5,19 @@ public class Items extends InventoryStock {
     private String barcodeNumber;
     private String itemStatus;
     private String description;
+    private String stockOUTID;
 
     public Items(String itemID, String stockID, String stockINDate, String remarks) {
         super(itemID, stockID, stockINDate, remarks);
+        setStockOUTID("NULL");
+    }
+
+    public String getStockOUTID() {
+        return stockOUTID;
+    }
+
+    public void setStockOUTID(String stockOUTID) {
+        this.stockOUTID = stockOUTID;
     }
 
     public String getDescription() {

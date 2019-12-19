@@ -24,7 +24,7 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String itemID, stockINDate, remarks = "";
-        String[] workingBarcodeList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
+        String[] workingBarcodeList = {}, stockOUTList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
         String stockInId;
         String index;
 
@@ -39,9 +39,10 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                 remarks = request.getParameter("remarks");
 
 
-            if (request.getParameterValues("barcode") != null && request.getParameterValues("workingDescription") != null) {
+            if (request.getParameterValues("barcode") != null && request.getParameterValues("workingDescription") != null && request.getParameterValues("stockOUT") != null) {
                 workingBarcodeList = request.getParameterValues("barcode");
                 workingListDescriptions = request.getParameterValues("workingDescription");
+                stockOUTList = request.getParameterValues("stockOUT");
             }
 
             if (request.getParameterValues("faultBarcode") != null && request.getParameterValues("faultDescription") != null) {
@@ -76,6 +77,7 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                         items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                         items[i].setBarcode(workingBarcodeList[i].trim());
                         items[i].setDescription(workingListDescriptions[i].trim());
+                        items[i].setStockOUTID(stockOUTList[i].trim());
                         items[i].setItemStatus("Working");
                     } else {
                         items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
@@ -96,6 +98,7 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                     items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                     items[i].setBarcode(workingBarcodeList[i].trim());
                     items[i].setDescription(workingListDescriptions[i].trim());
+                    items[i].setStockOUTID(stockOUTList[i].trim());
                     items[i].setItemStatus("Working");
                 }
 
@@ -107,7 +110,7 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
 
 
             Inventory_UPDATE inventory_update = new Inventory_UPDATE(ConnectionManager.getConnection(), MySQLQueries.QUERY_UPDATE_STOCK_IN_TABLE);
-            Inventory_INSERT item_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_ITEM_LIST);
+            Inventory_INSERT item_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_ITEM_LIST_FOR_UPDATE);
 
             Inventory_INSERT checkDuplicate = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_OTHER_ITEMS);
 
