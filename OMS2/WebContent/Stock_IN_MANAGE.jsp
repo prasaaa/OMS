@@ -255,7 +255,121 @@
                         </form>
                     </td>
                     <td style="padding-top: 8px;">
+                        <% if (session.getAttribute("insertConfirm") != null && session.getAttribute("stockInsert") != null) { %>
 
+                        <div class="modal" id="exampleModalX" tabindex="-1" role="dialog">
+                            <form action="Inventory_INSERT_Controller?parameterStatus=Confirm" method="post">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirm&nbsp;Insert</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <%
+                                                List<String> stringList = (ArrayList<String>) session.getAttribute("insertConfirm");
+                                                InventoryStock inventoryStock = (InventoryStock) session.getAttribute("stockInsert");
+
+                                            %>
+
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <table style="width: 100%">
+
+                                                        <tr hidden>
+                                                            <td>
+                                                                <input type="text" name="itemID"
+                                                                       value="<%=inventoryStock.getItemID()%>">
+                                                                <input type="text" name="stockindate"
+                                                                       value="<%=inventoryStock.getDate()%>">
+                                                                <input type="text" name="remarks"
+                                                                       value="<%=inventoryStock.getRemarks()%>">
+
+                                                                <% for (Items items : inventoryStock.getItems()) { %>
+
+                                                                <% if (items.getItemStatus().equalsIgnoreCase("Working")) { %>
+                                                                <input type="text" name="barcode"
+                                                                       value="<%=items.getBarcode()%>">
+                                                                <input type="text" name="workingDescription"
+                                                                       value="<%=items.getDescription()%>">
+                                                                <% } else if (items.getItemStatus().equalsIgnoreCase("Faulty")) { %>
+                                                                <input type="text" name="faultBarcode"
+                                                                       value="<%=items.getBarcode()%>">
+                                                                <input type="text" name="faultDescription"
+                                                                       value="<%=items.getDescription()%>">
+                                                                <% }
+                                                                } %>
+                                                            </td>
+                                                        </tr>
+
+
+                                                        <tr style="background-color: #cacaca;">
+                                                            <td>
+                                                                <div>
+                                                                    <p style="color:<%if (session.getAttribute("color") != null) {%><%=session.getAttribute("color")%><%}%>">
+                                                                        <%
+                                                                            if (session.getAttribute("message") != null) {
+                                                                        %>
+                                                                        <%=session.getAttribute("message")%>
+                                                                        <%
+                                                                            }
+                                                                        %>
+                                                                    </p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr style="background-color: #e9e9e9;">
+                                                            <td>
+                                                                <div>
+
+                                                                    <table>
+                                                                        <%
+                                                                            for (String string : stringList) {
+                                                                        %>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <p style="color:<%if (session.getAttribute("color") != null) {%><%=session.getAttribute("color")%><%}%>">
+                                                                                    <%=string.toString()%>
+                                                                                </p>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <%
+                                                                            }
+                                                                        %>
+                                                                    </table>
+
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr style="background-color: #cacaca;">
+                                                            <td>
+                                                                <div>
+                                                                    <p>Are&nbsp;you&nbsp;Sure&nbsp;you&nbsp;want&nbsp;to&nbsp;Continue?</p>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-outline-success">Yes,&nbsp;Re-Insert
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">
+                                                No,&nbsp;Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <% } %>
                         <form id="mainForm" action="Inventory_INSERT_Controller" method="post">
 
                             <button type="button" class="btn btn-success btn-block" data-toggle="modal"
@@ -394,7 +508,7 @@
 
                                                                             <%
                                                                                 if (stock != null) {
-                                                                                    if (resultset_for_items.getString("item_id").equalsIgnoreCase(stock.getItemList().getItemID())) {
+                                                                                    if (resultset_for_items.getString("item_id").equalsIgnoreCase(stock.getItemID())) {
 
 
                                                                             %>
@@ -520,7 +634,7 @@
                                                                         <%
 
                                                                             if (stock != null) {
-                                                                                for (Items items : stock.getItemList().getItems()) {
+                                                                                for (Items items : stock.getItems()) {
 
                                                                                     String color = "";
                                                                                     if (items.getItemStatus().equalsIgnoreCase("Working")) {
@@ -584,7 +698,7 @@
                                                                         <%
 
                                                                             if (stock != null) {
-                                                                                for (Items items : stock.getItemList().getItems()) {
+                                                                                for (Items items : stock.getItems()) {
 
 
                                                                                     if (items.getItemStatus().equalsIgnoreCase("Faulty")) {
@@ -1743,8 +1857,8 @@
         String index = session.getAttribute("index").toString();
 %>
 <script>
-    document.getElementById('itemdetailsdropitem<%=index%>').value = '<%=inventoryStock.getItemList().getItemID()%>';
-    document.getElementById('iteminformation<%=index%>').innerHTML = '<p>' + document.getElementById('<%=inventoryStock.getItemList().getItemID()%><%=index%>').innerHTML + '</p>';
+    document.getElementById('itemdetailsdropitem<%=index%>').value = '<%=inventoryStock.getItemID()%>';
+    document.getElementById('iteminformation<%=index%>').innerHTML = '<p>' + document.getElementById('<%=inventoryStock.getItemID()%><%=index%>').innerHTML + '</p>';
     document.getElementById('itemdetailsmyInput<%=index%>').value = "";
 
     document.getElementById('datePicker<%=index%>').value = '<%=inventoryStock.getDate()%>';
@@ -1755,7 +1869,7 @@
 
 </script>
 
-<% for (Items items : inventoryStock.getItemList().getItems()) {
+<% for (Items items : inventoryStock.getItems()) {
 
 
     if (items.getItemStatus().equalsIgnoreCase("working")) {
@@ -1812,6 +1926,7 @@
 %>
 
 <script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
+
 <%
     if (session.getAttribute("color") != null && session.getAttribute("message") != null) {
 
@@ -1822,13 +1937,28 @@
     $('#exampleModal').modal('show');
 
 </script>
-<% } else { %>
+<% } else if (session.getAttribute("insertConfirm") != null && session.getAttribute("stockInsert") != null) {
+%>
+
+<script>
+    $('#exampleModalX').modal('show');
+</script>
+<%
+} else { %>
 <script>
     myFunction();
 </script>
 <% }
     if (session.getAttribute("results") != null) {
         session.removeAttribute("results");
+    }
+
+    if (session.getAttribute("stockInsert") != null) {
+        session.removeAttribute("stockInsert");
+    }
+
+    if (session.getAttribute("insertConfirm") != null) {
+        session.removeAttribute("insertConfirm");
     }
 
     session.removeAttribute("color");

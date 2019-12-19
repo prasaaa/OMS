@@ -7,17 +7,21 @@ public class MySQLQueries {
 
     public static final String QUERY_INSERT_STOCK = "INSERT INTO `stock_in_items_table`(stock_in_id ,stock_in_date, remarks, item_id) VALUES (? , ?, ?, ?);";
     @Language("MySQL")
-    public static final String QUERY_INSERT_ITEM_LIST = "INSERT INTO `items_list_table`(item_id, barcode_number, items_status, description, stock_in_id) VALUES (?, ?, ?, ?, ?);";
+    public static final String QUERY_INSERT_ITEM_LIST = "INSERT INTO `items_list_table`(item_id, barcode_number, items_status, description, stock_in_id) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE stock_out_id = NULL;";
     @Language("MySQL")
     public static final String QUERY_SELECT_BY_BARCODE = "SELECT s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks, idt.item_details, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id " +
             "WHERE s.stock_in_id = (SELECT st.stock_in_id FROM items_list_table st WHERE st.barcode_number LIKE CONCAT('%' + ? + '%') ) " +
             "GROUP BY s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks, idt.item_details;";
 
-    public static final String QUERY_SELECT_ITEM_BY_BARCODE = "SELECT * FROM items_list_table WHERE barcode_number = ?;";
-    public static final String QUERY_SELECT_ALL = "SELECT s.stock_in_id, i.item_id, i.item_supplier, i.item_type, s.stock_in_date FROM `stock_in_items_table` s INNER JOIN `item_details_table` i  ON s.item_id = i.item_id ";
     @Language("MySQL")
-    public static final String QUERY_DELETE_STOCK_BY_STOCK_ID = "DELETE FROM stock_in_items_table WHERE stock_in_id = ? AND NOT EXISTS (SELECT * FROM items_list_table WHERE items_list_table.stock_in_id = stock_in_items_table.stock_in_id AND stock_out_id IS NOT NULL);";
+    public static final String QUERY_SELECT_ITEM_BY_BARCODE = "SELECT * FROM items_list_table WHERE barcode_number = ?;";
+    @Language("MySQL")
+    public static final String QUERY_SELECT_ITEM_BY_BARCODE_STOCK_OUT = "SELECT * FROM items_list_table WHERE barcode_number = ? AND item_id = ? AND stock_out_id IS NOT NULL;";
 
+
+    public static final String QUERY_SELECT_ALL = "SELECT s.stock_in_id, i.item_id, i.item_supplier, i.item_type, s.stock_in_date FROM `stock_in_items_table` s INNER JOIN `item_details_table` i  ON s.item_id = i.item_id ";
+
+    public static final String QUERY_DELETE_STOCK_BY_STOCK_ID = "DELETE FROM stock_in_items_table WHERE stock_in_id = ? AND NOT EXISTS (SELECT * FROM items_list_table WHERE items_list_table.stock_in_id = stock_in_items_table.stock_in_id AND stock_out_id IS NOT NULL);";
 
 
     public static final String QUERY_SELECT_ALL_CUSTOMER_ORDERS = "SELECT co.customer_Order_Id, c.customer_Name, co.order_Date, co.required_Date, co.order_Status, co.order_Type FROM `customer_order_table` co, `customer_table` c WHERE c.customer_Id = co.customer_Id;";

@@ -2,21 +2,22 @@ package com.model;
 
 public class InventoryStock {
 
-    private ItemList itemList;
-    private String stockID;
-    private String stockINDate;
-    private String remarks;
+    protected String itemID;
+    protected String stockID;
+    protected String stockINDate;
+    protected String remarks;
+    private Items[] items;
 
 
     public InventoryStock() {
+
     }
 
-    public ItemList getItemList() {
-        return this.itemList;
-    }
-
-    public void setItemList(ItemList itemList) {
-        this.itemList = itemList;
+    public InventoryStock(String itemID, String stockID, String stockINDate, String remarks) {
+        this.itemID = itemID;
+        this.stockID = stockID;
+        this.stockINDate = stockINDate;
+        this.remarks = remarks;
     }
 
     public String getDate() {
@@ -35,16 +36,27 @@ public class InventoryStock {
         this.remarks = remarks;
     }
 
-	public String getStockID() {
-		return stockID;
-	}
+    public String getStockID() {
+        return stockID;
+    }
 
-	public void setStockID(String stockID) {
-		this.stockID = stockID;
-	}
+    public void setStockID(String stockID) {
+        this.stockID = stockID;
+    }
 
+    public Items[] getItems() {
+        return this.items;
+    }
 
+    public void setItems(Items[] item) {
+        this.items = item;
+    }
 
+    public String getItemID() {
+        return itemID;
+    }
 
-
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
 }

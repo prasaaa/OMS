@@ -6,7 +6,6 @@ import com.DatabaseHandle.Inventory_INSERT;
 import com.DatabaseHandle.Inventory_UPDATE;
 import com.Utilities.MySQLQueries;
 import com.model.InventoryStock;
-import com.model.ItemList;
 import com.model.Items;
 
 import javax.servlet.ServletException;
@@ -22,15 +21,12 @@ import java.util.List;
 public class Inventory_UPDATE_Controller extends HttpServlet {
 
 
-
-
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String itemID = "", stockINDate = "", remarks = "";
+        String itemID, stockINDate, remarks = "";
         String[] workingBarcodeList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
-        String stockInId = "";
-        String index = "0";
+        String stockInId;
+        String index;
 
         try {
 
@@ -67,10 +63,9 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
 
             int totalItemsLength = workingBarcodeList.length + faultBarcodeList.length;
 
-            ItemList itemList = new ItemList();
             Items[] items = new Items[totalItemsLength];
 
-            itemList.setItemID(itemID.trim());
+            stock.setItemID(itemID.trim());
 
 
             for (int i = 0; i < totalItemsLength; i++) {
@@ -78,12 +73,12 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                 if (workingBarcodeList.length != 0 && faultBarcodeList.length != 0) {
 
                     if (i < workingBarcodeList.length) {
-                        items[i] = new Items();
+                        items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                         items[i].setBarcode(workingBarcodeList[i].trim());
                         items[i].setDescription(workingListDescriptions[i].trim());
                         items[i].setItemStatus("Working");
                     } else {
-                        items[i] = new Items();
+                        items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                         items[i].setBarcode(faultBarcodeList[i - workingBarcodeList.length].trim());
                         items[i].setDescription(faultListDescriptions[i - workingBarcodeList.length].trim());
                         items[i].setItemStatus("faulty");
@@ -91,14 +86,14 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                     }
 
                 } else if (workingBarcodeList.length == 0 && faultBarcodeList.length != 0) {
-                    items[i] = new Items();
+                    items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                     items[i].setBarcode(faultBarcodeList[i].trim());
                     items[i].setDescription(faultListDescriptions[i].trim());
                     items[i].setItemStatus("faulty");
 
 
                 } else if (workingBarcodeList.length != 0) {
-                    items[i] = new Items();
+                    items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                     items[i].setBarcode(workingBarcodeList[i].trim());
                     items[i].setDescription(workingListDescriptions[i].trim());
                     items[i].setItemStatus("Working");
@@ -108,9 +103,8 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
             }
 
 
-            itemList.setItems(items);
+            stock.setItems(items);
 
-            stock.setItemList(itemList);
 
             Inventory_UPDATE inventory_update = new Inventory_UPDATE(ConnectionManager.getConnection(), MySQLQueries.QUERY_UPDATE_STOCK_IN_TABLE);
             Inventory_INSERT item_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_ITEM_LIST);
@@ -121,9 +115,9 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                     MySQLQueries.QUERY_DELETE_ITEMS_BY_STOCK_ID);
 
 
-            boolean boolItemsList = true;
-            for (Items i : stock.getItemList().getItems()) {
-                boolItemsList = checkDuplicate.checkAvailability(i.getBarcode(), stock.getStockID());
+            boolean boolItemsList;
+            for (Items i : stock.getItems()) {
+                boolItemsList = checkDuplicate.checkAvailability(i.getBarcode(), i.getStockID());
 
                 if (!boolItemsList) {
                     duplicateList.add(i.getBarcode());
@@ -136,7 +130,7 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
             if (duplicateList.isEmpty()) {
 
 
-                long updateRowCount = inventory_update.updateStock(stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID(), stock.getStockID());
+                long updateRowCount = inventory_update.updateStock(stock.getDate(), stock.getRemarks(), stock.getItemID(), stock.getStockID());
 
                 long count = 0;
 
@@ -150,8 +144,8 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                     if (count > 0) {
 
 
-                        for (Items i : stock.getItemList().getItems()) {
-                            boolItems = item_insert.InsertItemList(itemList.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), stock.getStockID());
+                        for (Items i : stock.getItems()) {
+                            boolItems = item_insert.InsertItemList(i.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), i.getStockID());
 
                             if (!boolItems)
                                 break;
@@ -183,7 +177,7 @@ public class Inventory_UPDATE_Controller extends HttpServlet {
                     request.getSession(true).setAttribute("duplicates", duplicateList);
                     request.getSession(true).setAttribute("index", index);
                 }
-                response.sendRedirect("Inventory_Servlet?status=updateError");
+                response.sendRedirect("Inventory_Servlet?status=duplicatesFound");
             }
         } catch (Exception e) {
             e.printStackTrace();

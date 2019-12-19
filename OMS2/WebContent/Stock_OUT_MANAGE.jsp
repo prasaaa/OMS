@@ -69,13 +69,13 @@
 
 </head>
 <body>
-<%
+<%--
     System.out.println("this is user " + CurrentUser.getUsername());
     if (CurrentUser.getUsername().equals("nouser") || CurrentUser.getUsername().equals("")) {
         response.sendRedirect("login.jsp");
     }
 
-%>
+--%>
 
 
 <%
@@ -370,7 +370,7 @@
 
                                                                             <%
                                                                                 if (stock != null) {
-                                                                                    if (resultset_for_items.getString("item_id").equalsIgnoreCase(stock.getItemList().getItemID())) {
+                                                                                    if (resultset_for_items.getString("item_id").equalsIgnoreCase(stock.getItemID())) {
 
 
                                                                             %>
@@ -496,7 +496,7 @@
                                                                         <%
 
                                                                             if (stock != null) {
-                                                                                for (Items items : stock.getItemList().getItems()) {
+                                                                                for (Items items : stock.getItems()) {
 
                                                                                     String color = "";
                                                                                     if (items.getItemStatus().equalsIgnoreCase("Working")) {
@@ -560,7 +560,7 @@
                                                                         <%
 
                                                                             if (stock != null) {
-                                                                                for (Items items : stock.getItemList().getItems()) {
+                                                                                for (Items items : stock.getItems()) {
 
 
                                                                                     if (items.getItemStatus().equalsIgnoreCase("Faulty")) {
@@ -1720,8 +1720,8 @@
         String index = session.getAttribute("index").toString();
 %>
 <script>
-    document.getElementById('itemdetailsdropitem<%=index%>').value = '<%=inventoryStock.getItemList().getItemID()%>';
-    document.getElementById('iteminformation<%=index%>').innerHTML = '<p>' + document.getElementById('<%=inventoryStock.getItemList().getItemID()%><%=index%>').innerHTML + '</p>';
+    document.getElementById('itemdetailsdropitem<%=index%>').value = '<%=inventoryStock.getItemID()%>';
+    document.getElementById('iteminformation<%=index%>').innerHTML = '<p>' + document.getElementById('<%=inventoryStock.getItemID()%><%=index%>').innerHTML + '</p>';
     document.getElementById('itemdetailsmyInput<%=index%>').value = "";
 
     document.getElementById('datePicker<%=index%>').value = '<%=inventoryStock.getDate()%>';
@@ -1732,7 +1732,7 @@
 
 </script>
 
-<% for (Items items : inventoryStock.getItemList().getItems()) {
+<% for (Items items : inventoryStock.getItems()) {
 
 
     if (items.getItemStatus().equalsIgnoreCase("working")) {

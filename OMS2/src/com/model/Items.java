@@ -1,13 +1,13 @@
 package com.model;
 
-public class Items extends ItemList {
+public class Items extends InventoryStock {
 
     private String barcodeNumber;
     private String itemStatus;
     private String description;
 
-    public Items() {
-        super();
+    public Items(String itemID, String stockID, String stockINDate, String remarks) {
+        super(itemID, stockID, stockINDate, remarks);
     }
 
     public String getDescription() {
@@ -33,5 +33,6 @@ public class Items extends ItemList {
     public void setItemStatus(String itemStatus) {
         this.itemStatus = itemStatus;
     }
+
 
 }

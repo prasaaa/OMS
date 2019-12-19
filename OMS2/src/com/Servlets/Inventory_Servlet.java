@@ -30,119 +30,131 @@ public class Inventory_Servlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
+        HttpSession session = null;
 
         String message = "";
         String color = "";
 
 
-        if (session == null) {
+        if (request.getSession(false) != null) {
             session = request.getSession(true);
+        } else {
+            session = request.getSession(false);
         }
 
-        switch (request.getParameter("status")) {
-            case "deleteResultsFound":
+        if (request.getParameter("status") != null) {
 
-                message = "Results Found!!";
-                color = "green";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
+            switch (request.getParameter("status")) {
+                case "deleteResultsFound":
+
+                    message = "Results Found!!";
+                    color = "green";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
 
 
-            case "noDeleteResults":
-                message = "No Results!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "insertSuccess":
-                message = "Stock Inserted SuccessFully!!";
-                color = "green";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "insertNotSuccess":
-                message = "Stocks Insert Not Completed!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "deleteSuccess":
-                message = "Stocks Deleted SuccessFully!!";
-                color = "green";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "insertFail":
-                message = "Failed to Insert Stock!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "updateFail":
-                message = "Failed to Update Stock!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "insertError":
-            case "updateError":
-                message = "An Item Already Exist in Stock!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "deleteFail":
-                message = "Failed to Delete Stocks!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "warning":
-                message = "Nothing to Delete!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "updateSuccess":
-                message = "Item Updated SuccessFully!!";
-                color = "green";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
-            case "updateNotSuccess":
-                message = "Stocks Update Not Completed!!";
-                color = "red";
-                session.setAttribute("message", message);
-                session.setAttribute("color", color);
-                response.reset();
-                response.sendRedirect("Stock_IN_MANAGE.jsp");
-                return;
+                case "noDeleteResults":
+                    message = "No Results!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "insertSuccess":
+                    message = "Stock Inserted SuccessFully!!";
+                    color = "green";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "insertNotSuccess":
+                    message = "Stocks Insert Not Completed!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "deleteSuccess":
+                    message = "Stocks Deleted SuccessFully!!";
+                    color = "green";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "insertFail":
+                    message = "Failed to Insert Stock!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "updateFail":
+                    message = "Failed to Update Stock!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "duplicatesFound":
+                    message = "These Item/s Already Exist in Stock!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "duplicateInsert":
+                    message = "These Item/s are Reserved for Stock Out!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "deleteFail":
+                    message = "Failed to Delete Stocks!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "warning":
+                    message = "Item/s Reserved!! Unable to Delete Stock!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "updateSuccess":
+                    message = "Item Updated SuccessFully!!";
+                    color = "green";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
+                case "updateNotSuccess":
+                    message = "Stocks Update Not Completed!!";
+                    color = "red";
+                    session.setAttribute("message", message);
+                    session.setAttribute("color", color);
+                    response.reset();
+                    response.sendRedirect("Stock_IN_MANAGE.jsp");
+                    return;
 
-            default:
-                break;
+                default:
+                    break;
+            }
         }
 
     }

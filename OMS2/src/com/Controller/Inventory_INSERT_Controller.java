@@ -4,7 +4,6 @@ import com.DBConnection.ConnectionManager;
 import com.DatabaseHandle.Inventory_INSERT;
 import com.Utilities.MySQLQueries;
 import com.model.InventoryStock;
-import com.model.ItemList;
 import com.model.Items;
 
 import javax.servlet.ServletException;
@@ -24,7 +23,6 @@ import java.util.List;
 @WebServlet("/Inventory_INSERT_Controller")
 public class Inventory_INSERT_Controller extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
 
 
     /**
@@ -52,7 +50,7 @@ public class Inventory_INSERT_Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String itemID = "", stockINDate = "", remarks = "";
+        String itemID, stockINDate, remarks = "";
         String[] workingBarcodeList = {}, faultBarcodeList = {}, workingListDescriptions = {}, faultListDescriptions = {};
 
         try {
@@ -79,6 +77,8 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
             List<String> duplicateList = new ArrayList<>();
 
+            List<String> duplicateListForStockOut = new ArrayList<>();
+
             stock.setDate(stockINDate.trim());
             stock.setRemarks(remarks.trim());
 
@@ -90,10 +90,10 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
             int totalItemsLength = workingBarcodeList.length + faultBarcodeList.length;
 
-            ItemList itemList = new ItemList();
+
             Items[] items = new Items[totalItemsLength];
 
-            itemList.setItemID(itemID.trim());
+            stock.setItemID(itemID.trim());
 
 
             for (int i = 0; i < totalItemsLength; i++) {
@@ -101,12 +101,12 @@ public class Inventory_INSERT_Controller extends HttpServlet {
                 if (workingBarcodeList.length != 0 && faultBarcodeList.length != 0) {
 
                     if (i < workingBarcodeList.length) {
-                        items[i] = new Items();
+                        items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                         items[i].setBarcode(workingBarcodeList[i].trim());
                         items[i].setDescription(workingListDescriptions[i].trim());
                         items[i].setItemStatus("Working");
                     } else {
-                        items[i] = new Items();
+                        items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                         items[i].setBarcode(faultBarcodeList[i - workingBarcodeList.length].trim());
                         items[i].setDescription(faultListDescriptions[i - workingBarcodeList.length].trim());
                         items[i].setItemStatus("faulty");
@@ -114,14 +114,14 @@ public class Inventory_INSERT_Controller extends HttpServlet {
                     }
 
                 } else if (workingBarcodeList.length == 0 && faultBarcodeList.length != 0) {
-                    items[i] = new Items();
+                    items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                     items[i].setBarcode(faultBarcodeList[i].trim());
                     items[i].setDescription(faultListDescriptions[i].trim());
                     items[i].setItemStatus("faulty");
 
 
                 } else if (workingBarcodeList.length != 0) {
-                    items[i] = new Items();
+                    items[i] = new Items(stock.getItemID(), stock.getStockID(), stock.getDate(), stock.getRemarks());
                     items[i].setBarcode(workingBarcodeList[i].trim());
                     items[i].setDescription(workingListDescriptions[i].trim());
                     items[i].setItemStatus("Working");
@@ -130,61 +130,98 @@ public class Inventory_INSERT_Controller extends HttpServlet {
 
             }
 
+            stock.setItems(items);
 
-            itemList.setItems(items);
-
-            stock.setItemList(itemList);
 
             Inventory_INSERT inventory_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_STOCK);
             Inventory_INSERT item_insert = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_INSERT_ITEM_LIST);
 
             Inventory_INSERT checkDuplicate = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_SELECT_ITEM_BY_BARCODE);
 
-            boolean boolItemsList;
-            for (Items i : stock.getItemList().getItems()) {
-                boolItemsList = checkDuplicate.checkAvailability(i.getBarcode());
-
-                if (!boolItemsList) {
-                    duplicateList.add(i.getBarcode());
-
-                }
-
-            }
-
-            if (duplicateList.isEmpty()) {
-                boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemList().getItemID());
-
-                boolean boolItems = true;
-                for (Items i : items) {
-                    boolItems = item_insert.InsertItemList(itemList.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), stock.getStockID());
-
-                    if (!boolItems)
-                        break;
+            Inventory_INSERT checkDuplicateForStockOut = new Inventory_INSERT(ConnectionManager.getConnection(), MySQLQueries.QUERY_SELECT_ITEM_BY_BARCODE_STOCK_OUT);
 
 
-                }
+            if (request.getParameter("parameterStatus") != null) {
 
-                if (boolStock && boolItems) {
-                    response.sendRedirect("Inventory_Servlet?status=insertSuccess");
 
-                } else {
-
-                    if (request.getSession(false) != null)
-                        request.getSession(false).setAttribute("stock", stock);
-                    else
-                        request.getSession(true).setAttribute("stock", stock);
-                    response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
-                }
             } else {
 
-                if (request.getSession(false) != null) {
-                    request.getSession(false).setAttribute("stock", stock);
-                    request.getSession(false).setAttribute("duplicateList", duplicateList);
-                } else {
-                    request.getSession(true).setAttribute("stock", stock);
-                    request.getSession(true).setAttribute("duplicateList", duplicateList);
+                boolean boolItemsList;
+
+
+                for (Items i : stock.getItems()) {
+                    boolItemsList = checkDuplicateForStockOut.checkAvailability(i.getBarcode(), i.getItemID());
+
+                    if (!boolItemsList) {
+                        duplicateListForStockOut.add(i.getBarcode());
+
+                    }
+
                 }
-                response.sendRedirect("Inventory_Servlet?status=insertError");
+
+                if (duplicateListForStockOut.isEmpty()) {
+
+
+                    for (Items i : stock.getItems()) {
+                        boolItemsList = checkDuplicate.checkAvailability(i.getBarcode());
+
+                        if (!boolItemsList) {
+                            duplicateList.add(i.getBarcode());
+
+                        }
+
+                    }
+
+
+                    if (duplicateList.isEmpty()) {
+
+                        boolean boolStock = inventory_insert.InsertStock(stock.getStockID(), stock.getDate(), stock.getRemarks(), stock.getItemID());
+
+                        boolean boolItems = true;
+                        for (Items i : stock.getItems()) {
+                            boolItems = item_insert.InsertItemList(i.getItemID(), i.getBarcode(), i.getItemStatus(), i.getDescription(), i.getStockID());
+
+                            if (!boolItems)
+                                break;
+
+
+                        }
+
+                        if (boolStock && boolItems) {
+                            response.sendRedirect("Inventory_Servlet?status=insertSuccess");
+
+                        } else {
+
+                            if (request.getSession(false) != null)
+                                request.getSession(false).setAttribute("stock", stock);
+                            else
+                                request.getSession(true).setAttribute("stock", stock);
+                            response.sendRedirect("Inventory_Servlet?status=insertNotSuccess");
+                        }
+                    } else {
+                        if (request.getSession(false) != null) {
+                            request.getSession(false).setAttribute("stock", stock);
+                            request.getSession(false).setAttribute("duplicateList", duplicateList);
+                        } else {
+                            request.getSession(true).setAttribute("stock", stock);
+                            request.getSession(true).setAttribute("duplicateList", duplicateList);
+                        }
+                        response.sendRedirect("Inventory_Servlet?status=duplicatesFound");
+
+                    }
+
+                } else {
+
+
+                    if (request.getSession(false) != null) {
+                        request.getSession(false).setAttribute("stockInsert", stock);
+                        request.getSession(false).setAttribute("insertConfirm", duplicateListForStockOut);
+                    } else {
+                        request.getSession(true).setAttribute("stockInsert", stock);
+                        request.getSession(true).setAttribute("insertConfirm", duplicateListForStockOut);
+                    }
+                    response.sendRedirect("Inventory_Servlet?status=duplicateInsert");
+                }
             }
 
         } catch (Exception e) {
