@@ -29,28 +29,26 @@
     <title>Automated Barcode Solution</title>
 
     <link rel="stylesheet"
-          href="vendor/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          href="${pageContext.request.contextPath}/vendor/bootstrap/4.0.0/css/bootstrap.min.css"
           crossorigin="anonymous">
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link
-            href="vendor/bootstrap/4.3.1/css/bootstrap.min.css"
+            href="${pageContext.request.contextPath}/vendor/bootstrap/4.3.1/css/bootstrap.min.css"
             rel="stylesheet"
-            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
             crossorigin="anonymous">
 
 
     <link rel="stylesheet"
-          href="/vendor/fontawesome-free-5.12.0-web/css/all.min.css">
+          href="${pageContext.request.contextPath}/vendor/fontawesome-free-5.12.0-web/css/all.css">
 
-    <script src="${pageContext.request.contextPath}/vendor/fontawesome-free-5.12.0-web/js/all.js" crossorigin="anonymous" ></script>
+    <script defer type="text/javascript" src="${pageContext.request.contextPath}/vendor/fontawesome-free-5.12.0-web/js/all.js" crossorigin="anonymous" ></script>
 
 
     <!-- Custom styles for this template -->
-    <link href="css/simple-sidebar3.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/simple-sidebar3.css" rel="stylesheet">
 
     <noscript class="noscript">
         <div id="div100">
@@ -444,7 +442,7 @@
                                                                                readonly
                                                                                class="form-control"><i
                                                                             class="fa fa-caret-down"
-                                                                            id="caretv"></i><span
+                                                                            style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i><span
                                                                             class="popuptext"
                                                                             id="myPopup3v"></span>
                                                                     </div>
@@ -459,7 +457,7 @@
                                                                                    autocomplete="off"
                                                                                    placeholder="Search here.."><i
                                                                                 class="fa fa-search"
-                                                                                id="caretSearchv"></i>
+                                                                                style=" border: none;background: none;position: absolute;top: 17px;right: 13px;"></i>
                                                                         </div>
 
                                                                         <div style="overflow-x:hidden;">
@@ -1733,8 +1731,8 @@
 </div>
 
 <!-- Bootstrap core JavaScript -->
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 
 <!-- Menu Toggle Script -->
@@ -1838,7 +1836,7 @@
     }
 %>
 
-<script src="${pageContext.request.contextPath}/js/WebScript.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/WebScript.js"></script>
 
 <%
     if (session.getAttribute("color") != null && session.getAttribute("message") != null) {
