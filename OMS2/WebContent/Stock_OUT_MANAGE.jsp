@@ -46,7 +46,7 @@
     <link rel="stylesheet"
           href="vendor/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link href="vendor/material-design-icons-3.0.1/iconfont/material-icons.css" rel="stylesheet">
+    <script src="${pageContext.request.contextPath}/vendor/ajax/libs/font-awesome/5.0.0/js/font-awesome.min.js" crossorigin="anonymous" ></script>
 
     <link href="vendor/select2-4.0.12/dist/css/select2.css" rel="stylesheet">
 
