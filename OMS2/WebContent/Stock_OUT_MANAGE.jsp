@@ -44,9 +44,9 @@
 
 
     <link rel="stylesheet"
-          href="vendor/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+          href="/vendor/fontawesome-free-5.12.0-web/css/all.min.css">
 
-    <script src="${pageContext.request.contextPath}/vendor/ajax/libs/font-awesome/5.0.0/js/font-awesome.min.js" crossorigin="anonymous" ></script>
+    <script src="${pageContext.request.contextPath}/vendor/fontawesome-free-5.12.0-web/js/all.js" crossorigin="anonymous" ></script>
 
     <link href="vendor/select2-4.0.12/dist/css/select2.css" rel="stylesheet">
 
