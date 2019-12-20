@@ -1,9 +1,9 @@
 
-<%@page import="com.model.CurrentUser"%>
-<%@page import="com.DatabaseHandle.Supplier_SELECT"%>
 <%@page import="com.DBConnection.ConnectionManager"%>
-<%@page import="java.sql.ResultSet"%>
+<%@page import="com.DatabaseHandle.Supplier_SELECT" %>
+<%@page import="com.model.CurrentUser" %>
 <%@page import="java.sql.Connection"%>
+<%@page import="java.sql.ResultSet" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -38,23 +38,23 @@
 			<%} %>
 			<%if(CurrentUser.getUsername().equals("admin") || CurrentUser.getUsername().equals("accountant") || CurrentUser.getUsername().equals("manager")) {%>
 				<a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+						class="list-group-item list-group-item-action bg-light dropdown-toggle"
+						data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+						aria-controls="collapseExample">Inventory&nbsp;Management</a>
 				<div class="collapse" id="collapseExample">
 
-			
-			
-					<a href="Stock_IN_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
+
+					<a href="Stock_IN_MANAGE.jsp"
+					   class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
 					<a href="Stock_OUT_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+					   class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
 
 
 				</div>
-		
-				<a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
-				
-				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
+
+				<a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+
+				<a href="Customer_Details_Insert.jsp" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
 				<a href="Customer_Order_Insert.jsp"
 					class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
 				<a href="Emp_Management.jsp"
@@ -121,8 +121,8 @@
 						ChangeSession.setAttribute("change", 0);
 						ResultSet result;
 						session.setAttribute("test", null);
-						 
-						if( (Integer) session.getAttribute("test")  != null)
+
+                            if (session.getAttribute("test") != null)
 						{
 							
 							System.out.println("came inside the test");

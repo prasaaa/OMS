@@ -1,21 +1,16 @@
 package com.DatabaseHandle;
 
+import com.DBConnection.ConnectionManager;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import java.io.FileOutputStream;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import com.DBConnection.ConnectionManager;
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class Report_PRINT {
@@ -214,115 +209,112 @@ public class Report_PRINT {
 	            
 	            
 	            document.add(table);
-    
-			}
-			document.close();
-		}catch(Exception e)
-			{
-				System.out.print("error in pdf repair report " + e);
-			}
-		
-	}
-	
-	public void printstockreport()
-	{
-		
-		System.out.println("inside the stock method");
-		
-		Document document = new Document();
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		
-		try {
-			
-			PdfWriter.getInstance(document, new FileOutputStream("stockreport"+timeStamp+".pdf"));
-			document.open();
-			PdfPCell cell1;
-	        PdfPCell cell2;
-	        PdfPCell cell3;
-	        PdfPCell cell4;
-	        PdfPCell cell5;
-	        PdfPCell cell6;
-	        PdfPCell cell7;
-	  
-	        
-	        Paragraph preface = new Paragraph();
-	        
-	        addEmptyLine(preface, 1);
-	        
-	        preface.add(new Paragraph("Stock Report",redFont));
 
-	        addEmptyLine(preface, 1);
-	        
-	        preface.add(new Paragraph(
-	                "Report created on: " + " " + new Date(),smallBold));
-	        addEmptyLine(preface, 1);
-	     
+            }
+            document.close();
+        } catch (Exception e) {
+            System.out.print("error in pdf repair report " + e);
+        }
 
-	        addEmptyLine(preface, 2);
+    }
 
-	        document.add(preface);
-	        resultprint.beforeFirst();
-	        
-	        
-	        PdfPTable table = new PdfPTable(7);
-			table.setWidthPercentage(100);
-			
-			
-			
-			
-         
-            
-            //document.add(table);
-			
-			while(resultprint.next())
-			{
-				
-				table = new PdfPTable(7);
-				table.setWidthPercentage(100);
-				if(count == 0)
-				{
-					cell1 = new PdfPCell(new Paragraph("Stock ID"));
-					cell2 = new PdfPCell(new Paragraph("Items Model Name"));
-					cell3 = new PdfPCell(new Paragraph("Manufacturer"));
-					cell4 = new PdfPCell(new Paragraph("Supplier"));
-					cell5 = new PdfPCell(new Paragraph("Item Type"));
-					cell6 = new PdfPCell(new Paragraph("Received Date"));
-					cell7 = new PdfPCell(new Paragraph("Quantity"));
-					count++;
-					resultprint.beforeFirst();
-				}else
-				{
-					cell1 = new PdfPCell(new Paragraph(resultprint.getString(1)));
-					cell2 = new PdfPCell(new Paragraph(resultprint.getString(2)));
-					cell3 = new PdfPCell(new Paragraph(resultprint.getString(3)));
-					cell4 = new PdfPCell(new Paragraph(resultprint.getString(4)));
-					cell5 = new PdfPCell(new Paragraph(resultprint.getString(5)));
-					cell6 = new PdfPCell(new Paragraph(resultprint.getString(6)));
-					cell7 = new PdfPCell(new Paragraph(resultprint.getString(7)));
-				}
-				
-				
-				
-				table.addCell(cell1);
-	            table.addCell(cell2);
-	            table.addCell(cell3);
-	            table.addCell(cell4);
-	            table.addCell(cell5);
-	            table.addCell(cell6);
-	            table.addCell(cell7);
-	            
-	            
-	            document.add(table);
-    
-			}
-			count = 0;
-			document.close();
-		}catch(Exception e)
-			{
-				System.out.print("error in pdf repair report " + e);
-			}
-		
-	}
+    public boolean printstockreport() {
+
+        System.out.println("inside the stock method");
+
+        Document document = new Document();
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+
+        try {
+
+            PdfWriter.getInstance(document, new FileOutputStream("D:/Reports/stockreport" + timeStamp + ".pdf"));
+            document.open();
+            PdfPCell cell1;
+            PdfPCell cell2;
+            PdfPCell cell3;
+            PdfPCell cell4;
+            PdfPCell cell5;
+            PdfPCell cell6;
+            PdfPCell cell7;
+
+
+            Paragraph preface = new Paragraph();
+
+            addEmptyLine(preface, 1);
+
+            preface.add(new Paragraph("Stock Report", redFont));
+
+            addEmptyLine(preface, 1);
+
+            preface.add(new Paragraph(
+                    "Report created on: " + " " + new Date(), smallBold));
+            addEmptyLine(preface, 1);
+
+
+            addEmptyLine(preface, 2);
+
+            document.add(preface);
+            resultprint.beforeFirst();
+
+
+            PdfPTable table = new PdfPTable(7);
+            table.setWidthPercentage(100);
+
+
+            cell1 = new PdfPCell(new Paragraph("Stock ID"));
+            cell2 = new PdfPCell(new Paragraph("Items Model Name"));
+            cell3 = new PdfPCell(new Paragraph("Manufacturer"));
+            cell4 = new PdfPCell(new Paragraph("Supplier"));
+            cell5 = new PdfPCell(new Paragraph("Item Type"));
+            cell6 = new PdfPCell(new Paragraph("Received Date"));
+            cell7 = new PdfPCell(new Paragraph("Quantity"));
+
+            table.addCell(cell1);
+            table.addCell(cell2);
+            table.addCell(cell3);
+            table.addCell(cell4);
+            table.addCell(cell5);
+            table.addCell(cell6);
+            table.addCell(cell7);
+
+            document.add(table);
+
+            while (resultprint.next()) {
+
+                table = new PdfPTable(7);
+                table.setWidthPercentage(100);
+
+                cell1 = new PdfPCell(new Paragraph(resultprint.getString(1)));
+                cell2 = new PdfPCell(new Paragraph(resultprint.getString(2)));
+                cell3 = new PdfPCell(new Paragraph(resultprint.getString(3)));
+                cell4 = new PdfPCell(new Paragraph(resultprint.getString(4)));
+                cell5 = new PdfPCell(new Paragraph(resultprint.getString(5)));
+                cell6 = new PdfPCell(new Paragraph(resultprint.getString(6)));
+                cell7 = new PdfPCell(new Paragraph(resultprint.getString(7)));
+
+
+                table.addCell(cell1);
+                table.addCell(cell2);
+                table.addCell(cell3);
+                table.addCell(cell4);
+                table.addCell(cell5);
+                table.addCell(cell6);
+                table.addCell(cell7);
+
+
+                document.add(table);
+
+            }
+
+            document.close();
+            return true;
+        } catch (Throwable e) {
+            System.out.print("error in pdf stock report " + e);
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 	public void printemp()
 	{
 		

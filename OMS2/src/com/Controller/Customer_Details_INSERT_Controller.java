@@ -1,7 +1,7 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Customer_INSERT;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,9 +9,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Customer_INSERT;
+import java.io.IOException;
+import java.sql.Connection;
 
 
 
@@ -49,23 +48,23 @@ public class Customer_Details_INSERT_Controller extends HttpServlet {
 		cus_phone=request.getParameter("cus_phone");
 		
 		System.out.println("came dopost");
-		
-		coni = ConnectionManager.getConnection();
-		
-		System.out.println("con");
-		
-		query = "insert into current_customer(cus_name,cus_address,cus_phone) values(?,?,?)";
-		
-		System.out.println("q ava");
-		
-		Customer_INSERT ei =new Customer_INSERT(coni,query,cus_name,cus_address,cus_phone);
-		ei.insert_customer_table();;
-		
-		System.out.println("came dopost");
-		
-		
-		RequestDispatcher dispatcher = getServletContext(). getRequestDispatcher("/Customer_Details_INSERT.jsp");
-        dispatcher.forward(request,response);
-	}
+
+        coni = ConnectionManager.getConnection();
+
+        System.out.println("con");
+
+        query = "insert into current_customer(cus_name,cus_address,cus_phone) values(?,?,?)";
+
+        System.out.println("q ava");
+
+        Customer_INSERT ei = new Customer_INSERT(coni, query, cus_name, cus_address, cus_phone);
+        ei.insert_customer_table();
+
+        System.out.println("came dopost");
+
+
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/Customer_Details_INSERT.jsp");
+        dispatcher.forward(request, response);
+    }
 
 }

@@ -3,9 +3,7 @@ package com.DatabaseHandle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
-import com.mysql.cj.xdevapi.PreparableStatement;
 
 public class Payment_INSERT {
 	private Connection c;

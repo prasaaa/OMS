@@ -1,13 +1,5 @@
-
-
-<%@page import="com.DatabaseHandle.Supplier_SELECT"%>
-<%@page import="com.DBConnection.ConnectionManager"%>
-<%@page import="java.sql.ResultSet"%>
-
-
-<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+		 pageEncoding="ISO-8859-1" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -89,27 +81,28 @@
   <div class="d-flex" id="wrapper">
 
     <!-- Sidebar -->
-    <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Company Name</div>
-      <div class="list-group list-group-flush">
-        <a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a> <a
-					class="list-group-item list-group-item-action bg-light dropdown-toggle"
-					data-toggle="collapse" href="#collapseExample" role="button"
-					aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
-				<div class="collapse" id="collapseExample">
+	  <div class="bg-light border-right" id="sidebar-wrapper">
+		  <div class="sidebar-heading">Company Name</div>
+		  <div class="list-group list-group-flush">
+			  <a href="Supplier_Order_Insert.jsp" class="list-group-item list-group-item-action bg-light">Supplier&nbsp;Management</a>
+			  <a
+					  class="list-group-item list-group-item-action bg-light dropdown-toggle"
+					  data-toggle="collapse" href="#collapseExample" role="button"
+					  aria-expanded="false" aria-controls="collapseExample">Inventory&nbsp;Management</a>
+			  <div class="collapse" id="collapseExample">
 
 
-					<a href="Stock_IN_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
-					<a href="Stock_OUT_INSERT.jsp"
-						class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
+				  <a href="Stock_IN_MANAGE.jsp"
+					 class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;IN</a>
+				  <a href="Stock_OUT_INSERT.jsp"
+					 class="list-group-item list-group-item-action bg-secondary text-white">&nbsp;&nbsp;&nbsp;&nbsp;Stock&nbsp;OUT</a>
 
 
-				</div>
+			  </div>
 
-				<a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a> 
-				<a href="" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a> 
-				<a href="Customer_Order_Insert.jsp"
+			  <a href="" class="list-group-item list-group-item-action bg-light">Payment&nbsp;Management</a>
+			  <a href="" class="list-group-item list-group-item-action bg-light">Customer&nbsp;Management</a>
+			  <a href="Customer_Order_Insert.jsp"
 					class="list-group-item list-group-item-action bg-light">Installation&nbsp;Management</a>
       </div>
     </div>

@@ -1,49 +1,62 @@
 package com.model;
 
 public class InventoryStock {
-	
-	private ItemList itemList;
-	private String stockINDate;
-	private String remarks;
-	private long quantity;
-	
-	
-	public InventoryStock() {
-	}
-	
-	public void setItemList(ItemList itemList) {
-		this.itemList = itemList;
-	}
-	
-	public ItemList getItemList() {
-		return this.itemList;
-	}
-	
-	public void setDate(String stockINDate) {
-		this.stockINDate = stockINDate;
-	}
-	
-	public String getDate() {
-		return this.stockINDate;
-	}
-	
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-	
-	public String getRemarks() {	
-		return this.remarks;
-	}
-	
-	public void setQuantity(long quantity) {
-		this.quantity = quantity;
-	}
-	
-	public long getQuantity() {
-		return this.quantity;
-	} 
-	
-	
-	
-	
+
+    protected String itemID;
+    protected String stockID;
+    protected String stockINDate;
+    protected String remarks;
+    private Items[] items;
+
+
+    public InventoryStock() {
+
+    }
+
+    public InventoryStock(String itemID, String stockID, String stockINDate, String remarks) {
+        this.itemID = itemID;
+        this.stockID = stockID;
+        this.stockINDate = stockINDate;
+        this.remarks = remarks;
+    }
+
+    public String getDate() {
+        return this.stockINDate;
+    }
+
+    public void setDate(String stockINDate) {
+        this.stockINDate = stockINDate;
+    }
+
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public String getStockID() {
+        return stockID;
+    }
+
+    public void setStockID(String stockID) {
+        this.stockID = stockID;
+    }
+
+    public Items[] getItems() {
+        return this.items;
+    }
+
+    public void setItems(Items[] item) {
+        this.items = item;
+    }
+
+    public String getItemID() {
+        return itemID;
+    }
+
+    public void setItemID(String itemID) {
+        this.itemID = itemID;
+    }
 }

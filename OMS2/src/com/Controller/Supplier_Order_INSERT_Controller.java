@@ -1,24 +1,21 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.HashMap;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Main_SELECT;
+import com.DatabaseHandle.Supplier_CONFIRM_STOCK;
+import com.DatabaseHandle.Supplier_Order_INSERT;
+import com.model.Supplier_Order;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Customer_order_INSERT;
-import com.DatabaseHandle.Main_SELECT;
-import com.DatabaseHandle.Supplier_CONFIRM_STOCK;
-import com.DatabaseHandle.Supplier_Order_INSERT;
-import com.model.Supplier_Order;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.HashMap;
 
 
 @WebServlet("/Supplier_Order_INSERT_Controller")
@@ -45,31 +42,28 @@ public class Supplier_Order_INSERT_Controller extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Connection csoi = ConnectionManager.getConnection();
-		 buying_totalprice =0 ;
-		 
-		supplier_Id = request.getParameter("supplierselect");
-		estimated_Date = request.getParameter("date");
-		HttpSession I_OR_L_get =  request.getSession();
-		supplier_type_hashmap =(HashMap)  I_OR_L_get.getAttribute("supplier_hash");
-		supplier_type =  supplier_type_hashmap.get(supplier_Id);
+        Connection csoi = ConnectionManager.getConnection();
+        buying_totalprice = 0;
 
-		counter = 1;
-		item_name = request.getParameter(String.valueOf(counter)+"item");
-		if(request.getParameter(String.valueOf(counter)+"quantity") != null)
-		{
-			item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
-			item_quantity_double =  Double.parseDouble(request.getParameter(String.valueOf(counter)+"quantity"));
-			
-		}
-		
-		while(item_name != null)
-		{
-			//check wther the item is already in the hashmap otherwise old value will be replae by the new quanitty
-			if(! store_item_details.containsKey(item_name))
-			{
-				store_item_details.put(item_name,item_quantity);
-			}
+        supplier_Id = request.getParameter("supplierselect");
+        estimated_Date = request.getParameter("date");
+        HttpSession I_OR_L_get = request.getSession();
+        supplier_type_hashmap = (HashMap) I_OR_L_get.getAttribute("supplier_hash");
+        supplier_type = supplier_type_hashmap.get(supplier_Id);
+
+        counter = 1;
+        item_name = request.getParameter(counter + "item");
+        if (request.getParameter(counter + "quantity") != null) {
+            item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
+            item_quantity_double = Double.parseDouble(request.getParameter(counter + "quantity"));
+
+        }
+
+        while (item_name != null) {
+            //check wther the item is already in the hashmap otherwise old value will be replae by the new quanitty
+            if (!store_item_details.containsKey(item_name)) {
+                store_item_details.put(item_name, item_quantity);
+            }
 			else
 			{
 				store_item_details.put(item_name,store_item_details.get(item_name) + item_quantity);
@@ -82,25 +76,24 @@ public class Supplier_Order_INSERT_Controller extends HttpServlet {
 			{
 			
 				buying_price =  item_resultset.getDouble("buying_price");
-				
-			}
-			}catch (Exception e) {
-				
-				System.out.println("error in fetching item details " + e);
-			}
-			System.out.println("this is the price of "+ item_name + " this is the selling price " +   " and buying price " + buying_price );
-			
-			buying_totalprice =  buying_totalprice + buying_price * item_quantity_double;
-			counter++;
-			item_name = request.getParameter(String.valueOf(counter)+"item");
-			if(request.getParameter(String.valueOf(counter)+"quantity") != null)
-			{
-				item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
-				item_quantity_double =  Double.parseDouble(request.getParameter(String.valueOf(counter)+"quantity"));
-			}
-			
-			
-		}
+
+            }
+            } catch (Exception e) {
+
+                System.out.println("error in fetching item details " + e);
+            }
+            System.out.println("this is the price of " + item_name + " this is the selling price " + " and buying price " + buying_price);
+
+            buying_totalprice = buying_totalprice + buying_price * item_quantity_double;
+            counter++;
+            item_name = request.getParameter(counter + "item");
+            if (request.getParameter(counter + "quantity") != null) {
+                item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
+                item_quantity_double = Double.parseDouble(request.getParameter(counter + "quantity"));
+            }
+
+
+        }
 		
 		System.out.println(store_item_details);
 		System.out.println(supplier_type_hashmap);

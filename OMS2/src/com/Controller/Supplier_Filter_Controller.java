@@ -1,8 +1,7 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Supplier_SELECT;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,10 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Supplier_SELECT;
-;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
 
 
 @WebServlet("/Supplier_Filter_Controller")

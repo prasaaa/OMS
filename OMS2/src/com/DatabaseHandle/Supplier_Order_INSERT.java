@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import sun.security.util.PendingException;
-
 public class Supplier_Order_INSERT {
 	private Connection ccoi;
 	public ResultSet rs;

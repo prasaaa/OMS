@@ -1,22 +1,18 @@
 package com.Controller;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
+import com.DBConnection.ConnectionManager;
+import com.DatabaseHandle.Customer_order_INSERT;
+import com.DatabaseHandle.Main_SELECT;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.DBConnection.ConnectionManager;
-import com.DatabaseHandle.Customer_order_INSERT;
-import com.DatabaseHandle.Main_SELECT;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.HashMap;
 
 
 @WebServlet("/Customer_Order_Insert_Controller")
@@ -41,48 +37,42 @@ public class Customer_Order_Insert_Controller extends HttpServlet {
    
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		customer_Id = request.getParameter("customerselect");
-		required_Date = request.getParameter("date");
-		order_type =  request.getParameter("order_type"); 
-		Connection ccoic = ConnectionManager.getConnection();
-		counter = 1;
-		item_name = request.getParameter(String.valueOf(counter)+"item");
-		if(request.getParameter(String.valueOf(counter)+"quantity") != null)
-		{
-			item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
-		}
-		
-		while(item_name != null)
-		{
-			if(! store_item_details.containsKey(item_name))
-			{
-				store_item_details.put(item_name,item_quantity);
-			}
-			else {
-				store_item_details.put(item_name, store_item_details.get(item_name) + item_quantity);
+        customer_Id = request.getParameter("customerselect");
+        required_Date = request.getParameter("date");
+        order_type = request.getParameter("order_type");
+        Connection ccoic = ConnectionManager.getConnection();
+        counter = 1;
+        item_name = request.getParameter(counter + "item");
+        if (request.getParameter(counter + "quantity") != null) {
+            item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
+        }
+
+        while (item_name != null) {
+            if (!store_item_details.containsKey(item_name)) {
+                store_item_details.put(item_name, item_quantity);
+            } else {
+                store_item_details.put(item_name, store_item_details.get(item_name) + item_quantity);
 			}
 			Main_SELECT mssoi = new Main_SELECT(ccoic,"SELECT selling_price,buying_price from item_details_table where item_id ='"+ item_name+"'");
 			item_resultset = mssoi.get_table();
 			try {
-			while(item_resultset.next())
-			{
-			
-				buying_price =  item_resultset.getDouble("buying_price");
-				
-			}
-			}catch (Exception e) {
-				
-				System.out.println("error in fetching item details " + e);
-			}
-			counter++;
-			item_name = request.getParameter(String.valueOf(counter)+"item");
-			if(request.getParameter(String.valueOf(counter)+"quantity") != null)
-			{
-				item_quantity =  Integer.parseInt(request.getParameter(String.valueOf(counter)+"quantity"));
-			}
-			
-			
-		}
+			while(item_resultset.next()) {
+
+                buying_price = item_resultset.getDouble("buying_price");
+
+            }
+            } catch (Exception e) {
+
+                System.out.println("error in fetching item details " + e);
+            }
+            counter++;
+            item_name = request.getParameter(counter + "item");
+            if (request.getParameter(counter + "quantity") != null) {
+                item_quantity = Integer.parseInt(request.getParameter(counter + "quantity"));
+            }
+
+
+        }
 		System.out.println(store_item_details);
 		
 		
