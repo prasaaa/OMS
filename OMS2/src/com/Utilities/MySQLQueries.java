@@ -23,6 +23,8 @@ public class MySQLQueries {
     @Language("MySQL")
     public static final String QUERY_SELECT_ITEM_BY_BARCODE_STOCK_OUT_NOT_BY_THE_SAME_ITEM = "SELECT * FROM items_list_table WHERE barcode_number = ? AND item_id != ?;";
 
+    @Language("MySQL")
+    public static final String QUERY_GET_ALL_WORKING_ITEMS = "SELECT barcode_number, item_id FROM items_list_table WHERE items_status LIKE '%Working%' AND stock_out_id IS NULL";
 
     public static final String QUERY_SELECT_ITEM_BY_BARCODE_STOCK_OUT = "SELECT * FROM items_list_table WHERE barcode_number = ? AND item_id = ? AND stock_out_id IS NOT NULL;";
 
@@ -54,4 +56,11 @@ public class MySQLQueries {
 
     @Language("MySQL")
     public static final String QUERY_GET_ALL_OTHER_ITEMS = "SELECT * FROM items_list_table WHERE barcode_number = ? AND stock_in_id != ?;";
+
+    @Language("MySQL")
+    public static final String QUERY_GET_ALL_CUSTOMER_ORDERS = "SELECT cot.customer_Order_Id, cut.customer_name, cut.customer_location, cut.customer_branch, coit.item_Details_Id,  coit.need , coit.quantity  FROM customer_order_table cot INNER JOIN customer_order_items_table coit ON cot.customer_Order_Id = coit.customer_Order_Id INNER JOIN customer_table cut ON cot.customer_Id = cut.customer_Id;";
+
+
+    @Language("MySQL")
+    public static final String QUERY_GET_ITEM_USAGE = "SELECT SUM(quantity) AS quantity, COUNT(*) AS total FROM customer_order_items_table INNER JOIN stock_in_items_table s ON item_Details_Id = s.item_id WHERE stock_in_id = ? GROUP BY item_id;";
 }

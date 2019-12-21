@@ -1673,8 +1673,19 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p></p>
-                                                            Are you Sure you want to delete this record?
+                                                            <%
+                                                                ResultSet usageSet = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ITEM_USAGE).retreiveQueryData(results.getString("stock_in_id"));
+
+                                                                int quantity = 0;
+                                                                int total = 0;
+
+                                                                while (usageSet.next()) {
+                                                                    quantity += usageSet.getInt("quantity");
+                                                                    total += usageSet.getInt("total");
+                                                                }
+                                                            %>
+                                                            <p>Total&nbsp;Number&nbsp;of&nbsp;Usages&nbsp;:&nbsp;<%=total%><br>Number&nbsp;of&nbsp;Items&nbsp;Needed&nbsp;:&nbsp;<%=quantity%><br>Found&nbsp;for&nbsp;this&nbsp;Stock&nbsp;Item<br>Are&nbsp;You&nbsp;Sure&nbsp;Still&nbsp;You&nbsp;Want&nbsp;to&nbsp;Delete&nbsp;this&nbsp;Record?</p>
+
                                                         </div>
                                                         <div class="modal-footer">
                                                             <input type="button" class="btn btn-outline-success"

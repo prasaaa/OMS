@@ -283,6 +283,10 @@ function clearAllFieldsV() {
     if (document.getElementById("ErrorMessage") !== null)
         document.getElementById("ErrorMessage").hidden = true;
 
+    if (document.getElementById('custOrder') !== undefined || document.getElementById('custOrder') !== null) {
+        document.getElementById('custOrder').innerHTML = "";
+    }
+
     window.scrollTop;
 
 }

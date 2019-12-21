@@ -44,7 +44,9 @@
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/vendor/fontawesome-free-5.12.0-web/css/all.css">
 
-    <script defer type="text/javascript" src="${pageContext.request.contextPath}/vendor/fontawesome-free-5.12.0-web/js/all.js" crossorigin="anonymous" ></script>
+    <script defer type="text/javascript"
+            src="${pageContext.request.contextPath}/vendor/fontawesome-free-5.12.0-web/js/all.js"
+            crossorigin="anonymous"></script>
 
 
     <!-- Custom styles for this template -->
@@ -427,6 +429,13 @@
                                                             </td>
                                                         </tr>
                                                         <% } %>
+                                                        <tr>
+                                                            <td>
+                                                                <table>
+
+                                                                </table>
+                                                            </td>
+                                                        </tr>
                                                         <tr style="background-color: #e9e9e9;">
                                                             <td>
                                                                 <label for="itemdetailsdropitemv"
@@ -467,7 +476,11 @@
 
                                                                             <%
                                                                                 try {
-                                                                                    while (resultset_for_items.next()) {%>
+
+                                                                                    int i = 0;
+                                                                                    while (resultset_for_items.next()) {
+                                                                                        i++;
+                                                                            %>
                                                                             <a style="cursor: pointer;"
                                                                                id='<%=resultset_for_items.getString("item_id") %>v'
                                                                                tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
@@ -481,6 +494,29 @@
                                                                                     document.getElementById('itemdetailsdropitemv').value = '<%=resultset_for_items.getString("item_id")%>';
                                                                                     document.getElementById('iteminformationv').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>v').innerHTML + '</p>';
                                                                                     document.getElementById('itemdetailsmyInputv').value = "";
+                                                                                    document.getElementById('itemList').innerHTML = "";
+                                                                                    let x<%=i%> = document.createElement('option');
+                                                                                    x<%=i%>.text = 'Select Barcode from Here...';
+                                                                                    x<%=i%>.value = 'Select Barcode from Here...';
+                                                                                    x<%=i%>.selected = true;
+                                                                                    x<%=i%>.disabled = true;
+                                                                                    document.getElementById('itemList').add(x<%=i%>);
+
+                                                                                    <%
+                                                                                            ResultSet resultSetItems = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_WORKING_ITEMS).get_inventory_table();
+
+                                                                                            int j = 0;
+                                                                                            while (resultSetItems.next()) {
+                                                                                                j++;
+                                                                                                if (resultSetItems.getString("item_id").equalsIgnoreCase(resultset_for_items.getString("item_id"))) {
+                                                                                    %>
+                                                                                    let x<%=i+j%> = document.createElement('option');
+                                                                                    x<%=i+j%>.text = '<%=resultSetItems.getString("barcode_number") %>';
+                                                                                    x<%=i+j%>.value = '<%=resultSetItems.getString("barcode_number") %>';
+                                                                                    document.getElementById('itemList').add(x<%=i+j%>);
+                                                                                    <% } } %>
+
+
                                                                                 });
 
                                                                                 document.getElementById('<%=resultset_for_items.getString("item_id") %>v').addEventListener("keyup", function (e) {
@@ -529,30 +565,10 @@
                                                                 </div>
                                                                 <br>
 
-                                                                <select style="width: 100%" name="custOrder"
-                                                                        class="select-select2"
-                                                                        data-placeholder="Please choose one or more"
-                                                                        data-allow-clear="true"
-                                                                        data-close-on-select="false" multiple
-                                                                        id="custOrder">
-                                                                    <option>Lorem</option>
-                                                                    <option>ipsum</option>
-                                                                    <option>dolor</option>
-                                                                    <option>sit amet</option>
-                                                                    <option>consectetur</option>
-                                                                    <option>adipisicing</option>
-                                                                    <option>elit sed</option>
-                                                                    <option>do eiusmod</option>
-                                                                    <option>tempor</option>
-                                                                    <option>incididunt</option>
-                                                                    <option>ut labore</option>
-                                                                    <option>et dolore</option>
-                                                                    <option>magna aliqua</option>
-                                                                    <option>Ut enim ad</option>
-                                                                </select>
+
 
                                                                 <label for="datePickerv">Stock&nbsp;IN&nbsp;Date</label>
-                                                                <input type="date" name="stockindate"
+                                                                <input type="date" name="stockoutdate"
                                                                        id="datePickerv" required
 
                                                                     <% if (stock != null) { %>
@@ -564,7 +580,7 @@
                                                                 <label for="txtAreaRemarksv">Any&nbsp;other&nbsp;Information's</label>
 
                                                                 <textarea id="txtAreaRemarksv"
-                                                                          name="remarks"
+                                                                          name="remarksStockOUT"
                                                                           rows="4"
                                                                           cols="4"
                                                                           placeholder="Enter Stock Information Here..."><% if (stock != null) { %><%= stock.getRemarks() %><%}%></textarea>
@@ -573,36 +589,22 @@
                                                             <td>
                                                                 <label id="itemsListv">Item&nbsp;List&nbsp;Details</label>
                                                                 <div class="popup" style="width:100%;">
-                                                                    <input style="width:100%;"
-                                                                           type="text"
-                                                                           id="txtBarcodev"
-                                                                           name="barcodeNmber"
-                                                                           placeholder="Enter Barcode Here...">
+                                                                    <select style="width: 100%;" name="itemsList"
+                                                                            class="select-select2"
+                                                                            data-placeholder="Please Choose One or More Barcode Items Here..."
+                                                                            id="itemList" required>
+
+                                                                    </select>
                                                                     <span class="popuptext"
                                                                           id="myPopup1v"></span>
 
                                                                 </div>
 
-                                                                <div class="popup" style="width:100%;">
-                                                                    <select style="width:100%;"
-                                                                            id="itemStatusv">
-                                                                        <option selected disabled
-                                                                                value="">
-                                                                            Select&nbsp;Item&nbsp;Type
-                                                                        </option>
-                                                                        <option value="working">
-                                                                            Working
-                                                                        </option>
-                                                                        <option value="faulty">Faulty
-                                                                        </option>
-                                                                    </select>
-                                                                    <span class="popuptext"
-                                                                          id="myPopup4v"></span>
-                                                                </div>
+
                                                                 <div class="popup"
                                                                      style="width:100%;"><textarea
                                                                         id="descriptionv"
-                                                                        placeholder="Enter Fault Description Here..."
+                                                                        placeholder="Enter Description Here..."
                                                                         cols="4"
                                                                         rows="4"></textarea><span
                                                                         class="popuptext"
@@ -624,143 +626,18 @@
                                                                     <br>
 
                                                                 </div>
+                                                                <br>
+                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;"
+                                                                     id="list">
+                                                                    <table style="width:100%; padding:0; border-spacing:0;"
+                                                                           id="ItemsListTable"
+                                                                           border=1>
+                                                                    </table>
+                                                                </div>
 
                                                             </td>
                                                         </tr>
-                                                        <tr style="background-color: #cacaca;">
 
-                                                            <td>
-
-                                                                <label for="txtBarcodev"
-                                                                       id="workingItemsv">Working&nbsp;Item&nbsp;List</label><br>
-                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;"
-                                                                     id="workingListv">
-                                                                    <table style="width:100%; padding:0; border-spacing:0;"
-                                                                           id="workingItemsTablev"
-                                                                           border=1>
-
-                                                                        <%
-
-                                                                            if (stock != null) {
-                                                                                for (Items items : stock.getItems()) {
-
-                                                                                    String color = "";
-                                                                                    if (items.getItemStatus().equalsIgnoreCase("Working")) {
-                                                                                        for (String list : duplicateList) {
-                                                                                            if (list.equalsIgnoreCase(items.getBarcode())) {
-                                                                                                color = "red";
-                                                                                                break;
-                                                                                            }
-                                                                                        }
-
-                                                                        %>
-                                                                        <tr style="padding:0;">
-                                                                            <td style="padding:0;"><input type="text"
-                                                                                                          readonly
-                                                                                <% if (color.equalsIgnoreCase("red")) {%>
-                                                                                                          style="margin:0;border:0;color: red"
-                                                                                <%} else {%>
-                                                                                                          style="margin:0;border:0;color: black"
-                                                                                <%}%>
-                                                                                                          value="<%= items.getBarcode() %>"
-                                                                                                          name="barcode">
-                                                                            </td>
-                                                                            <td style="padding:0;"><input type="text"
-                                                                                                          style="margin:0;border:0;"
-                                                                                                          name="workingDescription"
-                                                                                                          value="<%= items.getDescription() %>">
-                                                                            </td>
-                                                                            <td style="padding:0;">
-                                                                                <button style="margin:0;" type="button"
-                                                                                        class="btn btn-danger"
-                                                                                        onclick="removeWorkingItemRowV(this)">
-                                                                                    <i class="fa fa-trash"></i></button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <%
-                                                                                    }
-                                                                                }
-
-                                                                            } %>
-
-                                                                    </table>
-
-
-                                                                </div>
-                                                                <br>
-                                                                <button style="width:100%"
-                                                                        class="btn btn-warning"
-                                                                        type="button"
-                                                                        onclick="deleteAllWorkingItemsRowsV();">
-                                                                    Clear&nbsp;All
-                                                                </button>
-
-                                                            </td>
-                                                            <td>
-                                                                <label for="txtBarcodev">Fault
-                                                                    Item&nbsp;List</label><br>
-                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
-                                                                    <table style="width:100%; padding:0; border-spacing:0;"
-                                                                           id="faultTablev"
-                                                                           border=1>
-                                                                        <%
-
-                                                                            if (stock != null) {
-                                                                                for (Items items : stock.getItems()) {
-
-
-                                                                                    if (items.getItemStatus().equalsIgnoreCase("Faulty")) {
-
-                                                                                        String color = "";
-                                                                                        for (String list : duplicateList) {
-                                                                                            if (list.equalsIgnoreCase(items.getBarcode())) {
-                                                                                                color = "red";
-                                                                                                break;
-                                                                                            }
-                                                                                        }
-                                                                        %>
-                                                                        <tr style="padding:0;">
-                                                                            <td style="padding:0;"><input type="text"
-                                                                                                          readonly
-
-                                                                                <% if (color.equalsIgnoreCase("red")) {%>
-                                                                                                          style="margin:0;border:0;color: red"
-                                                                                <%} else {%>
-                                                                                                          style="margin:0;border:0;color: black"
-                                                                                <%}%>
-                                                                                                          value="<%= items.getBarcode() %>"
-                                                                                                          name="faultBarcode">
-                                                                            </td>
-                                                                            <td style="padding:0;"><input type="text"
-                                                                                                          style="margin:0;border:0;"
-                                                                                                          name="faultDescription"
-                                                                                                          value="<%= items.getDescription() %>">
-                                                                            </td>
-                                                                            <td style="padding:0;">
-                                                                                <button style="margin:0;" type="button"
-                                                                                        class="btn btn-danger"
-                                                                                        onclick="removeFaultItemRowV(this)">
-                                                                                    <i class="fa fa-trash"></i></button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <% }
-                                                                        }
-
-                                                                        } %>
-
-                                                                    </table>
-
-
-                                                                </div>
-                                                                <br>
-                                                                <button style="width:100%"
-                                                                        class="btn btn-warning"
-                                                                        type="button"
-                                                                        onclick="deleteAllFaultItemsRowsV();">
-                                                                    Clear&nbsp;All
-                                                                </button>
-                                                            </td>
-                                                        </tr>
                                                     </table>
                                                 </div>
                                             </div>
@@ -1756,7 +1633,8 @@
 
 <!-- Bootstrap core JavaScript -->
 <script type="text/javascript" src="${pageContext.request.contextPath}/vendor/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <script src="${pageContext.request.contextPath}/vendor/select2-4.0.12/dist/js/select2.js"></script>
 <!-- Menu Toggle Script -->
@@ -1860,7 +1738,7 @@
     }
 %>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/WebScript.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/WebScript1.js"></script>
 
 <%
     if (session.getAttribute("color") != null && session.getAttribute("message") != null) {
@@ -1926,9 +1804,19 @@
 
 <script>
     $(document).ready(function () {
-        $('#custOrder').select2();
+        $('#itemList').select2({
+            searchInputPlaceholder: 'Type Here to Search...',
+        });
     });
+
+    $('body').on('keydown', '.select2-search__field', function(event) {
+        if ((event.ctrlKey && event.key === "j") || (event.ctrlKey && event.key === "b") || (event.ctrlKey && event.key === "i") || (event.keyCode === 13))
+            event.preventDefault();
+    });
+
+
 </script>
+
 
 </body>
 
