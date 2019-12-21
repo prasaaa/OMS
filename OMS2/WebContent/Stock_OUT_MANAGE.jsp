@@ -433,25 +433,67 @@
                                                         <% } %>
                                                         <tr>
                                                             <td colspan="2">
-                                                                <span>
-                                                                <input type="text" style="width:50%" readonly
-                                                                       id="custOrder" name="cutomerOrder">
-                                                                <input type="text" style="width:50%"
-                                                                       id="custOrderSearch" name="cutomerOrder">
-                                                                </span>
+                                                                <label for="custOrder" style="width:100%">Customer&nbsp;Order</label><br>
+                                                                <input type="text" style="width:100%" readonly
+                                                                       id="custOrder" name="cutomerOrder"
+                                                                       placeholder="Customer Order ID Goes Here...">&nbsp;
+
+                                                            </td>
+                                                        </tr>
+                                                        <tr style="background-color: #cacaca;">
+                                                            <td colspan="2">
                                                                 <div id="custOrderTable" class="dropdown-content1"
-                                                                     style="height: 200px; overflow-y: auto; widht: 100%">
-                                                                    <table>
+                                                                     style="height: 260px; overflow-y: auto; widht: 100%">
+                                                                    <table style="width: 100%">
+                                                                        <col style="width: 25%">
+                                                                        <col style="width: 10%">
+                                                                        <col style="width: 20%">
+                                                                        <col style="width: 15%">
+                                                                        <col style="width: 25%">
+                                                                        <col style="width: 5%">
+
                                                                         <thead>
 
                                                                         <tr>
+                                                                            <td colspan="6">
+                                                                                <div style="display:flex">
+                                                                                    <select style="width:50%" readonly
+                                                                                            id="custOrderSearchType"
+                                                                                            name="cutomerOrder">
+                                                                                        <option value="" disabled
+                                                                                                selected>Search&nbsp;By...
+                                                                                        </option>
+                                                                                        <option value="orderID">Order&nbsp;ID</option>
+                                                                                        <option value="custName">
+                                                                                            Customer&nbsp;Name
+                                                                                        </option>
+                                                                                        <option value="location">
+                                                                                            Location
+                                                                                        </option>
+                                                                                        <option value="branch">Branch
+                                                                                        </option>
+                                                                                        <option value="ordersList">
+                                                                                            Orders&nbsp;List
+                                                                                        </option>
 
-                                                                            <th>Customer&nbsp;Order&nbsp;ID</th>
-                                                                            <th>Name</th>
-                                                                            <th>Location</th>
-                                                                            <th>Branch</th>
-                                                                            <th>Orders&nbsp;(Item&nbsp;ID,&nbsp;Needs,&nbsp;Quantity)</th>
-                                                                            <th>Select</th>
+                                                                                    </select>&nbsp;
+                                                                                    <input type="text" style="width:50%"
+                                                                                           placeholder="Search Here..."
+                                                                                           id="custOrderSearch"
+                                                                                           name="cutomerOrder"
+                                                                                           oninput="searchfunctionV()">
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+
+                                                                        <tr>
+
+                                                                            <th class="header">Customer&nbsp;Order&nbsp;ID</th>
+                                                                            <th class="header">Name</th>
+                                                                            <th class="header">Location</th>
+                                                                            <th class="header">Branch</th>
+                                                                            <th class="header">Orders&nbsp;(Item&nbsp;ID,&nbsp;Needs,&nbsp;Quantity)</th>
+                                                                            <th class="header">Select</th>
 
                                                                         </tr>
                                                                         </thead>

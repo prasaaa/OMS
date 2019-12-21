@@ -274,6 +274,20 @@ input[type=reset]:hover {
     }
 }
 
+.header {
+    background-color: #a5a5a5;
+    position: sticky;
+    top: 90px;
+
+}
+
+thead td {
+    background-color: #a5a5a5;
+    position: sticky;
+    top: 0;
+
+}
+
 thead th {
     background-color: #a5a5a5;
     position: sticky;
@@ -368,6 +382,7 @@ thead th {
 .dropdown-content1 {
     display: none;
 }
+
 
 
 /* drop down styles */

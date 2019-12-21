@@ -304,18 +304,12 @@ window.addEventListener('click', function (event) {
     }
 });
 
-window.addEventListener('click', function (event) {
+document.getElementById('custOrder').addEventListener('click', function (event) {
 
-    let itemx = document.getElementById("custOrderTable");
+   document.getElementById("custOrderTable").classList.toggle("show");
 
-    if (event.target.id === "custOrder") {
-        itemx.classList.toggle("show");
 
-    } else if (event.target.id === "custOrderSearch") {
 
-    } else {
-        itemx.classList.remove("show");
-    }
 });
 
 
@@ -368,4 +362,46 @@ function searchfunction() {
 function clearTable() {
     document.getElementById("mainTable").innerHTML = oldTable;
     document.getElementById("txtSearch").setAttribute('type', 'text');
+}
+
+function searchfunctionV() {
+
+    let input, filter, table, tr, td, i, txtValue, catval, colno;
+
+    input = document.getElementById("custOrderSearch");
+    catval = document.getElementById("custOrderSearchType").value;
+    filter = input.value.toUpperCase();
+    table = document.getElementById("custOrderTable");
+
+    tr = table.getElementsByTagName("tr");
+    switch (catval) {
+        case "orderID":
+            colno = 0;
+            break;
+        case "custName":
+            colno = 1;
+            break;
+        case "location":
+            colno = 2;
+            break;
+        case "branch":
+            colno = 3;
+            break;
+        case "ordersList":
+            colno = 4;
+            break;
+        default:
+            return false;
+    }
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[colno];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
 }
