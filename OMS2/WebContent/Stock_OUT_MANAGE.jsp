@@ -5,8 +5,10 @@
 <%@page import="com.DatabaseHandle.Main_SELECT" %>
 <%@page import="com.Utilities.MySQLQueries" %>
 <%-- page import="com.model.CurrentUser" --%>
+<%@ page import="com.model.CustomerOrder" %>
 <%@ page import="com.model.InventoryStock" %>
 <%@ page import="com.model.Items" %>
+<%@ page import="com.model.OrderItem" %>
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.text.SimpleDateFormat" %>
@@ -430,10 +432,120 @@
                                                         </tr>
                                                         <% } %>
                                                         <tr>
-                                                            <td>
-                                                                <table>
+                                                            <td colspan="2">
+                                                                <span>
+                                                                <input type="text" style="width:50%" readonly
+                                                                       id="custOrder" name="cutomerOrder">
+                                                                <input type="text" style="width:50%"
+                                                                       id="custOrderSearch" name="cutomerOrder">
+                                                                </span>
+                                                                <div id="custOrderTable" class="dropdown-content1"
+                                                                     style="height: 200px; overflow-y: auto; widht: 100%">
+                                                                    <table>
+                                                                        <thead>
 
-                                                                </table>
+                                                                        <tr>
+
+                                                                            <th>Customer&nbsp;Order&nbsp;ID</th>
+                                                                            <th>Name</th>
+                                                                            <th>Location</th>
+                                                                            <th>Branch</th>
+                                                                            <th>Orders&nbsp;(Item&nbsp;ID,&nbsp;Needs,&nbsp;Quantity)</th>
+                                                                            <th>Select</th>
+
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <%
+                                                                            ResultSet customerOrderSet = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_CUSTOMER_ORDERS).get_inventory_table();
+
+                                                                            customerOrderSet.last();
+                                                                            int count = customerOrderSet.getRow();
+                                                                            CustomerOrder[] customerOrder = new CustomerOrder[count];
+
+                                                                            customerOrderSet.beforeFirst();
+
+                                                                            int k = 0;
+                                                                            while (customerOrderSet.next()) {
+                                                                                customerOrder[k] = new CustomerOrder();
+
+                                                                                customerOrder[k].setCustomerOrderID(customerOrderSet.getString("customer_Order_Id"));
+                                                                                customerOrder[k].setCustomerName(customerOrderSet.getString("customer_name"));
+                                                                                customerOrder[k].setLocation(customerOrderSet.getString("customer_location"));
+                                                                                customerOrder[k].setBranch(customerOrderSet.getString("customer_branch"));
+
+                                                                                ResultSet orderItemsSet = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_CUSTOMER_ORDER_ITEMS).retreiveQueryData(customerOrderSet.getString("customer_Order_Id"));
+
+                                                                                orderItemsSet.last();
+                                                                                int rowCount = orderItemsSet.getRow();
+
+                                                                                OrderItem[] orders = new OrderItem[rowCount];
+
+                                                                                orderItemsSet.beforeFirst();
+
+                                                                                int j = 0;
+
+                                                                                while (orderItemsSet.next()) {
+                                                                                    orders[j] = new OrderItem(customerOrder[k].getCustomerOrderID(), customerOrder[k].getCustomerName(), customerOrder[k].getLocation(), customerOrder[k].getBranch());
+
+                                                                                    orders[j].setItemID(orderItemsSet.getString("item_Details_Id"));
+                                                                                    orders[j].setNeeds(orderItemsSet.getInt("need"));
+                                                                                    orders[j].setQuantity(orderItemsSet.getInt("quantity"));
+
+                                                                                    j++;
+                                                                                }
+
+                                                                                customerOrder[k].setOrders(orders);
+
+                                                                                k++;
+                                                                            }
+
+                                                                            for (CustomerOrder customerOrder1 : customerOrder) {
+                                                                        %>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <%=customerOrder1.getCustomerOrderID()%>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%=customerOrder1.getCustomerName()%>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%=customerOrder1.getLocation()%>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%=customerOrder1.getBranch()%>
+                                                                            </td>
+                                                                            <td>
+                                                                                <% if (customerOrder1.getOrders().length != 0) { %>
+                                                                                <table>
+
+
+                                                                                    <% for (OrderItem orderItem : customerOrder1.getOrders()) {%>
+
+
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <%=orderItem.getItemID()%>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <%=orderItem.getNeeds()%>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <%=orderItem.getQuantity()%>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <%}%>
+                                                                                </table>
+                                                                                <% } %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button"
+                                                                                        class="btn btn-outline-success">
+                                                                                    <i class="fas fa-plus"></i></button>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <% } %>
+                                                                    </table>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                         <tr style="background-color: #e9e9e9;">
@@ -452,7 +564,7 @@
                                                                                autocomplete="off"
                                                                                readonly
                                                                                class="form-control"><i
-                                                                            class="fa fa-caret-down"
+                                                                            class="fa fa-caret-down" id="caretv"
                                                                             style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i><span
                                                                             class="popuptext"
                                                                             id="myPopup3v"></span>
@@ -564,7 +676,6 @@
                                                                     <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
                                                                 </div>
                                                                 <br>
-
 
 
                                                                 <label for="datePickerv">Stock&nbsp;IN&nbsp;Date</label>
@@ -1809,7 +1920,7 @@
         });
     });
 
-    $('body').on('keydown', '.select2-search__field', function(event) {
+    $('body').on('keydown', '.select2-search__field', function (event) {
         if ((event.ctrlKey && event.key === "j") || (event.ctrlKey && event.key === "b") || (event.ctrlKey && event.key === "i") || (event.keyCode === 13))
             event.preventDefault();
     });

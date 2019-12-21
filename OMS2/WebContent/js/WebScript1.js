@@ -304,6 +304,20 @@ window.addEventListener('click', function (event) {
     }
 });
 
+window.addEventListener('click', function (event) {
+
+    let itemx = document.getElementById("custOrderTable");
+
+    if (event.target.id === "custOrder") {
+        itemx.classList.toggle("show");
+
+    } else if (event.target.id === "custOrderSearch") {
+
+    } else {
+        itemx.classList.remove("show");
+    }
+});
+
 
 //to search main table
 function searchfunction() {
