@@ -236,16 +236,15 @@ public class Inventory_INSERT {
         return false;
     }
 
-    public boolean InsertStockOUT(String date, String remarks, long quantity, double sppitem, String itemID, String customerID) {
+    public boolean InsertStockOUT(String stockOutID, String custOrderID, String itemID, String stockOUTDate, String remarks) {
         try {
             ps = c.prepareStatement(query);
 
-            ps.setString(1, date);
-            ps.setString(2, remarks);
-            ps.setLong(3, quantity);
-            ps.setDouble(4, sppitem);
-            ps.setString(5, itemID);
-            ps.setString(6, customerID);
+            ps.setString(1, stockOutID);
+            ps.setString(2, custOrderID);
+            ps.setString(3, itemID);
+            ps.setString(4, stockOUTDate);
+            ps.setString(5, remarks);
 
             ps.execute();
 

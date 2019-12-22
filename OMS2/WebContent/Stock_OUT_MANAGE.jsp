@@ -204,7 +204,7 @@
                    style="width: 100%; height: 80%;">
                 <tr>
                     <td style="padding: 0px 0px 0px 0px;">
-                        <form action="Inventory_SELECT_Controller"
+                        <form action="Stock_OUT_SELECT_Controller"
                               method="POST" id="searchForm" name="searchForm">
                             <table style="width: 100%;">
                                 <tr>
@@ -215,12 +215,13 @@
 
                                         <option value="" disabled selected>Search&nbsp;By...</option>
                                         <option value="bar">Barcode&nbsp;Number</option>
-                                        <option value="stockid">Stock&nbsp;ID</option>
+                                        <option value="stockOUTid">Stock&nbsp;OUT&nbsp;ID</option>
                                         <option value="iname">Item&nbsp;Model</option>
                                         <option value="manu">Manufacturer</option>
                                         <option value="sup">Supplier</option>
                                         <option value="itype">Item&nbsp;Type</option>
-                                        <option value="stockindate">Stock&nbsp;IN&nbsp;Date</option>
+                                        <option value="stockoutdate">Stock&nbsp;OUT&nbsp;Date</option>
+                                        <option value="cusOrdID">Customer&nbsp;Order&nbsp;ID</option>
                                     </select></td>
                                     <td style="padding-top: 0px; padding-bottom: 0px;"><input
                                             class="btn-block" name="queryValue" id="txtSearch"
@@ -360,7 +361,7 @@
                         </div>
 
                         <% } %>
-                        <form id="mainForm" action="Inventory_INSERT_Controller" method="post">
+                        <form id="mainForm" action="Stock_OUT_INSERT_Controller" method="post">
 
                             <button type="button" class="btn btn-success btn-block" data-toggle="modal"
                                     data-target="#exampleModal" onclick="clearAllFieldsV()"><i class="fa fa-plus"></i>&nbsp;Create&nbsp;Stock
@@ -434,10 +435,19 @@
                                                         <tr>
                                                             <td colspan="2">
                                                                 <label for="custOrder" style="width:100%">Customer&nbsp;Order</label><br>
-                                                                <input type="text" style="width:100%" readonly
-                                                                       id="custOrder" name="cutomerOrder"
-                                                                       placeholder="Customer Order ID Goes Here...">&nbsp;
+                                                                <div class="popup"
+                                                                     style="width:100%;">
+                                                                    <input type="text"
+                                                                           style="width:100%; cursor: default" readonly
+                                                                           id="custOrder" name="customerOrder"
+                                                                           placeholder="Click Here to Add a Customer Order..."
+                                                                           class="form-control"><i
+                                                                        class="fa fa-caret-down"
+                                                                        style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i><span
+                                                                        class="popuptext"
+                                                                        id="myPopup3v"></span>
 
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                         <tr style="background-color: #cacaca;">
@@ -660,8 +670,8 @@
                                                                                     document.getElementById('itemdetailsmyInputv').value = "";
                                                                                     document.getElementById('itemList').innerHTML = "";
                                                                                     let x<%=i%> = document.createElement('option');
-                                                                                    x<%=i%>.text = 'Select Barcode from Here...';
-                                                                                    x<%=i%>.value = 'Select Barcode from Here...';
+                                                                                    x<%=i%>.text = 'Please Choose One or More Stock Items Here by Barcode...';
+                                                                                    x<%=i%>.value = '';
                                                                                     x<%=i%>.selected = true;
                                                                                     x<%=i%>.disabled = true;
                                                                                     document.getElementById('itemList').add(x<%=i%>);
@@ -674,10 +684,10 @@
                                                                                                 j++;
                                                                                                 if (resultSetItems.getString("item_id").equalsIgnoreCase(resultset_for_items.getString("item_id"))) {
                                                                                     %>
-                                                                                    let x<%=i+j%> = document.createElement('option');
-                                                                                    x<%=i+j%>.text = '<%=resultSetItems.getString("barcode_number") %>';
-                                                                                    x<%=i+j%>.value = '<%=resultSetItems.getString("barcode_number") %>';
-                                                                                    document.getElementById('itemList').add(x<%=i+j%>);
+                                                                                    let y<%=i+j%> = document.createElement('option');
+                                                                                    y<%=i+j%>.text = '<%=resultSetItems.getString("barcode_number") %>';
+                                                                                    y<%=i+j%>.value = '<%=resultSetItems.getString("barcode_number") %>';
+                                                                                    document.getElementById('itemList').add(y<%=i+j%>);
                                                                                     <% } } %>
 
 
@@ -730,7 +740,7 @@
                                                                 <br>
 
 
-                                                                <label for="datePickerv">Stock&nbsp;IN&nbsp;Date</label>
+                                                                <label for="datePickerv">Stock&nbsp;OUT&nbsp;Date</label>
                                                                 <input type="date" name="stockoutdate"
                                                                        id="datePickerv" required
 
@@ -753,8 +763,7 @@
                                                                 <label id="itemsListv">Item&nbsp;List&nbsp;Details</label>
                                                                 <div class="popup" style="width:100%;">
                                                                     <select style="width: 100%;" name="itemsList"
-                                                                            class="select-select2"
-                                                                            data-placeholder="Please Choose One or More Barcode Items Here..."
+                                                                            class="select-select2 form-control"
                                                                             id="itemList" required>
 
                                                                     </select>
@@ -790,7 +799,7 @@
 
                                                                 </div>
                                                                 <br>
-                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:150px;overflow:auto; overflow-x:hidden;"
+                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:250px;overflow:auto; overflow-x:hidden;"
                                                                      id="list">
                                                                     <table style="width:100%; padding:0; border-spacing:0;"
                                                                            id="ItemsListTable"
@@ -844,18 +853,17 @@
 
 
                                 <tr>
-                                    <th>Stock&nbsp;IN&nbsp;ID</th>
+                                    <th>Stock&nbsp;OUT&nbsp;ID</th>
                                     <th hidden>Item&nbsp;ID</th>
+                                    <td>Customer&nbsp;Order&nbsp;ID</td>
                                     <th>Model</th>
                                     <th>Manufacturer</th>
                                     <th>Supplier</th>
                                     <th>Type</th>
-                                    <th>Received&nbsp;Date</th>
-                                    <th>Workings</th>
-                                    <th>Faults</th>
+                                    <th>Stock&nbsp;OUT&nbsp;Date</th>
+                                    <th>Quantity</th>
                                     <th>View</th>
                                     <th>Update</th>
-                                    <th>Delete</th>
 
 
                                 </tr>
@@ -875,7 +883,7 @@
                                         }
                                     } else {
                                         Inventory_SELECT si = new Inventory_SELECT(ConnectionManager.getConnection(),
-                                                MySQLQueries.QUERY_GET_STOCK_TABLE);
+                                                MySQLQueries.QUERY_GET_STOCK_OUT_DETAILS);
                                         results = si.get_inventory_table();
                                     }
 
@@ -887,16 +895,18 @@
 
                                             while (results.next()) {
 
-                                                ResultSet workingResult = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_WORKING_STOCK_BY_STOCK_ID).retreiveQueryData(results.getString("stock_in_id"));
-                                                ResultSet faultResult = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_FAULT_STOCK_BY_STOCK_ID).retreiveQueryData(results.getString("stock_in_id"));
+                                                ResultSet workingResult = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_WORKING_STOCK_BY_STOCK_ID).retreiveQueryData(results.getString("stock_out_id"));
+                                                ResultSet faultResult = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_FAULT_STOCK_BY_STOCK_ID).retreiveQueryData(results.getString("stock_out_id"));
 
 
                                 %>
 
                                 <tr>
-                                    <td><%=results.getString("stock_in_id")%>
+                                    <td><%=results.getString("stock_out_id")%>
                                     </td>
                                     <td hidden><%=results.getString("item_id")%>
+                                    </td>
+                                    <td><%=results.getString("customer_order_id")%>
                                     </td>
                                     <td><%=results.getString("item_model_name")%>
                                     </td>
@@ -906,31 +916,30 @@
                                     </td>
                                     <td><%=results.getString("item_type")%>
                                     </td>
-                                    <td><%=results.getString("stock_in_date")%>
+                                    <td><%=results.getString("stock_out_date")%>
                                     </td>
-                                    <td><%=results.getInt("workingCount")%>
+                                    <td><%=results.getInt("rowCount")%>
                                     </td>
-                                    <td><%=results.getInt("faultCount")%>
-                                    </td>
+
                                     <td>
 
 
                                         <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-outline-info" data-toggle="modal"
-                                                data-target="#v<%out.print(results.getString("stock_in_id"));%>"
+                                                data-target="#v<%out.print(results.getString("stock_out_id"));%>"
                                         ><i class="fas fa-info-circle"></i></button>
 
 
                                         <!-- Modal -->
                                         <div class="modal  fade"
-                                             id="v<%out.print(results.getString("stock_in_id"));%>"
+                                             id="v<%out.print(results.getString("stock_out_id"));%>"
                                              tabindex="-1" role="dialog"
-                                             aria-labelledby="v<%=results.getString("stock_in_id") %>"
+                                             aria-labelledby="v<%=results.getString("stock_out_id") %>"
                                              aria-hidden="true">
                                             <div class="modal-dialog modal-xl modal-lg modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Stock&nbsp;Item&nbsp;Information</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Stock&nbsp;OUT&nbsp;Item&nbsp;Information</h5>
                                                         <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
@@ -955,13 +964,13 @@
                                                                                     </th>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <th>Stock&nbsp;IN&nbsp;ID</th>
-                                                                                    <td><%= results.getString("stock_in_id")%>
+                                                                                    <th>Stock&nbsp;OUT&nbsp;ID</th>
+                                                                                    <td><%= results.getString("stock_out_id")%>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <th>Stock&nbsp;IN&nbsp;Date</th>
-                                                                                    <td><%= results.getString("stock_in_date")%>
+                                                                                    <td><%= results.getString("stock_out_date")%>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
@@ -1043,7 +1052,24 @@
                                                                                 <col style="width:80%">
                                                                                 <tr>
                                                                                     <th colspan="2">
-                                                                                        <i>Working&nbsp;Item&nbsp;List</i>
+                                                                                        <i>Customer&nbsp;Order&nbsp;Details</i>
+                                                                                    </th>
+                                                                                </tr>
+                                                                                <tr>
+
+                                                                                </tr>
+
+                                                                            </table>
+
+                                                                        </td>
+                                                                        <td>
+
+                                                                            <table>
+                                                                                <col style="width:20%">
+                                                                                <col style="width:80%">
+                                                                                <tr>
+                                                                                    <th colspan="2">
+                                                                                        <i>Item&nbsp;List</i>
                                                                                     </th>
                                                                                 </tr>
                                                                                 <tr>
@@ -1056,31 +1082,6 @@
                                                                                     <td><%=workingResult.getString("barcode_number")%>
                                                                                     </td>
                                                                                     <td><%=workingResult.getString("description")%>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <%}%>
-                                                                            </table>
-
-                                                                        </td>
-                                                                        <td>
-
-                                                                            <table>
-                                                                                <col style="width:20%">
-                                                                                <col style="width:80%">
-                                                                                <tr>
-                                                                                    <th colspan="2"><i>Fault&nbsp;Item&nbsp;List</i>
-                                                                                    </th>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td><b>Barcode&nbsp;Number</b>
-                                                                                    </td>
-                                                                                    <td><b>Description</b></td>
-                                                                                </tr>
-                                                                                <% while (faultResult.next()) { %>
-                                                                                <tr>
-                                                                                    <td><%=faultResult.getString("barcode_number")%>
-                                                                                    </td>
-                                                                                    <td><%=faultResult.getString("description")%>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <%}%>
@@ -1110,10 +1111,10 @@
                                     <td>
                                         <form action="Inventory_UPDATE_Controller" method="post"
                                               id="mainForm<%=i%>">
-                                            <input type="hidden" name="stock_in_id"
+                                            <input type="hidden" name="stock_out_id"
 
 
-                                                   value="<%=results.getString("stock_in_id") %>">
+                                                   value="<%=results.getString("stock_out_id") %>">
 
                                             <input type="hidden" name="indexNumber"
 
@@ -1125,15 +1126,15 @@
                                             <!-- Button trigger modal -->
                                             <button type="button" onclick="clearAllFields<%=i%>()"
                                                     class="btn btn-outline-dark" data-toggle="modal"
-                                                    data-target="#u<%out.print(results.getString("stock_in_id"));%>"
+                                                    data-target="#u<%out.print(results.getString("stock_out_id"));%>"
                                             ><i class="far fa-edit"></i></button>
 
 
                                             <!-- Modal -->
                                             <div class="modal fade"
-                                                 id="u<%out.print(results.getString("stock_in_id"));%>"
+                                                 id="u<%out.print(results.getString("stock_out_id"));%>"
                                                  tabindex="-1" role="dialog"
-                                                 aria-labelledby="u<%=results.getString("stock_in_id") %>"
+                                                 aria-labelledby="u<%=results.getString("stock_out_id") %>"
                                                  aria-hidden="true">
                                                 <div class="modal-dialog modal-xl modal-lg modal-lg" role="document">
                                                     <div class="modal-content">
@@ -1170,237 +1171,401 @@
                                                                             </td>
                                                                         </tr>
                                                                         <% } %>
-                                                                        <tr style="background-color: #e9e9e9;">
-                                                                            <td>
-                                                                                <label for="stockID<%=i%>">Stock&nbsp;IN&nbsp;ID</label>
-                                                                                <input id="stockID<%=i%>" type="text"
-                                                                                       name="stockINId"
-                                                                                       style="width:100%;display: block"
-                                                                                       value="<%=results.getString("stock_in_id")%>"
-                                                                                       readonly>
-                                                                                <label for="itemdetailsdropitem<%=i%>"
-                                                                                       id="stockItem<%=i%>">Stock&nbsp;Item</label><br>
-                                                                                <div class="dropdown">
-
+                                                                        <tr>
+                                                                            <td colspan="2">
+                                                                                <label for="custOrder"
+                                                                                       style="width:100%">Customer&nbsp;Order</label><br>
+                                                                                <div class="popup"
+                                                                                     style="width:100%;">
                                                                                     <input type="text"
-                                                                                           id="itemdetailsdropitem<%=i%>"
-                                                                                           name="itemID"
-                                                                                           style="cursor: default;"
-                                                                                           placeholder="Click Here to Select an Item"
-                                                                                           value="<%= results.getString("item_id")%>"
-                                                                                           required
-                                                                                           autocomplete="off"
+                                                                                           style="width:100%; cursor: default"
                                                                                            readonly
+                                                                                           id="custOrder"
+                                                                                           name="customerOrder"
+                                                                                           placeholder="Click Here to Add a Customer Order..."
                                                                                            class="form-control"><i
                                                                                         class="fa fa-caret-down"
-                                                                                        id="caret<%=i%>"
-                                                                                        style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i>
-
+                                                                                        style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i><span
+                                                                                        class="popuptext"
+                                                                                        id="myPopup3v"></span>
 
                                                                                 </div>
-                                                                                <div id="iteminformation<%=i%>"
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr style="background-color: #cacaca;">
+                                                                            <td colspan="2">
+                                                                                <div id="custOrderTable"
+                                                                                     class="dropdown-content1"
+                                                                                     style="height: 260px; overflow-y: auto; widht: 100%">
+                                                                                    <table style="width: 100%"
+                                                                                           id="custTableBody">
+                                                                                        <col style="width: 25%">
+                                                                                        <col style="width: 10%">
+                                                                                        <col style="width: 20%">
+                                                                                        <col style="width: 15%">
+                                                                                        <col style="width: 25%">
+                                                                                        <col style="width: 5%">
+
+                                                                                        <thead>
+
+                                                                                        <tr style="height: auto">
+                                                                                            <td colspan="1">
+
+                                                                                                <select style="width:100%"
+                                                                                                        readonly
+                                                                                                        id="custOrderSearchType"
+                                                                                                        name="cutomerOrder">
+                                                                                                    <option value=""
+                                                                                                            disabled
+                                                                                                            selected>
+                                                                                                        Search&nbsp;By...
+                                                                                                    </option>
+                                                                                                    <option value="orderID">
+                                                                                                        Order&nbsp;ID
+                                                                                                    </option>
+                                                                                                    <option value="custName">
+                                                                                                        Customer&nbsp;Name
+                                                                                                    </option>
+                                                                                                    <option value="location">
+                                                                                                        Location
+                                                                                                    </option>
+                                                                                                    <option value="branch">
+                                                                                                        Branch
+                                                                                                    </option>
+                                                                                                    <option value="ordersList">
+                                                                                                        Orders&nbsp;List
+                                                                                                    </option>
+
+                                                                                                </select>
+                                                                                            </td>
+                                                                                            <td colspan="3">
+                                                                                                <input type="text"
+                                                                                                       style="width:100%"
+                                                                                                       placeholder="Search Here..."
+                                                                                                       id="custOrderSearch"
+                                                                                                       name="cutomerOrder"
+                                                                                                       oninput="searchfunctionV()">
+                                                                                            </td>
+                                                                                            <td colspan="2"
+                                                                                                style="padding-top: 20px;">
+                                                                                                <button type="button"
+                                                                                                        style="width: 100%"
+                                                                                                        class="btn btn-outline-danger"
+                                                                                                        onclick="clearCustTable()">
+                                                                                                    Reset&nbsp;Table
+                                                                                                </button>
+
+                                                                                            </td>
+                                                                                        </tr>
+
+                                                                                        <tr>
+
+                                                                                            <th class="header">Customer&nbsp;Order&nbsp;ID</th>
+                                                                                            <th class="header">Name</th>
+                                                                                            <th class="header">
+                                                                                                Location
+                                                                                            </th>
+                                                                                            <th class="header">Branch
+                                                                                            </th>
+                                                                                            <th class="header">Orders&nbsp;(Item&nbsp;ID,&nbsp;Needs,&nbsp;Quantity)</th>
+                                                                                            <th class="header">Select
+                                                                                            </th>
+
+                                                                                        </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                        <%
+                                                                                            ResultSet customerOrderSet = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_CUSTOMER_ORDERS).get_inventory_table();
+
+                                                                                            customerOrderSet.last();
+                                                                                            int count = customerOrderSet.getRow();
+                                                                                            CustomerOrder[] customerOrder = new CustomerOrder[count];
+
+                                                                                            customerOrderSet.beforeFirst();
+
+                                                                                            int k = 0;
+                                                                                            while (customerOrderSet.next()) {
+                                                                                                customerOrder[k] = new CustomerOrder();
+
+                                                                                                customerOrder[k].setCustomerOrderID(customerOrderSet.getString("customer_Order_Id"));
+                                                                                                customerOrder[k].setCustomerName(customerOrderSet.getString("customer_name"));
+                                                                                                customerOrder[k].setLocation(customerOrderSet.getString("customer_location"));
+                                                                                                customerOrder[k].setBranch(customerOrderSet.getString("customer_branch"));
+
+                                                                                                ResultSet orderItemsSet = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_CUSTOMER_ORDER_ITEMS).retreiveQueryData(customerOrderSet.getString("customer_Order_Id"));
+
+                                                                                                orderItemsSet.last();
+                                                                                                int rowCount = orderItemsSet.getRow();
+
+                                                                                                OrderItem[] orders = new OrderItem[rowCount];
+
+                                                                                                orderItemsSet.beforeFirst();
+
+                                                                                                int j = 0;
+
+                                                                                                while (orderItemsSet.next()) {
+                                                                                                    orders[j] = new OrderItem(customerOrder[k].getCustomerOrderID(), customerOrder[k].getCustomerName(), customerOrder[k].getLocation(), customerOrder[k].getBranch());
+
+                                                                                                    orders[j].setItemID(orderItemsSet.getString("item_Details_Id"));
+                                                                                                    orders[j].setNeeds(orderItemsSet.getInt("need"));
+                                                                                                    orders[j].setQuantity(orderItemsSet.getInt("quantity"));
+
+                                                                                                    j++;
+                                                                                                }
+
+                                                                                                customerOrder[k].setOrders(orders);
+
+                                                                                                k++;
+                                                                                            }
+
+                                                                                            int l = 0;
+                                                                                            for (CustomerOrder customerOrder1 : customerOrder) {
+                                                                                                l++;
+                                                                                        %>
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <%=customerOrder1.getCustomerOrderID()%>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <%=customerOrder1.getCustomerName()%>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <%=customerOrder1.getLocation()%>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <%=customerOrder1.getBranch()%>
+                                                                                            </td>
+                                                                                            <td>
+
+
+                                                                                                <% for (OrderItem orderItem : customerOrder1.getOrders()) {%>
+
+
+                                                                                                <pre><%=orderItem.getItemID() + ","%> <%=orderItem.getNeeds() + ","%> <%=orderItem.getQuantity()%></pre>
+
+
+                                                                                                <%}%>
+
+
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <button type="button"
+                                                                                                        id="cus<%=l%>"
+                                                                                                        class="btn btn-outline-success">
+                                                                                                    <i class="fas fa-plus"></i>
+                                                                                                </button>
+                                                                                            </td>
+                                                                                            <script>
+                                                                                                document.getElementById('cus<%=l%>').addEventListener('click', function () {
+                                                                                                    document.getElementById('custOrder').value = '<%=customerOrder1.getCustomerOrderID()%>';
+                                                                                                    document.getElementById("custOrderTable").classList.remove("show");
+                                                                                                });
+                                                                                            </script>
+                                                                                        </tr>
+                                                                                        <% } %>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr style="background-color: #e9e9e9;">
+                                                                            <td>
+                                                                                <label for="itemdetailsdropitemv"
+                                                                                       id="stockItemv">Stock&nbsp;Item</label><br>
+                                                                                <div class="dropdown">
+                                                                                    <div class="popup"
+                                                                                         style="width:100%;">
+                                                                                        <input type="text"
+                                                                                               id="itemdetailsdropitemv"
+                                                                                               name="itemID"
+                                                                                               style="cursor: default;"
+                                                                                               placeholder="Click Here to Select an Item"
+                                                                                               value="" required
+                                                                                               autocomplete="off"
+                                                                                               readonly
+                                                                                               class="form-control"><i
+                                                                                            class="fa fa-caret-down"
+                                                                                            id="caretv"
+                                                                                            style="border: none;background: none;position: absolute;top: 17px;right: 13px;"></i><span
+                                                                                            class="popuptext"
+                                                                                            id="myPopup3v"></span>
+                                                                                    </div>
+                                                                                    <div id="itemdetailsitemdisplayv"
+                                                                                         class="dropdown-content"
+                                                                                         style="margin-top:-4%;width:100%;height : 450%;overflow-y:scroll;overflow-x:hidden;border:1px solid #538AC0;">
+                                                                                        <div style="position: sticky;top:-6px;margin-top:-6px;padding:0">
+                                                                                            <input tabindex="0"
+                                                                                                   type="text"
+                                                                                                   id="itemdetailsmyInputv"
+                                                                                                   onkeyup="itemdetailsitemdisplayfilterFunctionV()"
+                                                                                                   autocomplete="off"
+                                                                                                   placeholder="Search here.."><i
+                                                                                                class="fa fa-search"
+                                                                                                style=" border: none;background: none;position: absolute;top: 17px;right: 13px;"></i>
+                                                                                        </div>
+
+                                                                                        <div style="overflow-x:hidden;">
+
+
+                                                                                            <%
+                                                                                                try {
+
+                                                                                                    int i = 0;
+                                                                                                    while (resultset_for_items.next()) {
+                                                                                                        i++;
+                                                                                            %>
+                                                                                            <a style="cursor: pointer;"
+                                                                                               id='<%=resultset_for_items.getString("item_id") %>v'
+                                                                                               tabindex="0">Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=resultset_for_items.getString("item_model_name")%>
+                                                                                            </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=resultset_for_items.getString("item_type")%>
+                                                                                                <br>Manufacturer&nbsp;:&nbsp;<%=resultset_for_items.getString("item_manufacturer")%>
+                                                                                                <br>Supplier&nbsp;:&nbsp;<%=resultset_for_items.getString("item_supplier")%>
+                                                                                                <br>Description&nbsp;:&nbsp;<%=resultset_for_items.getString("item_details")%>
+                                                                                            </a>
+                                                                                            <script>
+                                                                                                document.getElementById('<%=resultset_for_items.getString("item_id") %>v').addEventListener('click', function () {
+                                                                                                    document.getElementById('itemdetailsdropitemv').value = '<%=resultset_for_items.getString("item_id")%>';
+                                                                                                    document.getElementById('iteminformationv').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>v').innerHTML + '</p>';
+                                                                                                    document.getElementById('itemdetailsmyInputv').value = "";
+                                                                                                    document.getElementById('itemList').innerHTML = "";
+                                                                                                    let x<%=i%> = document.createElement('option');
+                                                                                                    x<%=i%>.text = 'Please Choose One or More Stock Items Here by Barcode...';
+                                                                                                    x<%=i%>.value = '';
+                                                                                                    x<%=i%>.selected = true;
+                                                                                                    x<%=i%>.disabled = true;
+                                                                                                    document.getElementById('itemList').add(x<%=i%>);
+
+                                                                                                    <%
+                                                                                                            ResultSet resultSetItems = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_WORKING_ITEMS).get_inventory_table();
+
+                                                                                                            int j = 0;
+                                                                                                            while (resultSetItems.next()) {
+                                                                                                                j++;
+                                                                                                                if (resultSetItems.getString("item_id").equalsIgnoreCase(resultset_for_items.getString("item_id"))) {
+                                                                                                    %>
+                                                                                                    let y<%=i+j%> = document.createElement('option');
+                                                                                                    y<%=i+j%>.text = '<%=resultSetItems.getString("barcode_number") %>';
+                                                                                                    y<%=i+j%>.value = '<%=resultSetItems.getString("barcode_number") %>';
+                                                                                                    document.getElementById('itemList').add(y<%=i+j%>);
+                                                                                                    <% } } %>
+
+
+                                                                                                });
+
+                                                                                                document.getElementById('<%=resultset_for_items.getString("item_id") %>v').addEventListener("keyup", function (e) {
+                                                                                                    if (e.keyCode === 13) {
+                                                                                                        e.preventDefault();
+                                                                                                        document.getElementById('<%=resultset_for_items.getString("item_id") %>v').click();
+                                                                                                    }
+                                                                                                });
+
+                                                                                            </script>
+
+                                                                                            <%
+                                                                                                if (stock != null) {
+                                                                                                    if (resultset_for_items.getString("item_id").equalsIgnoreCase(stock.getItemID())) {
+
+
+                                                                                            %>
+
+                                                                                            <script>
+                                                                                                window.addEventListener('load', function () {
+                                                                                                    document.getElementById('itemdetailsdropitemv').value = '<%=resultset_for_items.getString("item_id")%>';
+                                                                                                    document.getElementById('iteminformationv').innerHTML = '<p>' + document.getElementById('<%=resultset_for_items.getString("item_id") %>v').innerHTML + '</p>';
+                                                                                                    document.getElementById('itemdetailsmyInputv').value = "";
+                                                                                                });
+
+
+                                                                                            </script>
+
+                                                                                            <% }
+                                                                                            }
+                                                                                            }
+
+                                                                                            } catch (Exception e) {
+                                                                                                e.printStackTrace();
+                                                                                            }%>
+
+                                                                                        </div>
+
+
+                                                                                    </div>
+
+                                                                                </div>
+                                                                                <div id="iteminformationv"
                                                                                      style="width:100%; background-color: lightgrey; padding:0; height:auto; overflow-x:hidden;">
-                                                                                    <p>Item&nbsp;Model&nbsp;Name&nbsp;:&nbsp;<b><%=results.getString("item_model_name")%>
-                                                                                    </b><br>Item&nbsp;Type&nbsp;:&nbsp;<%=results.getString("item_type")%>
-                                                                                        <br>Manufacturer&nbsp;:&nbsp;<%=results.getString("item_manufacturer")%>
-                                                                                        <br>Supplier&nbsp;:&nbsp;<%=results.getString("item_supplier")%>
-                                                                                        <br>Description&nbsp;:&nbsp;<%=results.getString("item_details")%>
-                                                                                    </p>
-
+                                                                                    <p>Item&nbsp;Information&nbsp;Goes&nbsp;Here....</p>
                                                                                 </div>
-
                                                                                 <br>
 
-                                                                                <label for="datePicker<%=i%>">Stock&nbsp;IN&nbsp;Date</label>
-                                                                                <input type="date" name="stockindate"
-                                                                                       id="datePicker<%=i%>" required
 
+                                                                                <label for="datePickerv">Stock&nbsp;OUT&nbsp;Date</label>
+                                                                                <input type="date" name="stockoutdate"
+                                                                                       id="datePickerv" required
 
-                                                                                       value="<%= results.getString("stock_in_date") %>"><br>
-                                                                                <label for="txtAreaRemarks<%=i%>">Any&nbsp;other&nbsp;Information's</label>
+                                                                                    <% if (stock != null) { %>
+                                                                                       value="<%= stock.getDate() %>"
+                                                                                    <% } else {%>
+                                                                                       value="<%= new SimpleDateFormat("yyyy-MM-dd").format(new Date()) %>">
+                                                                                <% } %>
+                                                                                <br>
+                                                                                <label for="txtAreaRemarksv">Any&nbsp;other&nbsp;Information's</label>
 
-                                                                                <textarea id="txtAreaRemarks<%=i%>"
-                                                                                          name="remarks" rows="4"
+                                                                                <textarea id="txtAreaRemarksv"
+                                                                                          name="remarksStockOUT"
+                                                                                          rows="4"
                                                                                           cols="4"
-                                                                                          placeholder="Enter Stock Information Here..."><% if (results.getString("remarks") != null) {%><%=results.getString("remarks")%><%}%></textarea>
-
-
+                                                                                          placeholder="Enter Stock Information Here..."><% if (stock != null) { %><%= stock.getRemarks() %><%}%></textarea>
+                                                                                <br>
                                                                             </td>
                                                                             <td>
-
-                                                                                <label id="itemsList<%=i%>">Item&nbsp;List&nbsp;Details</label>
+                                                                                <label id="itemsListv">Item&nbsp;List&nbsp;Details</label>
                                                                                 <div class="popup" style="width:100%;">
-                                                                                    <input style="width:100%;"
-                                                                                           type="text"
-                                                                                           id="txtBarcode<%=i%>"
-                                                                                           name="barcodeNmber"
-                                                                                           placeholder="Enter Barcode Here...">
-                                                                                    <span class="popuptext"
-                                                                                          id="myPopup1<%=i%>"></span>
+                                                                                    <select style="width: 100%;"
+                                                                                            name="itemsList"
+                                                                                            class="select-select2 form-control"
+                                                                                            id="itemList" required>
 
-                                                                                </div>
-
-                                                                                <div class="popup" style="width:100%;">
-                                                                                    <select style="width:100%;"
-                                                                                            id="itemStatus<%=i%>">
-                                                                                        <option selected disabled
-                                                                                                value="">Select&nbsp;Item&nbsp;Type
-                                                                                        </option>
-                                                                                        <option value="working">
-                                                                                            Working
-                                                                                        </option>
-                                                                                        <option value="faulty">Faulty
-                                                                                        </option>
                                                                                     </select>
                                                                                     <span class="popuptext"
-                                                                                          id="myPopup4<%=i%>"></span>
+                                                                                          id="myPopup1v"></span>
+
                                                                                 </div>
+
+
                                                                                 <div class="popup"
                                                                                      style="width:100%;"><textarea
-                                                                                        id="description<%=i%>"
+                                                                                        id="descriptionv"
                                                                                         placeholder="Enter Description Here..."
                                                                                         cols="4"
                                                                                         rows="4"></textarea><span
                                                                                         class="popuptext"
-                                                                                        id="myPopup2<%=i%>"></span>
+                                                                                        id="myPopup2v"></span>
                                                                                 </div>
                                                                                 <div style="width: 100%; display: flex; flex-direction: row;">
                                                                                     <button style="width:50%; margin-right:2.5px;"
                                                                                             class="btn btn-info"
                                                                                             type="button"
-                                                                                            onclick="myFirstFunction<%=i%>();">
+                                                                                            onclick="myFirstFunctionV();">
                                                                                         Add&nbsp;Item
                                                                                     </button>
                                                                                     <button style="width:50%; margin-right:2.5px;"
                                                                                             class="btn btn-warning"
                                                                                             type="button"
-                                                                                            onclick="resetItemDetails<%=i%>();">
+                                                                                            onclick="resetItemDetailsV();">
                                                                                         Reset
                                                                                     </button>
                                                                                     <br>
 
                                                                                 </div>
-                                                                                <br><br>
-                                                                                <div><p style="text-align: justify-all">
-                                                                                    ***Changing the Working Items that
-                                                                                    are Reserved for Stock OUT Disabled
-                                                                                    for Security Purpose....
-                                                                                </p></div>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-
-                                                                                <label for="txtBarcode<%=i%>"
-                                                                                       id="workingItems<%=i%>">Working&nbsp;Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;"
-                                                                                     id="workingList<%=i%>">
-                                                                                    <table style="width:100%; padding:0; border-spacing:0;"
-                                                                                           id="workingItemsTable<%=i%>"
-                                                                                           border=1>
-
-                                                                                        <% workingResult.beforeFirst();
-                                                                                            while (workingResult.next()) { %>
-
-
-                                                                                        <tr style="padding:0;">
-                                                                                            <td style="padding:0;">
-                                                                                                <input type="text"
-                                                                                                       readonly
-                                                                                                       style="margin:0;border:0;"
-                                                                                                       value="<%= workingResult.getString("barcode_number") %>"
-                                                                                                       name="barcode">
-                                                                                            </td>
-                                                                                            <td style="padding:0;">
-                                                                                                <input type="text"
-                                                                                                       style="margin:0;border:0;"
-                                                                                                       name="workingDescription"
-                                                                                                       value="<%=workingResult.getString("description")%>">
-                                                                                            </td>
-                                                                                            <td style="padding:0;">
-                                                                                                <% if (workingResult.getString("stock_out_id") != null) { %>
-                                                                                                <input type="text"
-                                                                                                       name="stockOUT"
-                                                                                                       value="<%=workingResult.getString("stock_out_id")%>"
-                                                                                                       hidden>
-                                                                                                <% } else { %>
-                                                                                                <input type="text"
-                                                                                                       name="stockOUT"
-                                                                                                       value="NULL"
-                                                                                                       hidden>
-                                                                                                <% } %>
-                                                                                                <button style="margin:0;"
-                                                                                                        type="button"
-                                                                                                        class="btn btn-danger"
-                                                                                                        onclick="removeWorkingItemRow<%=i%>(this)"
-                                                                                                        <% if (workingResult.getString("stock_out_id") != null) { %>
-                                                                                                        disabled
-                                                                                                        <% } %>>
-                                                                                                    <i class="fa fa-trash"></i>
-                                                                                                </button>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <% } %>
-
-                                                                                    </table>
-
-
-                                                                                </div>
                                                                                 <br>
-                                                                                <button style="width:100%"
-                                                                                        class="btn btn-warning"
-                                                                                        type="button"
-                                                                                        onclick="deleteAllWorkingItemsRows<%=i%>();">
-                                                                                    Clear&nbsp;All
-                                                                                </button>
-                                                                            </td>
-                                                                            <td>
-                                                                                <label for="txtBarcode<%=i%>">Fault Item&nbsp;List</label><br>
-                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:300px;overflow:auto; overflow-x:hidden;">
+                                                                                <div style="width:100%; background-color: lightgrey; padding:0; height:250px;overflow:auto; overflow-x:hidden;"
+                                                                                     id="list">
                                                                                     <table style="width:100%; padding:0; border-spacing:0;"
-                                                                                           id="faultTable<%=i%>"
+                                                                                           id="ItemsListTable"
                                                                                            border=1>
-
-                                                                                        <% faultResult.beforeFirst();
-                                                                                            while (faultResult.next()) { %>
-
-                                                                                        <tr style="padding:0;">
-                                                                                            <td style="padding:0;">
-                                                                                                <input type="text"
-                                                                                                       readonly
-                                                                                                       style="margin:0;border:0;"
-                                                                                                       value="<%= faultResult.getString("barcode_number") %>"
-                                                                                                       name="barcode">
-                                                                                            </td>
-                                                                                            <td style="padding:0;">
-                                                                                                <input type="text"
-                                                                                                       style="margin:0;border:0;"
-                                                                                                       name="workingDescription"
-                                                                                                       value="<%=faultResult.getString("description")%>">
-                                                                                            </td>
-                                                                                            <td style="padding:0;">
-                                                                                                <button style="margin:0;"
-                                                                                                        type="button"
-                                                                                                        class="btn btn-danger"
-                                                                                                        onclick="removeFaultItemRow<%=i%>(this)">
-                                                                                                    <i class="fa fa-trash"></i>
-                                                                                                </button>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                        <% } %>
-
-
                                                                                     </table>
-
-
                                                                                 </div>
-                                                                                <br>
-                                                                                <button style="width:100%"
-                                                                                        class="btn btn-warning"
-                                                                                        type="button"
-                                                                                        onclick="deleteAllFaultItemsRows<%=i%>();">
-                                                                                    Clear&nbsp;All
-                                                                                </button>
 
                                                                             </td>
                                                                         </tr>
@@ -1711,21 +1876,21 @@
                                     </td>
                                     <td>
                                         <form action="Inventory_DELETE_Controller" method="post">
-                                            <input type="hidden" name="stock_in_id"
-                                                   value="<%=results.getString("stock_in_id") %>">
+                                            <input type="hidden" name="stock_out_id"
+                                                   value="<%=results.getString("stock_out_id") %>">
                                             <!-- <button type="submit" class="btn btn-outline-danger">Delete</button> -->
 
 
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-outline-danger" data-toggle="modal"
-                                                    data-target="#d<%out.print(results.getString("stock_in_id"));%>"
+                                                    data-target="#d<%out.print(results.getString("stock_out_id"));%>"
                                             ><i class="fas fa-trash-alt"></i></button>
 
                                             <!-- Modal -->
                                             <div class="modal fade"
-                                                 id="d<%out.print(results.getString("stock_in_id"));%>"
+                                                 id="d<%out.print(results.getString("stock_out_id"));%>"
                                                  tabindex="-1" role="dialog"
-                                                 aria-labelledby="d<%=results.getString("stock_in_id") %>"
+                                                 aria-labelledby="d<%=results.getString("stock_out_id") %>"
                                                  aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">

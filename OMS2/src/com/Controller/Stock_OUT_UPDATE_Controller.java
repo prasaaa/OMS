@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/STOCK_OUT_UPDATE_Controller")
-public class STOCK_OUT_UPDATE_Controller extends HttpServlet {
+@WebServlet("/Stock_OUT_UPDATE_Controller")
+public class Stock_OUT_UPDATE_Controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }

@@ -82,8 +82,8 @@ function myFirstFunctionV() {
         if (bool === true) {
 
 
-             if (itemDescription.value.trim() !== "") {
-                 workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "faultBarcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" readonly name="faultDescription" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRowV(this)"><i class="fa fa-trash"></i></button></td></tr>';
+            if (itemDescription.value.trim() !== "") {
+                workingItemsTable.insertRow(-1).innerHTML = '<tr style="padding:0;"><td style="padding:0;"><input type="text" readonly style = "margin:0;border:0;" value ="' + barcodeText.value + '" name = "barcode"></td> <td style="padding:0;"><input type="text" style = "margin:0;border:0;" readonly name="description" value="' + itemDescription.value + '" ></td><td style="padding:0;"><button style="margin:0;" type="button" class="btn btn-danger" onclick="removeWorkingItemRowV(this)"><i class="fa fa-trash"></i></button></td></tr>';
                 resetItemDetailsV();
                 autoFocusV();
 
@@ -99,7 +99,7 @@ function myFirstFunctionV() {
                 }
 
                 itemDescription.focus();
-                window.scroll(0,0);
+                window.scroll(0, 0);
 
 
             }
@@ -138,17 +138,14 @@ function myFirstFunctionV() {
 
 function resetItemDetailsV() {
 
-    let barcodeText = document.getElementById("itemList");
-    let itemDescription = document.getElementById("descriptionv");
-
-    barcodeText.value = "";
-    itemDescription.value = "";
+    $('#itemList').val(null).trigger('change');
+    document.getElementById("descriptionv").value = "";
 }
 
 
 function autoFocusV() {
     document.getElementById("itemList").focus();
-    window.scroll(0,0);
+    window.scroll(0, 0);
 }
 
 
@@ -177,11 +174,6 @@ function removeWorkingItemRowV(input) {
 }
 
 
-
-
-
-
-
 function validateFormX() {
 
     var popup;
@@ -191,7 +183,7 @@ function validateFormX() {
         popup = document.getElementById("myPopup3v");
         popup.innerHTML = "This is a Required Field!!";
         document.getElementById("itemdetailsdropitemv").focus();
-        window.scroll(0,0);
+        window.scroll(0, 0);
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -200,11 +192,11 @@ function validateFormX() {
                 popup.classList.remove("show");
             }, 3000);
         }
-    } else if (document.getElementById("ItemsListTable").innerHTML.trim().replace(/^\s+|\s+$/, '') === "" ) {
+    } else if (document.getElementById("ItemsListTable").innerHTML.trim().replace(/^\s+|\s+$/, '') === "") {
         popup = document.getElementById("myPopup1v");
         popup.innerHTML = "Please Enter at least one Item!!!";
         document.getElementById("itemList").focus();
-        window.scroll(0,0);
+        window.scroll(0, 0);
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -230,24 +222,21 @@ function clearAllFieldsV() {
         document.getElementById("custOrderTable").classList.remove("show");
 
 
-
-
     if (document.getElementById("ErrorMessage") !== null)
         document.getElementById("ErrorMessage").hidden = true;
 
     if (document.getElementById('itemList') !== undefined || document.getElementById('itemList') !== null) {
         document.getElementById('itemList').innerHTML = "";
         let x = document.createElement('option');
-        x.text = "Select Barcode from Here...";
-        x.value = 'Select Barcode from Here...';
+        x.text = "Please Choose One or More Stock Items Here by Barcode...";
+        x.value = '';
         x.selected = true;
         x.disabled = true;
         document.getElementById('itemList').add(x);
     }
 
 
-
-    window.scroll(0,0);
+    window.scroll(0, 0);
 
 }
 
@@ -320,6 +309,15 @@ document.getElementById('custOrder').addEventListener('click', function (event) 
 
 });
 
+document.getElementById('custOrder').addEventListener('keydown', function (event) {
+
+    if (event.keyCode === 13) {
+        document.getElementById("custOrderTable").classList.toggle("show");
+        clearCustTable();
+    }
+
+});
+
 
 //to search main table
 function searchfunction() {
@@ -381,11 +379,11 @@ function clearCustTable() {
 
     let i;
 
-    for ( i = 1; i < tr.length; i++ ) {
+    for (i = 1; i < tr.length; i++) {
         tr[i].style.display = "";
     }
 
-    table.scroll(0,0);
+    table.scroll(0, 0);
 }
 
 

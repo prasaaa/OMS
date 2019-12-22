@@ -15,7 +15,7 @@ public class MySQLQueries {
 
     @Language("MySQL")
     public static final String QUERY_SELECT_BY_BARCODE = "SELECT s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks, idt.item_details, COUNT(CASE WHEN ilt.items_status LIKE '%Working%' THEN 1 END) AS workingCount, COUNT(CASE WHEN ilt.items_status LIKE '%Faulty%' THEN 1 END) AS faultCount FROM stock_in_items_table s INNER JOIN item_details_table idt ON s.item_id = idt.item_id INNER JOIN items_list_table ilt ON s.stock_in_id = ilt.stock_in_id " +
-            "WHERE s.stock_in_id = (SELECT st.stock_in_id FROM items_list_table st WHERE st.barcode_number LIKE CONCAT('%' + ? + '%') ) " +
+            "WHERE s.stock_in_id = (SELECT st.stock_in_id FROM items_list_table st WHERE st.barcode_number LIKE CONCAT('%' , ? , '%') ) " +
             "GROUP BY s.stock_in_id, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, s.stock_in_date, s.remarks, idt.item_details;";
 
     @Language("MySQL")
@@ -65,4 +65,14 @@ public class MySQLQueries {
 
     @Language("MySQL")
     public static final String QUERY_GET_ITEM_USAGE = "SELECT SUM(quantity) AS quantity, COUNT(*) AS total FROM customer_order_items_table INNER JOIN stock_in_items_table s ON item_Details_Id = s.item_id WHERE stock_in_id = ? GROUP BY item_id;";
+
+    @Language("MySQL")
+    public static final String QUERY_INSERT_STOCK_OUT = "INSERT INTO stock_out_items_table (stock_out_id, customer_order_id, item_id, stock_out_date, remarks) VALUES (?, ?, ?, ?, ?);";
+
+    @Language("MySQL")
+    public static final String QUERY_UPDATE_STOCK_OUT_ID_IN_ITEM_LIST = "UPDATE items_list_table SET stock_out_id = ?, description = CONCAT(description , ', Stock OUT Description : ' , ?) WHERE item_id = ? AND barcode_number = ?;";
+
+    @Language("MySQL")
+    public static final String QUERY_GET_STOCK_OUT_DETAILS = "SELECT soit.stock_out_id, soit.customer_order_id, idt.item_details, idt.item_id, idt.item_model_name, idt.item_manufacturer, idt.item_supplier, idt.item_type, soit.stock_out_date , COUNT(*) AS rowCount FROM stock_out_items_table soit INNER JOIN items_list_table ilt ON ilt.stock_out_id = soit.stock_out_id  INNER JOIN item_details_table idt on soit.item_id = idt.item_id GROUP BY soit.stock_out_id;";
+
 }

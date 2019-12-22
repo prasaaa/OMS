@@ -25,74 +25,77 @@ html {
     flex-wrap: nowrap;
     padding: 10px;
 }
+
 /*general*/
 .cell {
-	min-height: 75px;
-	flex-grow: 1;
-	flex-basis: 100%;
+    min-height: 75px;
+    flex-grow: 1;
+    flex-basis: 100%;
 }
 
 table, th, td {
-	border: 1px solid black;
+    border: 1px solid black;
 }
 
 .my-custom-scrollbar {
-	position: relative;
-	height: 200px;
-	overflow: auto;
+    position: relative;
+    height: 200px;
+    overflow: auto;
 }
 
 .table-wrapper-scroll-y {
-	display: block;
+    display: block;
 }
 
 #notibox {
-	flex-basis: 500%;
+    flex-basis: 500%;
 }
 
-@media ( max-width :768px) {
-	.row {
-		flex-wrap: wrap;
-	}
+@media ( max-width: 768px) {
+    .row {
+        flex-wrap: wrap;
+    }
 }
 
 #sidebar-wrapper {
-	min-height: 100vh;
-	margin-left: -15rem;
-	-webkit-transition: margin .25s ease-out;
-	-moz-transition: margin .25s ease-out;
-	-o-transition: margin .25s ease-out;
-	transition: margin .25s ease-out;
+    min-height: 100vh;
+    margin-left: -15rem;
+    -webkit-transition: margin .25s ease-out;
+    -moz-transition: margin .25s ease-out;
+    -o-transition: margin .25s ease-out;
+    transition: margin .25s ease-out;
 }
 
 #sidebar-wrapper .sidebar-heading {
-	padding: 0.875rem 1.25rem;
-	font-size: 1.2rem;
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
 }
 
 #sidebar-wrapper .list-group {
-	width: 15rem;
+    width: 15rem;
 }
 
 #page-content-wrapper {
-	min-width: 100vw;
+    min-width: 100vw;
 }
 
 #wrapper.toggled #sidebar-wrapper {
-	margin-left: 0;
+    margin-left: 0;
 }
 
-@media ( min-width : 768px) {
-	#sidebar-wrapper {
-		margin-left: 0;
-	}
-	#page-content-wrapper {
-		min-width: 0;
-		width: 100%;
-	}
-	#wrapper.toggled #sidebar-wrapper {
-		margin-left: -15rem;
-	}
+@media ( min-width: 768px) {
+    #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    #page-content-wrapper {
+        min-width: 0;
+        width: 100%;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: -15rem;
+    }
 }
 
 /*!
@@ -151,22 +154,21 @@ scroll css class
 }
 
 .table-wrapper-scroll-y {
-	display: block;
+    display: block;
 }
 
 /*! 
 Insert form styles
 */
-input[type=text], select, textarea, input[type=date], input[type=number]
-	{
-	width: 100%;
-	padding: 8px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-	margin-top: 6px;
-	margin-bottom: 16px;
-	resize: vertical;
+input[type=text], select, textarea, input[type=date], input[type=number] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
 }
 
 /*
@@ -228,39 +230,57 @@ input[type=reset]:hover {
 }
 */
 #snackbar {
-  visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
-  background-color: #c0c0c0;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  bottom: 30px;
-  font-size: 17px;
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #c0c0c0;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
 }
 
 #snackbar.show {
-  visibility: visible;
-  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
 }
 
 @-webkit-keyframes fadein {
-  from {bottom: 0; opacity: 0;} 
-  to {bottom: 30px; opacity: 1;}
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
 }
 
 @keyframes fadein {
-  from {bottom: 0; opacity: 0;}
-  to {bottom: 30px; opacity: 1;}
+    from {
+        bottom: 0;
+        opacity: 0;
+    }
+    to {
+        bottom: 30px;
+        opacity: 1;
+    }
 }
 
 @-webkit-keyframes fadeout {
-  from {bottom: 30px; opacity: 1;} 
-  to {bottom: 0; opacity: 0;}
+    from {
+        bottom: 30px;
+        opacity: 1;
+    }
+    to {
+        bottom: 0;
+        opacity: 0;
+    }
 }
 
 @keyframes fadeout {
@@ -292,7 +312,6 @@ thead th {
     background-color: #a5a5a5;
     position: sticky;
     top: 0;
-
 }
 
 /* Popup container - can be anything you want */
@@ -382,7 +401,6 @@ thead th {
 .dropdown-content1 {
     display: none;
 }
-
 
 
 /* drop down styles */
