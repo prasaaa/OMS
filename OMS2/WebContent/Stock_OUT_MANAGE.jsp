@@ -444,7 +444,7 @@
                                                             <td colspan="2">
                                                                 <div id="custOrderTable" class="dropdown-content1"
                                                                      style="height: 260px; overflow-y: auto; widht: 100%">
-                                                                    <table style="width: 100%">
+                                                                    <table style="width: 100%" id="custTableBody">
                                                                         <col style="width: 25%">
                                                                         <col style="width: 10%">
                                                                         <col style="width: 20%">
@@ -454,35 +454,45 @@
 
                                                                         <thead>
 
-                                                                        <tr>
-                                                                            <td colspan="6">
-                                                                                <div style="display:flex">
-                                                                                    <select style="width:50%" readonly
-                                                                                            id="custOrderSearchType"
-                                                                                            name="cutomerOrder">
-                                                                                        <option value="" disabled
-                                                                                                selected>Search&nbsp;By...
-                                                                                        </option>
-                                                                                        <option value="orderID">Order&nbsp;ID</option>
-                                                                                        <option value="custName">
-                                                                                            Customer&nbsp;Name
-                                                                                        </option>
-                                                                                        <option value="location">
-                                                                                            Location
-                                                                                        </option>
-                                                                                        <option value="branch">Branch
-                                                                                        </option>
-                                                                                        <option value="ordersList">
-                                                                                            Orders&nbsp;List
-                                                                                        </option>
+                                                                        <tr style="height: auto">
+                                                                            <td colspan="1">
 
-                                                                                    </select>&nbsp;
-                                                                                    <input type="text" style="width:50%"
-                                                                                           placeholder="Search Here..."
-                                                                                           id="custOrderSearch"
-                                                                                           name="cutomerOrder"
-                                                                                           oninput="searchfunctionV()">
-                                                                                </div>
+                                                                                <select style="width:100%" readonly
+                                                                                        id="custOrderSearchType"
+                                                                                        name="cutomerOrder">
+                                                                                    <option value="" disabled
+                                                                                            selected>Search&nbsp;By...
+                                                                                    </option>
+                                                                                    <option value="orderID">Order&nbsp;ID</option>
+                                                                                    <option value="custName">
+                                                                                        Customer&nbsp;Name
+                                                                                    </option>
+                                                                                    <option value="location">
+                                                                                        Location
+                                                                                    </option>
+                                                                                    <option value="branch">Branch
+                                                                                    </option>
+                                                                                    <option value="ordersList">
+                                                                                        Orders&nbsp;List
+                                                                                    </option>
+
+                                                                                </select>
+                                                                            </td>
+                                                                            <td colspan="3">
+                                                                                <input type="text" style="width:100%"
+                                                                                       placeholder="Search Here..."
+                                                                                       id="custOrderSearch"
+                                                                                       name="cutomerOrder"
+                                                                                       oninput="searchfunctionV()">
+                                                                            </td>
+                                                                            <td colspan="2" style="padding-top: 20px;">
+                                                                                <button type="button"
+                                                                                        style="width: 100%"
+                                                                                        class="btn btn-outline-danger"
+                                                                                        onclick="clearCustTable()">
+                                                                                    Reset&nbsp;Table
+                                                                                </button>
+
                                                                             </td>
                                                                         </tr>
 
@@ -497,6 +507,7 @@
 
                                                                         </tr>
                                                                         </thead>
+                                                                        <tbody>
                                                                         <%
                                                                             ResultSet customerOrderSet = new Inventory_SELECT(ConnectionManager.getConnection(), MySQLQueries.QUERY_GET_ALL_CUSTOMER_ORDERS).get_inventory_table();
 
@@ -541,7 +552,9 @@
                                                                                 k++;
                                                                             }
 
+                                                                            int l = 0;
                                                                             for (CustomerOrder customerOrder1 : customerOrder) {
+                                                                                l++;
                                                                         %>
                                                                         <tr>
                                                                             <td>
@@ -557,35 +570,32 @@
                                                                                 <%=customerOrder1.getBranch()%>
                                                                             </td>
                                                                             <td>
-                                                                                <% if (customerOrder1.getOrders().length != 0) { %>
-                                                                                <table>
 
 
-                                                                                    <% for (OrderItem orderItem : customerOrder1.getOrders()) {%>
+                                                                                <% for (OrderItem orderItem : customerOrder1.getOrders()) {%>
 
 
-                                                                                    <tr>
-                                                                                        <td>
-                                                                                            <%=orderItem.getItemID()%>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <%=orderItem.getNeeds()%>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <%=orderItem.getQuantity()%>
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                    <%}%>
-                                                                                </table>
-                                                                                <% } %>
+                                                                                <pre><%=orderItem.getItemID() + ","%> <%=orderItem.getNeeds() + ","%> <%=orderItem.getQuantity()%></pre>
+
+
+                                                                                <%}%>
+
+
                                                                             </td>
                                                                             <td>
-                                                                                <button type="button"
+                                                                                <button type="button" id="cus<%=l%>"
                                                                                         class="btn btn-outline-success">
                                                                                     <i class="fas fa-plus"></i></button>
                                                                             </td>
+                                                                            <script>
+                                                                                document.getElementById('cus<%=l%>').addEventListener('click', function () {
+                                                                                    document.getElementById('custOrder').value = '<%=customerOrder1.getCustomerOrderID()%>';
+                                                                                    document.getElementById("custOrderTable").classList.remove("show");
+                                                                                });
+                                                                            </script>
                                                                         </tr>
                                                                         <% } %>
+                                                                        </tbody>
                                                                     </table>
                                                                 </div>
                                                             </td>

@@ -99,7 +99,7 @@ function myFirstFunctionV() {
                 }
 
                 itemDescription.focus();
-                window.scrollTop;
+                window.scroll(0,0);
 
 
             }
@@ -148,7 +148,7 @@ function resetItemDetailsV() {
 
 function autoFocusV() {
     document.getElementById("itemList").focus();
-    window.scrollTop;
+    window.scroll(0,0);
 }
 
 
@@ -191,7 +191,7 @@ function validateFormX() {
         popup = document.getElementById("myPopup3v");
         popup.innerHTML = "This is a Required Field!!";
         document.getElementById("itemdetailsdropitemv").focus();
-        window.scrollTop;
+        window.scroll(0,0);
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -204,7 +204,7 @@ function validateFormX() {
         popup = document.getElementById("myPopup1v");
         popup.innerHTML = "Please Enter at least one Item!!!";
         document.getElementById("itemList").focus();
-        window.scrollTop;
+        window.scroll(0,0);
 
         if (!popup.classList.contains("show")) {
             popup.classList.add("show");
@@ -223,6 +223,13 @@ function clearAllFieldsV() {
     document.getElementById("itemdetailsdropitemv").value = "";
     document.getElementById('iteminformationv').innerHTML = 'Item&nbsp;Information&nbsp;Goes&nbsp;Here...';
     document.getElementById("ItemsListTable").innerHTML = "";
+    document.getElementById('custOrder').value = "";
+
+
+    if (document.getElementById("custOrderTable").classList.contains("show"))
+        document.getElementById("custOrderTable").classList.remove("show");
+
+
 
 
     if (document.getElementById("ErrorMessage") !== null)
@@ -238,7 +245,9 @@ function clearAllFieldsV() {
         document.getElementById('itemList').add(x);
     }
 
-    window.scrollTop;
+
+
+    window.scroll(0,0);
 
 }
 
@@ -306,9 +315,8 @@ window.addEventListener('click', function (event) {
 
 document.getElementById('custOrder').addEventListener('click', function (event) {
 
-   document.getElementById("custOrderTable").classList.toggle("show");
-
-
+    document.getElementById("custOrderTable").classList.toggle("show");
+    clearCustTable();
 
 });
 
@@ -363,6 +371,23 @@ function clearTable() {
     document.getElementById("mainTable").innerHTML = oldTable;
     document.getElementById("txtSearch").setAttribute('type', 'text');
 }
+
+function clearCustTable() {
+    document.getElementById("custOrderSearch").value = "";
+    document.getElementById("custOrderSearchType").getElementsByTagName('option').item(0).selected = true;
+    let table = document.getElementById("custOrderTable");
+
+    let tr = table.getElementsByTagName("tr");
+
+    let i;
+
+    for ( i = 1; i < tr.length; i++ ) {
+        tr[i].style.display = "";
+    }
+
+    table.scroll(0,0);
+}
+
 
 function searchfunctionV() {
 
